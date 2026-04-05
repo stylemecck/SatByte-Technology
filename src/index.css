@@ -1,0 +1,104 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+@import "tailwindcss";
+
+/* Class-based dark mode for manual toggle */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-heading: "Poppins", ui-sans-serif, system-ui, sans-serif;
+  --font-body: "Inter", ui-sans-serif, system-ui, sans-serif;
+
+  --color-primary: #2563eb;
+  --color-secondary: #0f172a;
+  --color-accent: #38bdf8;
+  --color-background: #020617;
+
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-2xl: 1.25rem;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: var(--font-body);
+    @apply antialiased bg-slate-50 text-slate-900 transition-colors duration-300;
+  }
+
+  .dark body {
+    @apply bg-[#020617] text-slate-100;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-heading);
+  }
+}
+
+/* Animated mesh gradient for hero backgrounds */
+@keyframes gradient-shift {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.animate-gradient-mesh {
+  background-size: 200% 200%;
+  animation: gradient-shift 12s ease infinite;
+}
+
+/* Swiper custom theming */
+.swiper-pagination-bullet-active {
+  @apply !bg-primary;
+}
+
+/* Recent highlights: avoid text/pagination overlap; fade slides shouldn’t stack interactively */
+.portfolio-preview-swiper {
+  overflow: hidden;
+  padding-bottom: 3.25rem;
+}
+
+.portfolio-preview-swiper .swiper-pagination {
+  bottom: 0.875rem !important;
+  z-index: 20;
+}
+
+.portfolio-preview-swiper .swiper-slide {
+  height: auto;
+  box-sizing: border-box;
+}
+
+.portfolio-preview-swiper .swiper-slide:not(.swiper-slide-active) {
+  pointer-events: none;
+}
+
+/* Home testimonials slider: keep dots below quote block */
+.home-testimonials-swiper {
+  padding-bottom: 2.75rem;
+}
+
+.home-testimonials-swiper .swiper-pagination {
+  bottom: 0.5rem !important;
+}
+
+/* Subtle interactive lift — pair with transition classes on elements */
+@layer utilities {
+  .hover-surface {
+    @apply transition-[transform,box-shadow,border-color] duration-300 ease-out;
+  }
+  .hover-surface:hover {
+    @apply -translate-y-1 shadow-xl shadow-slate-900/10 dark:shadow-primary/15;
+  }
+}
