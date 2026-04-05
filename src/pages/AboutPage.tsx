@@ -9,9 +9,9 @@ import { Card, CardContent } from '@/components/ui/card'
 import { SITE } from '@/lib/constants'
 
 const milestones = [
-  { year: '2019', title: 'Foundations', text: 'Started delivering websites and support for local businesses.' },
-  { year: '2021', title: 'Product builds', text: 'Expanded into custom dashboards, billing tools, and school portals.' },
-  { year: '2023', title: 'Full-stack', text: 'End-to-end apps with APIs, auth, and cloud deployment.' },
+  { year: '2024', title: 'Foundations', text: 'Started delivering websites and support for local businesses.' },
+  { year: '2025', title: 'Product builds', text: 'Expanded into custom dashboards, billing tools, and school portals.' },
+  { year: '2025', title: 'Full-stack', text: 'End-to-end apps with APIs, auth, and cloud deployment.' },
   { year: '2026', title: 'SatByte today', text: 'Serving clients across Bihar and India with a premium delivery standard.' },
 ] as const
 
