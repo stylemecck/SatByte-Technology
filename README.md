@@ -1,73 +1,30 @@
-# React + TypeScript + Vite
+# SatByte Technology
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**High-End Web Solutions | Custom Portals | Automated Business Architectures**
 
-Currently, two official plugins are available:
+SatByte Technology is a premium web development agency platform engineered to facilitate scalable agency growth, secure client portals, high-conversion project quoting, and rich content management.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## 🚀 Core Features
 
-## React Compiler
+- **Interactive Project Estimator**: A dynamic module generating real-time quotes, seamlessly integrated with Calendly for frictionless lead generation.
+- **Secure Client Portal**: Employs secure, passwordless OTP (One-Time Password) access ensuring clients can easily track project statuses and invoices without managing passwords.
+- **Admin Back-Office**: A comprehensive command center for managing order phases, generating/dispatching automated PDF invoices, and tracking client interactions.
+- **Enterprise CMS Engine**: A Tiptap-powered advanced rich-text blog management system featuring grid layouts, dynamic Tables of Contents, and newsletter integration.
+- **Premium UI/UX**: Designed meticulously with React, Framer Motion, and Tailwind CSS to deliver cutting-edge aesthetics and dynamic micro-animations.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## 🛠 Tech Stack
 
-## Expanding the ESLint configuration
+- **Frontend**: React 19, TypeScript, Vite, Tailwind CSS, Framer Motion, Radix UI.
+- **Backend API**: Node.js, Express.
+- **Database**: MongoDB (Mongoose ORM).
+- **Core Integrations**: Nodemailer (OTP/Emailing), PDFKit (Invoicing), Tiptap (CMS).
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## 📜 Copyright and License
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+**Proprietary Software - All Rights Reserved.**
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+This repository and all of its contents are the exclusive intellectual property of **SatByte Technology**. 
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+**NO PERMISSION IS GRANTED** to use, copy, modify, distribute, or operate this code, directly or indirectly, without explicit prior written authorization from SatByte Technology. 
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+For full legal details, please see the enclosed [LICENSE](./LICENSE) file.
