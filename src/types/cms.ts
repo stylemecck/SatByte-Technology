@@ -33,3 +33,17 @@ export type ServiceDTO = {
   createdAt: string
   updatedAt: string
 }
+
+export type OrderDTO = {
+  _id: string
+  email: string
+  planKey: string
+  planName: string
+  amountPaid: number
+  paymentGatewayReferenceId: string
+  emailReferenceId: string
+  customerName: string
+  status: string
+  createdAt: string
+  updatedAt: string
+}

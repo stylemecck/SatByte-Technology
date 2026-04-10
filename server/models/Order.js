@@ -1,0 +1,17 @@
+import mongoose from 'mongoose'
+
+const orderSchema = new mongoose.Schema(
+  {
+    email: { type: String, required: true, lowercase: true, trim: true },
+    planKey: { type: String, required: true },
+    planName: { type: String, required: true },
+    amountPaid: { type: Number },
+    paymentGatewayReferenceId: { type: String, required: true }, // Stripe session or payment intent
+    emailReferenceId: { type: String, required: true }, // The SB-XXXXXX reference
+    customerName: { type: String },
+    status: { type: String, default: 'paid' },
+  },
+  { timestamps: true },
+)
+
+export const Order = mongoose.models.Order || mongoose.model('Order', orderSchema)

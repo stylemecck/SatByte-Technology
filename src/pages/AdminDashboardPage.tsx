@@ -17,10 +17,11 @@ import {
   useDeleteService,
   useProjectsQuery,
   useServicesQuery,
+  useOrdersQuery,
 } from '@/hooks/useCmsQueries'
 import { api, clearToken } from '@/lib/apiClient'
 import { LazyImage } from '@/components/LazyImage'
-import type { BlogDTO, ProjectDTO, ServiceDTO } from '@/types/cms'
+import type { BlogDTO, ProjectDTO, ServiceDTO, OrderDTO } from '@/types/cms'
 
 const categories = ['Web', 'E-commerce', 'Software', 'Other'] as const
 
@@ -51,19 +52,22 @@ export default function AdminDashboardPage() {
       </header>
 
       <main className="mx-auto max-w-6xl px-4 py-8">
-        <Tabs.Root defaultValue="projects">
+        <Tabs.Root defaultValue="orders">
           <Tabs.List className="mb-6 flex flex-wrap gap-2 border-b border-slate-200 pb-2 dark:border-white/10">
-            {(['projects', 'blogs', 'services'] as const).map((tab) => (
+            {(['orders', 'projects', 'blogs', 'services'] as const).map((tab) => (
               <Tabs.Trigger
                 key={tab}
                 value={tab}
                 className="rounded-lg px-4 py-2 text-sm font-medium text-slate-600 transition-colors data-[state=active]:bg-primary data-[state=active]:text-white dark:text-slate-300 dark:data-[state=active]:bg-primary"
               >
-                {tab === 'projects' ? 'Portfolio' : tab === 'blogs' ? 'Blog' : 'Services'}
+                {tab === 'orders' ? 'Orders' : tab === 'projects' ? 'Portfolio' : tab === 'blogs' ? 'Blog' : 'Services'}
               </Tabs.Trigger>
             ))}
           </Tabs.List>
 
+          <Tabs.Content value="orders">
+            <OrdersPanel />
+          </Tabs.Content>
           <Tabs.Content value="projects">
             <ProjectsPanel
               onChanged={() => qc.invalidateQueries({ queryKey: ['projects'] })}
@@ -78,6 +82,83 @@ export default function AdminDashboardPage() {
         </Tabs.Root>
       </main>
     </div>
+  )
+}
+
+function OrdersPanel() {
+  const { data, isPending } = useOrdersQuery()
+
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>Recent Orders</CardTitle>
+      </CardHeader>
+      <CardContent>
+        {isPending ? (
+          <p className="text-sm text-slate-500">Loading orders…</p>
+        ) : !data?.length ? (
+          <p className="text-sm text-slate-500">No orders found.</p>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-sm text-slate-600 dark:text-slate-400">
+              <thead className="border-b border-slate-200 bg-slate-50 text-xs font-medium uppercase text-slate-500 dark:border-white/10 dark:bg-white/5 dark:text-slate-300">
+                <tr>
+                  <th className="px-4 py-3">Date</th>
+                  <th className="px-4 py-3">Customer / Email</th>
+                  <th className="px-4 py-3">Plan</th>
+                  <th className="px-4 py-3">Amount</th>
+                  <th className="px-4 py-3">References</th>
+                  <th className="px-4 py-3">Status</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-200 dark:divide-white/10">
+                {data.map((order) => (
+                  <tr key={order._id} className="hover:bg-slate-50 dark:hover:bg-white/5">
+                    <td className="whitespace-nowrap px-4 py-3">
+                      {new Date(order.createdAt).toLocaleDateString()}
+                    </td>
+                    <td className="px-4 py-3">
+                      <div className="font-medium text-secondary dark:text-white">
+                        {order.customerName || 'N/A'}
+                      </div>
+                      <div className="text-xs text-slate-500">{order.email}</div>
+                    </td>
+                    <td className="px-4 py-3">
+                      <span className="inline-flex rounded-full bg-blue-100 px-2 text-xs font-semibold leading-5 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
+                        {order.planName}
+                      </span>
+                    </td>
+                    <td className="px-4 py-3">
+                      {order.amountPaid ? `₹${(order.amountPaid / 100).toLocaleString('en-IN')}` : '-'}
+                    </td>
+                    <td className="px-4 py-3 text-xs">
+                      <div>
+                        <span className="font-semibold text-slate-500">Int:</span> {order.emailReferenceId}
+                      </div>
+                      <div>
+                        <span className="font-semibold text-slate-500">Ext:</span>{' '}
+                        <span className="break-all">{order.paymentGatewayReferenceId}</span>
+                      </div>
+                    </td>
+                    <td className="px-4 py-3">
+                      <span
+                        className={`inline-flex rounded-full px-2 text-xs font-semibold leading-5 ${
+                          order.status === 'paid'
+                            ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
+                            : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200'
+                        }`}
+                      >
+                        {order.status}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </CardContent>
+    </Card>
   )
 }
 

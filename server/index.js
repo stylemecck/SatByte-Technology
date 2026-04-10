@@ -9,6 +9,7 @@ import checkoutRoutes from './routes/checkoutRoutes.js'
 import contactRoutes from './routes/contactRoutes.js'
 import projectRoutes from './routes/projectRoutes.js'
 import serviceRoutes from './routes/serviceRoutes.js'
+import { handlePurchaseSuccess } from './controllers/checkoutController.js'
 
 const app = express()
 const PORT = Number(process.env.PORT || 5000)
@@ -37,6 +38,9 @@ app.use('/api/blogs', blogRoutes)
 app.use('/api/services', serviceRoutes)
 app.use('/api/contact', contactRoutes)
 app.use('/api/checkout', checkoutRoutes)
+
+// Sample route for purchase success confirmation
+app.post('/api/purchase-success', handlePurchaseSuccess)
 
 app.use((err, _req, res, _next) => {
   console.error(err)

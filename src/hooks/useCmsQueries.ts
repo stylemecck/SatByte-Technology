@@ -1,7 +1,17 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 import { api } from '@/lib/apiClient'
-import type { BlogDTO, ProjectDTO, ServiceDTO } from '@/types/cms'
+import type { BlogDTO, OrderDTO, ProjectDTO, ServiceDTO } from '@/types/cms'
+
+export function useOrdersQuery() {
+  return useQuery({
+    queryKey: ['orders'],
+    queryFn: async () => {
+      const { data } = await api.get<OrderDTO[]>('/checkout/orders')
+      return data
+    },
+  })
+}
 
 export function useProjectsQuery() {
   return useQuery({

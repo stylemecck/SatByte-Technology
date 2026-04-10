@@ -1,15 +1,30 @@
 import { motion } from 'framer-motion'
 import { CheckCircle2 } from 'lucide-react'
+import { useEffect, useRef, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 
 import { pageVariants } from '@/animations/pageVariants'
 import { SEO } from '@/components/SEO'
 import { Button } from '@/components/ui/button'
+import { api } from '@/lib/apiClient'
 
 /** Shown after Stripe redirects back with a successful payment. */
 export default function PricingSuccessPage() {
   const [params] = useSearchParams()
   const sessionId = params.get('session_id')
+  
+  const hasFired = useRef(false)
+  const [emailSent, setEmailSent] = useState(false)
+
+  useEffect(() => {
+    if (!sessionId || hasFired.current) return
+    hasFired.current = true
+
+    // Trigger the backend to verify the session and send the email
+    api.post('/purchase-success', { session_id: sessionId })
+      .then(() => setEmailSent(true))
+      .catch((err) => console.error('Failed to trigger confirmation email', err))
+  }, [sessionId])
 
   return (
     <motion.div
@@ -29,7 +44,7 @@ export default function PricingSuccessPage() {
       </div>
       <h1 className="font-heading mt-6 text-2xl font-bold text-secondary dark:text-white">Payment received</h1>
       <p className="mt-3 text-slate-600 dark:text-slate-400">
-        Thank you. We’ll follow up by email shortly to confirm your project details.
+        Thank you. {emailSent ? 'We have sent an email with your project details.' : 'We’ll follow up by email shortly to confirm your project details.'}
       </p>
       {sessionId ? (
         <p className="mt-4 break-all text-xs text-slate-500">Reference: {sessionId}</p>
@@ -45,3 +60,4 @@ export default function PricingSuccessPage() {
     </motion.div>
   )
 }
+
