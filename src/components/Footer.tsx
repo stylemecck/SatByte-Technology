@@ -111,6 +111,32 @@ export function Footer() {
                 </a>
               ))}
             </div>
+            
+            <div className="mt-8">
+              <h3 className="font-heading mb-4 text-sm font-semibold uppercase tracking-wider text-white">
+                Subscribe to Newsletter
+              </h3>
+              <form 
+                className="flex flex-col sm:flex-row gap-2"
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  alert("Thanks for subscribing! We'll be in touch.");
+                }}
+              >
+                <input 
+                  type="email" 
+                  placeholder="Enter your email" 
+                  required 
+                  className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white placeholder-slate-400 focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
+                />
+                <button 
+                  type="submit" 
+                  className="rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-accent/90"
+                >
+                  Subscribe
+                </button>
+              </form>
+            </div>
           </div>
         </div>
 
