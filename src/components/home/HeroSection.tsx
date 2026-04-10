@@ -48,13 +48,13 @@ export function HeroSection() {
           {/* Epic Headline */}
           <motion.h1
             variants={fadeUpItem}
-            className="font-heading text-5xl font-extrabold leading-[1.1] tracking-tight text-white sm:text-7xl lg:text-[5.5rem]"
+            className="font-heading text-4xl font-extrabold leading-[1.1] tracking-tight text-white sm:text-7xl lg:text-[5.5rem]"
           >
             Empowering scale through{' '}
             <br className="hidden md:block" />
-            <span className="relative whitespace-nowrap">
+            <span className="relative inline-block mt-2 md:mt-0">
               <span className="absolute -inset-2 bg-gradient-to-r from-primary/20 to-accent/20 blur-2xl z-0" />
-              <span className="relative bg-gradient-to-r from-accent via-white to-primary bg-clip-text text-transparent italic pr-2">
+              <span className="relative bg-gradient-to-r from-accent via-white to-primary bg-clip-text text-transparent italic pr-2 break-words">
                 Smart Architecture
               </span>
             </span>
