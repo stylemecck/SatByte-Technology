@@ -42,3 +42,47 @@ export async function sendContact(req, res) {
     res.status(500).json({ message: 'Failed to send email' })
   }
 }
+
+export async function submitEstimate(req, res) {
+  try {
+    const { projectType, pages, timeline, estimate, email } = req.body
+    if (!email || !projectType) {
+      return res.status(400).json({ message: 'Email and project type are required' })
+    }
+
+    const user = process.env.GMAIL_USER
+    const pass = process.env.GMAIL_APP_PASS
+
+    if (!user || !pass) {
+      return res.status(503).json({ message: 'GMAIL is not configured on the server.' })
+    }
+
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: { user, pass },
+    })
+
+    const messageHtml = `
+      <h2>New Project Estimate Request</h2>
+      <p><strong>Client Email:</strong> ${email}</p>
+      <p><strong>Project Type:</strong> ${projectType}</p>
+      <p><strong>Pages Needed:</strong> ${pages || 'Not specified'}</p>
+      <p><strong>Timeline:</strong> ${timeline || 'Not specified'}</p>
+      <p><strong>Calculated Estimate:</strong> ${estimate}</p>
+    `;
+
+    // Send to Admin
+    await transporter.sendMail({
+      from: `"SatByte Site" <${user}>`,
+      to: user,
+      replyTo: email,
+      subject: `[New Lead] Estimate Request from ${email}`,
+      html: messageHtml,
+    })
+
+    res.json({ message: 'Estimate sent successfully' })
+  } catch (e) {
+    console.error(e)
+    res.status(500).json({ message: 'Failed to send estimate email' })
+  }
+}

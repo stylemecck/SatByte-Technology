@@ -182,7 +182,25 @@ export default function ContactPage() {
           </motion.div>
         </div>
 
-        <div className="mt-12 overflow-hidden rounded-3xl border border-slate-200/80 shadow-lg dark:border-white/10">
+        {/* Calendly Booking Section */}
+        <div className="mt-16">
+          <SectionHeader
+            eyebrow="Book a Call"
+            title="Schedule a Discovery Call"
+            subtitle="Pick a time that works for you to discuss your project directly with our experts."
+          />
+          <div className="mt-8 overflow-hidden rounded-3xl border border-slate-200/80 bg-white shadow-lg dark:border-white/10 dark:bg-transparent">
+            <iframe
+              src="https://calendly.com/YOUR_CALENDLY_ID/30min?hide_event_type_details=1&hide_gdpr_banner=1"
+              width="100%"
+              height="700"
+              className="border-0"
+              title="Schedule a call on Calendly"
+            />
+          </div>
+        </div>
+
+        <div className="mt-16 overflow-hidden rounded-3xl border border-slate-200/80 shadow-lg dark:border-white/10">
           <iframe
             title="SatByte Technologies location"
             src={MAP_EMBED}
