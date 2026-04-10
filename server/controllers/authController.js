@@ -1,6 +1,9 @@
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
+import nodemailer from 'nodemailer'
 import { User } from '../models/User.js'
+import { Order } from '../models/Order.js'
+import { Otp } from '../models/Otp.js'
 
 function signToken(user) {
   const secret = process.env.JWT_SECRET
@@ -68,5 +71,79 @@ export async function register(req, res) {
   } catch (e) {
     console.error(e)
     res.status(500).json({ message: 'Registration failed' })
+  }
+}
+
+export async function clientLoginRequest(req, res) {
+  try {
+    const { email } = req.body
+    if (!email) return res.status(400).json({ message: 'Email required' })
+
+    const normalizedEmail = email.toLowerCase().trim()
+    const hasOrders = await Order.findOne({ email: normalizedEmail })
+
+    if (!hasOrders) {
+      return res.status(404).json({ message: 'No purchases found for this email.' })
+    }
+
+    const code = Math.floor(100000 + Math.random() * 900000).toString()
+    await Otp.deleteMany({ email: normalizedEmail })
+    await Otp.create({ email: normalizedEmail, otp: code })
+
+    const user = process.env.GMAIL_USER
+    const pass = process.env.GMAIL_APP_PASS
+
+    if (!user || !pass) {
+      console.warn('GMAIL_USER or GMAIL_APP_PASS not config. Outputting OTP to console:', code)
+      return res.json({ message: 'OTP sent (check server logs)' })
+    }
+
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: { user, pass },
+    })
+
+    await transporter.sendMail({
+      from: `"SatByte Portal" <${user}>`,
+      to: normalizedEmail,
+      subject: `Your Login Code: ${code}`,
+      html: `<h2>SatByte Client Portal</h2><p>Your one-time login code is: <strong>${code}</strong></p><p>This code expires in 5 minutes.</p>`,
+    })
+
+    res.json({ message: 'OTP sent to your email.' })
+  } catch (e) {
+    console.error(e)
+    res.status(500).json({ message: 'Failed to send OTP' })
+  }
+}
+
+export async function clientLoginVerify(req, res) {
+  try {
+    const { email, otp } = req.body
+    if (!email || !otp) return res.status(400).json({ message: 'Email and OTP required' })
+
+    const normalizedEmail = email.toLowerCase().trim()
+    const validOtp = await Otp.findOne({ email: normalizedEmail, otp })
+
+    if (!validOtp) {
+      return res.status(401).json({ message: 'Invalid or expired OTP' })
+    }
+
+    await Otp.deleteMany({ email: normalizedEmail })
+
+    const secret = process.env.JWT_SECRET
+    const token = jwt.sign(
+      { sub: 'client-' + normalizedEmail, email: normalizedEmail, role: 'client' },
+      secret,
+      { expiresIn: '7d' },
+    )
+
+    res.json({
+      token,
+      user: { id: 'client-' + normalizedEmail, email: normalizedEmail, role: 'client' },
+    })
+  } catch (e) {
+    console.error(e)
+    res.status(500).json({ message: 'Verification failed' })
   }
 }
