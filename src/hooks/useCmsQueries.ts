@@ -83,3 +83,14 @@ export function useDeleteService() {
     onSuccess: () => qc.invalidateQueries({ queryKey: ['services'] }),
   })
 }
+
+export function useUpdateOrderStatus() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: async ({ id, projectStatus, progress }: { id: string; projectStatus: string; progress: number }) => {
+      const { data } = await api.put(`/checkout/orders/${id}/status`, { projectStatus, progress })
+      return data
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['orders'] }),
+  })
+}

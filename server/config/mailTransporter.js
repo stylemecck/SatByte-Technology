@@ -1,5 +1,29 @@
 import nodemailer from 'nodemailer';
+import PDFDocument from 'pdfkit';
 
+const generateInvoiceBuffer = (planName, referenceNumber, amountTotal) => {
+  return new Promise((resolve) => {
+    const doc = new PDFDocument({ margin: 50 });
+    const buffers = [];
+    doc.on('data', buffers.push.bind(buffers));
+    doc.on('end', () => resolve(Buffer.concat(buffers)));
+
+    doc.fontSize(20).text('SatByte Technologies', { align: 'center' });
+    doc.fontSize(12).text('Payment Invoice', { align: 'center' });
+    doc.moveDown();
+    
+    doc.fontSize(12).text(`Reference: ${referenceNumber}`);
+    doc.text(`Date: ${new Date().toLocaleDateString()}`);
+    doc.moveDown();
+    
+    doc.text(`Item: ${planName}`);
+    doc.text(`Amount Paid: INR ${(amountTotal / 100).toLocaleString('en-IN')}`);
+    
+    doc.moveDown(2);
+    doc.fontSize(10).text('Thank you for your business!', { align: 'center' });
+    doc.end();
+  });
+};
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
@@ -8,11 +32,21 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-export const sendPurchaseConfirmation = async (userEmail, planName, referenceNumber, gatewayReference) => {
+export const sendPurchaseConfirmation = async (userEmail, planName, referenceNumber, gatewayReference, amountTotal) => {
+  
+  const invoiceBuffer = await generateInvoiceBuffer(planName, referenceNumber, amountTotal || 0);
+
   const mailOptions = {
     from: `"SatByte Technologies" <${process.env.GMAIL_USER}>`,
     to: userEmail,
     subject: `Payment Confirmation - ${planName} | SatByte Technologies`,
+    attachments: [
+      {
+        filename: `Invoice-${referenceNumber}.pdf`,
+        content: invoiceBuffer,
+        contentType: 'application/pdf'
+      }
+    ],
     html: `
       <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 8px; background-color: #ffffff;">
         <div style="text-align: center; margin-bottom: 25px;">

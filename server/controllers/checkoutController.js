@@ -143,7 +143,7 @@ export async function handlePurchaseSuccess(req, res) {
       });
 
       // Send the confirmation email
-      await sendPurchaseConfirmation(email, planData.name, referenceNumber, gatewayReference);
+      await sendPurchaseConfirmation(email, planData.name, referenceNumber, gatewayReference, session.amount_total);
     }
 
     res.status(200).json({ 
@@ -159,16 +159,50 @@ export async function handlePurchaseSuccess(req, res) {
   }
 }
 
-/**
- * Get all orders.
- * Protected by admin auth middleware.
- */
 export async function getOrders(req, res) {
   try {
+    if (req.user?.role !== 'admin') {
+      return res.status(403).json({ message: 'Forbidden' });
+    }
     const orders = await Order.find().sort({ createdAt: -1 });
     res.json(orders);
   } catch (error) {
     console.error('[get-orders]', error);
     res.status(500).json({ message: 'Failed to fetch orders' });
+  }
+}
+
+export async function getMyOrders(req, res) {
+  try {
+    const email = req.user?.email;
+    if (!email) return res.status(401).json({ message: 'Unauthenticated' });
+
+    const orders = await Order.find({ email: email.toLowerCase().trim() }).sort({ createdAt: -1 });
+    res.json(orders);
+  } catch (error) {
+    console.error('[get-my-orders]', error);
+    res.status(500).json({ message: 'Failed to fetch your orders' });
+  }
+}
+
+export async function updateOrderStatus(req, res) {
+  try {
+    if (req.user?.role !== 'admin') {
+      return res.status(403).json({ message: 'Forbidden' });
+    }
+    const { id } = req.params;
+    const { projectStatus, progress } = req.body;
+    
+    const updated = await Order.findByIdAndUpdate(
+      id,
+      { projectStatus, progress },
+      { new: true }
+    );
+    if (!updated) return res.status(404).json({ message: 'Order not found' });
+    
+    res.json(updated);
+  } catch (error) {
+    console.error('[update-order-status]', error);
+    res.status(500).json({ message: 'Failed to update order status' });
   }
 }

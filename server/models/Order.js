@@ -10,6 +10,8 @@ const orderSchema = new mongoose.Schema(
     emailReferenceId: { type: String, required: true }, // The SB-XXXXXX reference
     customerName: { type: String },
     status: { type: String, default: 'paid' },
+    projectStatus: { type: String, default: 'Pending Validation' },
+    progress: { type: Number, default: 0 },
   },
   { timestamps: true },
 )
