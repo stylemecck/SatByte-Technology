@@ -4,6 +4,7 @@ import { Trash2 } from 'lucide-react'
 import { type FormEvent, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { Link, useNavigate } from 'react-router-dom'
+import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip as RechartsTooltip, XAxis, YAxis } from 'recharts'
 
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -18,8 +19,10 @@ import {
   useProjectsQuery,
   useServicesQuery,
   useOrdersQuery,
+  useUpdateOrderStatus,
 } from '@/hooks/useCmsQueries'
 import { api, clearToken } from '@/lib/apiClient'
+import { RichTextEditor } from '@/components/admin/RichTextEditor'
 import { LazyImage } from '@/components/LazyImage'
 import type { BlogDTO, ProjectDTO, ServiceDTO } from '@/types/cms'
 
@@ -52,19 +55,22 @@ export default function AdminDashboardPage() {
       </header>
 
       <main className="mx-auto max-w-6xl px-4 py-8">
-        <Tabs.Root defaultValue="orders">
+        <Tabs.Root defaultValue="analytics">
           <Tabs.List className="mb-6 flex flex-wrap gap-2 border-b border-slate-200 pb-2 dark:border-white/10">
-            {(['orders', 'projects', 'blogs', 'services'] as const).map((tab) => (
+            {(['analytics', 'orders', 'projects', 'blogs', 'services'] as const).map((tab) => (
               <Tabs.Trigger
                 key={tab}
                 value={tab}
-                className="rounded-lg px-4 py-2 text-sm font-medium text-slate-600 transition-colors data-[state=active]:bg-primary data-[state=active]:text-white dark:text-slate-300 dark:data-[state=active]:bg-primary"
+                className="rounded-lg px-4 py-2 text-sm font-medium text-slate-600 transition-colors data-[state=active]:bg-primary data-[state=active]:text-white dark:text-slate-300 dark:data-[state=active]:bg-primary capitalize"
               >
-                {tab === 'orders' ? 'Orders' : tab === 'projects' ? 'Portfolio' : tab === 'blogs' ? 'Blog' : 'Services'}
+                {tab === 'projects' ? 'Portfolio' : tab}
               </Tabs.Trigger>
             ))}
           </Tabs.List>
 
+          <Tabs.Content value="analytics">
+            <AnalyticsPanel />
+          </Tabs.Content>
           <Tabs.Content value="orders">
             <OrdersPanel />
           </Tabs.Content>
@@ -87,6 +93,21 @@ export default function AdminDashboardPage() {
 
 function OrdersPanel() {
   const { data, isPending } = useOrdersQuery()
+  const updateStatus = useUpdateOrderStatus()
+  const [editingId, setEditingId] = useState<string | null>(null)
+  const [editStatus, setEditStatus] = useState('')
+  const [editProgress, setEditProgress] = useState(0)
+
+  const handleEdit = (order: any) => {
+    setEditingId(order._id)
+    setEditStatus(order.projectStatus || 'Pending')
+    setEditProgress(order.progress || 0)
+  }
+
+  const handleSave = (id: string) => {
+    updateStatus.mutate({ id, projectStatus: editStatus, progress: editProgress })
+    setEditingId(null)
+  }
 
   return (
     <Card>
@@ -105,10 +126,10 @@ function OrdersPanel() {
                 <tr>
                   <th className="px-4 py-3">Date</th>
                   <th className="px-4 py-3">Customer / Email</th>
-                  <th className="px-4 py-3">Plan</th>
-                  <th className="px-4 py-3">Amount</th>
-                  <th className="px-4 py-3">References</th>
-                  <th className="px-4 py-3">Status</th>
+                  <th className="px-4 py-3">Plan/Amount</th>
+                  <th className="px-4 py-3">Project Status</th>
+                  <th className="px-4 py-3">Progress</th>
+                  <th className="px-4 py-3 text-right">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-200 dark:divide-white/10">
@@ -124,32 +145,57 @@ function OrdersPanel() {
                       <div className="text-xs text-slate-500">{order.email}</div>
                     </td>
                     <td className="px-4 py-3">
-                      <span className="inline-flex rounded-full bg-blue-100 px-2 text-xs font-semibold leading-5 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
+                      <span className="inline-flex rounded-full bg-blue-100 px-2 text-xs font-semibold leading-5 text-blue-800 dark:bg-accent/10 dark:text-accent mb-1">
                         {order.planName}
                       </span>
-                    </td>
-                    <td className="px-4 py-3">
-                      {order.amountPaid ? `₹${(order.amountPaid / 100).toLocaleString('en-IN')}` : '-'}
-                    </td>
-                    <td className="px-4 py-3 text-xs">
-                      <div>
-                        <span className="font-semibold text-slate-500">Int:</span> {order.emailReferenceId}
-                      </div>
-                      <div>
-                        <span className="font-semibold text-slate-500">Ext:</span>{' '}
-                        <span className="break-all">{order.paymentGatewayReferenceId}</span>
+                      <div className="text-xs text-slate-500 font-medium">
+                        {order.amountPaid ? `₹${(order.amountPaid / 100).toLocaleString('en-IN')}` : '-'}
                       </div>
                     </td>
                     <td className="px-4 py-3">
-                      <span
-                        className={`inline-flex rounded-full px-2 text-xs font-semibold leading-5 ${
-                          order.status === 'paid'
-                            ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
-                            : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200'
-                        }`}
-                      >
-                        {order.status}
-                      </span>
+                      {editingId === order._id ? (
+                        <Input
+                          value={editStatus}
+                          onChange={(e) => setEditStatus(e.target.value)}
+                          className="h-8 text-xs w-32"
+                        />
+                      ) : (
+                        <span className="font-medium text-slate-700 dark:text-slate-300">
+                          {order.projectStatus || 'Pending'}
+                        </span>
+                      )}
+                    </td>
+                    <td className="px-4 py-3">
+                      {editingId === order._id ? (
+                        <div className="flex items-center gap-2">
+                          <Input
+                            type="number"
+                            min="0"
+                            max="100"
+                            value={editProgress}
+                            onChange={(e) => setEditProgress(Number(e.target.value))}
+                            className="h-8 text-xs w-20"
+                          />
+                          <span className="text-xs">%</span>
+                        </div>
+                      ) : (
+                        <div className="flex items-center gap-2">
+                          <div className="h-2 w-16 bg-slate-200 rounded-full overflow-hidden dark:bg-white/10">
+                            <div className="h-full bg-primary" style={{ width: `${order.progress || 0}%` }}></div>
+                          </div>
+                          <span className="text-xs font-medium">{order.progress || 0}%</span>
+                        </div>
+                      )}
+                    </td>
+                    <td className="px-4 py-3 text-right">
+                      {editingId === order._id ? (
+                        <div className="flex justify-end gap-2">
+                          <Button size="sm" onClick={() => handleSave(order._id)}>Save</Button>
+                          <Button size="sm" variant="ghost" onClick={() => setEditingId(null)}>Cancel</Button>
+                        </div>
+                      ) : (
+                        <Button size="sm" variant="outline" onClick={() => handleEdit(order)}>Edit Status</Button>
+                      )}
                     </td>
                   </tr>
                 ))}
@@ -373,49 +419,83 @@ function BlogsPanel({ onChanged }: { onChanged: () => void }) {
   const { register, getValues, reset } = useForm<{
     title: string
     content: string
+    excerpt: string
     readTime: string
-  }>({ defaultValues: { readTime: '5 min read' } })
+    author: string
+    category: string
+  }>({
+    defaultValues: { title: '', content: '', excerpt: '', readTime: '5 min read', author: 'SatByte Team', category: 'Technology' },
+  })
 
   const [editing, setEditing] = useState<BlogDTO | null>(null)
+  const [contentHtml, setContentHtml] = useState('')
+  const [editContentHtml, setEditContentHtml] = useState('')
   const editFileRef = useRef<HTMLInputElement>(null)
 
   const createBlog = async (e: FormEvent) => {
     e.preventDefault()
     const values = getValues()
+    const payloadContent = contentHtml
+    if (!payloadContent) {
+      alert('Content is required')
+      return
+    }
     const file = fileRef.current?.files?.[0]
     if (!file) {
-      alert('Choose a cover image')
+      alert('Choose a blog featured image')
       return
     }
     const fd = new FormData()
     fd.append('title', values.title)
-    fd.append('content', values.content)
+    fd.append('content', payloadContent)
+    fd.append('excerpt', values.excerpt)
     fd.append('readTime', values.readTime)
+    fd.append('author', values.author)
+    fd.append('category', values.category)
     fd.append('image', file)
     await api.post('/blogs', fd)
     reset()
+    setContentHtml('')
     if (fileRef.current) fileRef.current.value = ''
     onChanged()
   }
 
   const saveEdit = async () => {
     if (!editing) return
+    const values = getValues()
+    const payloadContent = editContentHtml || values.content
+    const payload = {
+      ...editing,
+      title: editing.title, // Actually we are tracking these in the editing state object below
+      content: payloadContent,
+      excerpt: editing.excerpt,
+      readTime: editing.readTime,
+      author: editing.author || 'SatByte Team',
+      category: editing.category || 'Technology',
+    }
     const img = editFileRef.current?.files?.[0]
     if (img) {
       const fd = new FormData()
-      fd.append('title', editing.title)
-      fd.append('content', editing.content)
-      fd.append('readTime', editing.readTime)
+      fd.append('title', payload.title)
+      fd.append('content', payload.content)
+      fd.append('excerpt', payload.excerpt)
+      fd.append('readTime', payload.readTime)
+      fd.append('author', payload.author)
+      fd.append('category', payload.category)
       fd.append('image', img)
       await api.put(`/blogs/${editing._id}`, fd)
     } else {
       await api.put(`/blogs/${editing._id}`, {
-        title: editing.title,
-        content: editing.content,
-        readTime: editing.readTime,
+        title: payload.title,
+        content: payload.content,
+        excerpt: payload.excerpt,
+        readTime: payload.readTime,
+        author: payload.author,
+        category: payload.category,
       })
     }
     setEditing(null)
+    setEditContentHtml('')
     if (editFileRef.current) editFileRef.current.value = ''
     onChanged()
   }
@@ -427,24 +507,36 @@ function BlogsPanel({ onChanged }: { onChanged: () => void }) {
           <CardTitle>New blog post</CardTitle>
         </CardHeader>
         <CardContent>
-          <form onSubmit={createBlog} className="space-y-4">
-            <div className="space-y-2">
+          <form onSubmit={createBlog} className="grid gap-4 sm:grid-cols-2">
+            <div className="space-y-2 sm:col-span-2">
               <Label>Title</Label>
               <Input {...register('title', { required: true })} />
             </div>
             <div className="space-y-2">
-              <Label>Content</Label>
-              <Textarea className="min-h-[160px]" {...register('content', { required: true })} />
+              <Label>Author</Label>
+              <Input {...register('author', { required: true })} />
             </div>
             <div className="space-y-2">
-              <Label>Read time label</Label>
+              <Label>Category</Label>
+              <Input {...register('category', { required: true })} />
+            </div>
+            <div className="space-y-2">
+              <Label>Read Time</Label>
               <Input {...register('readTime')} />
             </div>
             <div className="space-y-2">
+              <Label>Excerpt</Label>
+              <Input {...register('excerpt')} />
+            </div>
+            <div className="space-y-2 sm:col-span-2">
+              <Label>Blog Content (Rich Text)</Label>
+              <RichTextEditor value={contentHtml} onChange={setContentHtml} />
+            </div>
+            <div className="space-y-2 sm:col-span-2">
               <Label>Cover image</Label>
               <Input ref={fileRef} type="file" accept="image/*" />
             </div>
-            <Button type="submit">Publish</Button>
+            <Button type="submit" className="sm:col-span-2">Publish</Button>
           </form>
         </CardContent>
       </Card>
@@ -456,29 +548,46 @@ function BlogsPanel({ onChanged }: { onChanged: () => void }) {
         <CardContent className="space-y-4">
           {isPending ? <p className="text-sm text-slate-500">Loading…</p> : null}
           {data?.map((b) => (
-            <div key={b._id} className="flex gap-4 border-b border-slate-200 pb-4 dark:border-white/10">
+            <div key={b._id} className="flex flex-col sm:flex-row gap-4 border-b border-slate-200 pb-4 dark:border-white/10">
               <LazyImage
                 src={b.imageUrl}
                 alt={b.title}
                 optimizeWidth={160}
-                aspectClassName="h-20 w-28 shrink-0 rounded-md"
+                aspectClassName="h-32 w-full sm:w-40 shrink-0 rounded-md"
               />
               <div className="min-w-0 flex-1">
                 {editing?._id === b._id ? (
-                  <div className="space-y-2">
+                  <div className="space-y-4">
                     <Input
+                      placeholder="Title"
                       value={editing.title}
                       onChange={(e) => setEditing({ ...editing, title: e.target.value })}
                     />
-                    <Textarea
-                      className="min-h-[120px]"
-                      value={editing.content}
-                      onChange={(e) => setEditing({ ...editing, content: e.target.value })}
-                    />
-                    <Input
-                      value={editing.readTime}
-                      onChange={(e) => setEditing({ ...editing, readTime: e.target.value })}
-                    />
+                    <div className="grid grid-cols-2 gap-2">
+                      <Input
+                        placeholder="Author"
+                        value={editing.author || ''}
+                        onChange={(e) => setEditing({ ...editing, author: e.target.value })}
+                      />
+                      <Input
+                        placeholder="Category"
+                        value={editing.category || ''}
+                        onChange={(e) => setEditing({ ...editing, category: e.target.value })}
+                      />
+                    </div>
+                    <div className="grid grid-cols-2 gap-2">
+                      <Input
+                        placeholder="Excerpt"
+                        value={editing.excerpt || ''}
+                        onChange={(e) => setEditing({ ...editing, excerpt: e.target.value })}
+                      />
+                      <Input
+                        placeholder="Read Time"
+                        value={editing.readTime || ''}
+                        onChange={(e) => setEditing({ ...editing, readTime: e.target.value })}
+                      />
+                    </div>
+                    <RichTextEditor value={editContentHtml} onChange={setEditContentHtml} />
                     <Input ref={editFileRef} type="file" accept="image/*" />
                     <div className="flex gap-2">
                       <Button type="button" size="sm" onClick={saveEdit}>
@@ -491,16 +600,22 @@ function BlogsPanel({ onChanged }: { onChanged: () => void }) {
                   </div>
                 ) : (
                   <>
-                    <p className="font-medium dark:text-white">{b.title}</p>
-                    <p className="line-clamp-2 text-sm text-slate-600 dark:text-slate-400">{b.excerpt}</p>
-                    <div className="mt-2 flex gap-2">
-                      <Button type="button" size="sm" variant="outline" onClick={() => setEditing(b)}>
+                    <h3 className="font-semibold text-lg dark:text-white">{b.title}</h3>
+                    <p className="text-xs text-primary dark:text-accent font-medium mb-1">
+                      {b.category || 'Technology'} • {b.author || 'SatByte Team'}
+                    </p>
+                    <p className="line-clamp-2 text-sm text-slate-600 dark:text-slate-400 mb-3">{b.excerpt || b.content.replace(/<[^>]+>/g, '')}</p>
+                    <div className="flex gap-2">
+                      <Button type="button" size="sm" variant="outline" onClick={() => {
+                        setEditing(b)
+                        setEditContentHtml(b.content)
+                      }}>
                         Edit
                       </Button>
                       <Button
                         type="button"
                         size="sm"
-                        className="bg-red-600 hover:bg-red-700"
+                        className="bg-red-600 hover:bg-red-700 text-white"
                         onClick={() => {
                           if (confirm('Delete post and image?')) del.mutate(b._id, { onSuccess: onChanged })
                         }}
@@ -674,3 +789,47 @@ function ServicesPanel({ onChanged }: { onChanged: () => void }) {
     </div>
   )
 }
+
+function AnalyticsPanel() {
+  const { data, isPending } = useOrdersQuery()
+
+  const chartData = (data || []).reduce((acc: any[], order) => {
+    const plan = order.planName || 'Unknown'
+    const existing = acc.find((val) => val.name === plan)
+    if (existing) {
+      existing.count += 1
+      existing.revenue += (order.amountPaid || 0) / 100
+    } else {
+      acc.push({ name: plan, count: 1, revenue: (order.amountPaid || 0) / 100 })
+    }
+    return acc
+  }, [])
+
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>Revenue by Plan</CardTitle>
+      </CardHeader>
+      <CardContent>
+        {isPending ? (
+          <p className="text-sm text-slate-500">Loading analytics…</p>
+        ) : (
+          <div className="h-[400px] w-full mt-4">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={chartData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+                <CartesianGrid strokeDasharray="3 3" opacity={0.2} />
+                <XAxis dataKey="name" />
+                <YAxis yAxisId="left" orientation="left" stroke="#8884d8" />
+                <YAxis yAxisId="right" orientation="right" stroke="#82ca9d" />
+                <RechartsTooltip contentStyle={{ backgroundColor: '#1e293b', border: 'none', color: '#fff' }} />
+                <Bar yAxisId="left" dataKey="revenue" fill="#8884d8" name="Revenue (₹)" />
+                <Bar yAxisId="right" dataKey="count" fill="#82ca9d" name="Orders Count" />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        )}
+      </CardContent>
+    </Card>
+  )
+}
+

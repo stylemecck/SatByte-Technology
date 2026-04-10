@@ -27,7 +27,7 @@ export async function createBlog(req, res) {
     if (!req.file?.buffer) {
       return res.status(400).json({ message: 'Image file is required (field name: image)' })
     }
-    const { title, content, readTime } = req.body
+    const { title, content, readTime, author, category } = req.body
     if (!title || !content) {
       return res.status(400).json({ message: 'title and content are required' })
     }
@@ -36,6 +36,8 @@ export async function createBlog(req, res) {
       title,
       content,
       readTime: readTime || '5 min read',
+      author: author || 'SatByte Team',
+      category: category || 'Technology',
       imageUrl: secure_url,
       cloudinaryPublicId: public_id,
     })
@@ -50,10 +52,12 @@ export async function updateBlog(req, res) {
   try {
     const doc = await Blog.findById(req.params.id)
     if (!doc) return res.status(404).json({ message: 'Not found' })
-    const { title, content, readTime } = req.body
+    const { title, content, readTime, author, category } = req.body
     if (title) doc.title = title
     if (content) doc.content = content
     if (readTime) doc.readTime = readTime
+    if (author) doc.author = author
+    if (category) doc.category = category
 
     if (req.file?.buffer) {
       await deleteImage(doc.cloudinaryPublicId)

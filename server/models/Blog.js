@@ -19,6 +19,8 @@ const blogSchema = new mongoose.Schema(
     slug: { type: String, unique: true, sparse: true },
     excerpt: { type: String, default: '' },
     readTime: { type: String, default: '5 min read' },
+    author: { type: String, default: 'SatByte Team' },
+    category: { type: String, default: 'Technology' },
   },
   { timestamps: true },
 )

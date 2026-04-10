@@ -19,6 +19,8 @@ export type BlogDTO = {
   slug: string
   excerpt: string
   readTime: string
+  author?: string
+  category?: string
   createdAt: string
   updatedAt: string
 }
@@ -44,6 +46,8 @@ export type OrderDTO = {
   emailReferenceId: string
   customerName: string
   status: string
+  projectStatus?: string
+  progress?: number
   createdAt: string
   updatedAt: string
 }
