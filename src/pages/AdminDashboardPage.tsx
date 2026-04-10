@@ -21,7 +21,7 @@ import {
 } from '@/hooks/useCmsQueries'
 import { api, clearToken } from '@/lib/apiClient'
 import { LazyImage } from '@/components/LazyImage'
-import type { BlogDTO, ProjectDTO, ServiceDTO, OrderDTO } from '@/types/cms'
+import type { BlogDTO, ProjectDTO, ServiceDTO } from '@/types/cms'
 
 const categories = ['Web', 'E-commerce', 'Software', 'Other'] as const
 
