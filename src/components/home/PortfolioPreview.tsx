@@ -1,102 +1,116 @@
 import { motion } from 'framer-motion'
 import { useMemo } from 'react'
 import { Link } from 'react-router-dom'
-import { Autoplay, EffectFade, Pagination } from 'swiper/modules'
-import { Swiper, SwiperSlide } from 'swiper/react'
+import { ArrowRight } from 'lucide-react'
 
 import { SectionHeader } from '@/components/SectionHeader'
-import { Button } from '@/components/ui/button'
 import { LazyImage } from '@/components/LazyImage'
-import { fadeUpItem } from '@/animations/pageVariants'
 import { useProjectsQuery } from '@/hooks/useCmsQueries'
 import { HOME_PORTFOLIO } from '@/lib/constants'
+import { cn } from '@/lib/utils'
 
-import 'swiper/css'
-import 'swiper/css/effect-fade'
-import 'swiper/css/pagination'
-
-type Slide = { title: string; description: string; image: string }
-
-/** Swiper carousel — uses CMS projects when available, else static samples. */
 export function PortfolioPreview() {
   const { data } = useProjectsQuery()
 
-  const slides: Slide[] = useMemo(() => {
+  const slides = useMemo(() => {
     if (data?.length) {
       return data.slice(0, 4).map((p) => ({
         title: p.title,
         description: p.description,
         image: p.imageUrl,
+        slug: p._id // fallback to ID if needed
       }))
     }
-    return HOME_PORTFOLIO.map((p) => ({ title: p.title, description: p.description, image: p.image }))
+    return HOME_PORTFOLIO.map((p) => ({ title: p.title, description: p.description, image: p.image, slug: '' }))
   }, [data])
 
   return (
-    <section className="px-4 py-20 sm:px-6 lg:px-8">
+    <section className="px-4 py-24 sm:px-6 lg:px-8 bg-slate-50 dark:bg-transparent">
       <div className="mx-auto max-w-7xl">
-        <SectionHeader
-          eyebrow="Portfolio"
-          title="Recent highlights"
-          subtitle="A glimpse of the experiences we craft for schools, commerce, and enterprises."
-          className="mb-12 sm:mb-14"
-        />
+        {/* Header Area */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 sm:mb-16">
+          <SectionHeader
+            eyebrow="Capabilities"
+            title="Recent highlights"
+            subtitle="A glimpse of the high-end experiences we craft for enterprises and agencies."
+            className="mb-0 text-left"
+          />
+          <Link to="/portfolio" className="hidden md:inline-flex items-center gap-2 text-[15px] font-bold text-primary dark:text-accent hover:opacity-80 transition-opacity mb-2">
+            View full portfolio <ArrowRight className="h-4 w-4 stroke-[2.5]" />
+          </Link>
+        </div>
 
-        <motion.div
-          variants={fadeUpItem}
-          initial="initial"
-          whileInView="animate"
-          viewport={{ once: true }}
-          whileHover={{ scale: 1.008 }}
-          transition={{ type: 'spring', stiffness: 400, damping: 28 }}
-          className="group/card relative overflow-hidden rounded-3xl border border-slate-200/80 bg-white/50 shadow-xl backdrop-blur-md dark:border-white/10 dark:bg-white/5"
-        >
-          <Swiper
-            className="portfolio-preview-swiper"
-            modules={[Autoplay, Pagination, EffectFade]}
-            effect="fade"
-            fadeEffect={{ crossFade: true }}
-            speed={600}
-            loop={slides.length > 1}
-            autoHeight
-            autoplay={{ delay: 4500, disableOnInteraction: false }}
-            pagination={{ clickable: true }}
-          >
-            {slides.map((project) => (
-              <SwiperSlide key={project.title} className="!h-auto">
-                <div className="grid min-h-0 grid-cols-1 md:grid-cols-2">
-                  <div className="relative isolate min-h-[220px] w-full overflow-hidden bg-slate-200/80 dark:bg-slate-800/80 md:min-h-[min(100%,360px)]">
-                    <div className="group/img h-full min-h-[220px] md:absolute md:inset-0 md:min-h-0">
-                      <LazyImage
-                        src={project.image}
-                        alt={project.title}
-                        aspectClassName="h-full min-h-[220px] w-full rounded-none md:min-h-full"
-                        className="h-full min-h-[220px] w-full rounded-none object-cover transition-[transform,filter] duration-700 ease-out group-hover/card:brightness-105 md:min-h-0 group-hover/img:scale-105"
-                        optimizeWidth={900}
-                      />
-                    </div>
-                  </div>
+        {/* Bento Box Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 lg:grid-rows-2 gap-4 sm:gap-6 lg:min-h-[640px]">
+          {slides.map((project, i) => {
+            const isHero = i === 0
+            const isWide = i === 1
 
-                  <div className="flex min-w-0 flex-col justify-center border-t border-slate-200/80 bg-white/95 px-6 pb-8 pt-8 dark:border-white/10 dark:bg-[#0f172a]/95 sm:px-10 md:border-l md:border-t-0 md:bg-white/90 md:pb-10 md:pt-10 md:backdrop-blur-md dark:md:bg-[#0f172a]/90">
-                    <h3 className="font-heading text-2xl font-bold leading-snug tracking-tight text-secondary dark:text-white sm:text-3xl">
+            return (
+              <motion.div
+                key={project.title}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-100px" }}
+                transition={{ duration: 0.6, delay: i * 0.1, ease: [0.21, 0.47, 0.32, 0.98] }}
+                className={cn(
+                  "group relative overflow-hidden rounded-[1.5rem] bg-[#0B1121] shadow-xl border border-slate-200/50 dark:border-white/10 dark:shadow-2xl dark:shadow-black/60",
+                  isHero ? "md:col-span-2 lg:col-span-2 lg:row-span-2 min-h-[440px] lg:min-h-0" :
+                  isWide ? "md:col-span-2 lg:col-span-2 lg:row-span-1 min-h-[300px] lg:min-h-0" :
+                  "md:col-span-1 lg:col-span-1 lg:row-span-1 min-h-[280px] lg:min-h-0"
+                )}
+              >
+                {/* Background Full Cover Image */}
+                <div className="absolute inset-0 z-0">
+                  <LazyImage 
+                    src={project.image} 
+                    alt={project.title}
+                    aspectClassName="h-full w-full rounded-none"
+                    optimizeWidth={isHero ? 1200 : 800}
+                    className="h-full w-full rounded-none object-cover transition-transform duration-1000 ease-[cubic-bezier(0.2,0.8,0.2,1)] group-hover:scale-105"
+                  />
+                </div>
+                
+                {/* Luxurious Gradient Overlays */}
+                <div className="absolute inset-0 z-10 bg-gradient-to-t from-slate-900/95 via-slate-900/40 to-transparent opacity-80 group-hover:opacity-100 transition-opacity duration-700" />
+                <div className="absolute inset-0 z-10 bg-primary/20 dark:bg-accent/20 opacity-0 group-hover:opacity-100 transition-opacity duration-700 mix-blend-overlay" />
+
+                {/* Content Block */}
+                <div className="absolute inset-0 z-20 flex flex-col justify-end p-6 sm:p-8">
+                  <div className="translate-y-4 group-hover:translate-y-0 transition-transform duration-500 ease-[cubic-bezier(0.2,0.8,0.2,1)]">
+                    <h3 className={cn(
+                      "font-heading font-extrabold text-white mb-2 leading-tight tracking-tight shadow-black/50 drop-shadow-md", 
+                      isHero ? "text-3xl sm:text-4xl" : "text-xl sm:text-2xl"
+                    )}>
                       {project.title}
                     </h3>
-                    <p className="mt-3 max-w-prose text-pretty text-base leading-relaxed text-slate-600 dark:text-slate-400">
+                    <p className={cn(
+                      "text-slate-300 font-medium", 
+                      isHero ? "text-lg mb-8 line-clamp-2 md:line-clamp-3 lg:max-w-[85%]" : "text-[15px] mb-5 line-clamp-1"
+                    )}>
                       {project.description}
                     </p>
-                    <Button
-                      asChild
-                      variant="secondary"
-                      className="mt-8 w-fit transition-transform duration-300 group-hover/card:translate-x-0.5"
+                    
+                    {/* Ghosted View Button */}
+                    <Link 
+                      to="/portfolio" 
+                      className="inline-flex items-center justify-center h-11 w-11 rounded-full bg-white text-slate-900 opacity-0 group-hover:opacity-100 transition-all duration-500 hover:scale-110 shadow-xl group-hover:translate-x-1"
                     >
-                      <Link to="/portfolio">View full portfolio</Link>
-                    </Button>
+                       <ArrowRight className="h-[18px] w-[18px] stroke-[2.5]" />
+                    </Link>
                   </div>
                 </div>
-              </SwiperSlide>
-            ))}
-          </Swiper>
-        </motion.div>
+              </motion.div>
+            )
+          })}
+        </div>
+
+        {/* Mobile "View All" Strip */}
+        <div className="mt-10 md:hidden flex justify-center">
+          <Link to="/portfolio" className="inline-flex items-center gap-2 text-[15px] font-bold text-primary dark:text-accent border-b-[2.5px] border-primary/30 dark:border-accent/30 pb-1.5 hover:border-primary dark:hover:border-accent transition-colors">
+            View full portfolio <ArrowRight className="h-4 w-4 stroke-[3]" />
+          </Link>
+        </div>
       </div>
     </section>
   )

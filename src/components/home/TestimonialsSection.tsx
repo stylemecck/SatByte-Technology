@@ -1,59 +1,80 @@
 import { motion } from 'framer-motion'
-import { Quote } from 'lucide-react'
-import { Autoplay, Pagination } from 'swiper/modules'
-import { Swiper, SwiperSlide } from 'swiper/react'
+import { Quote, Star } from 'lucide-react'
 
 import { SectionHeader } from '@/components/SectionHeader'
 import { fadeUpItem } from '@/animations/pageVariants'
 import { TESTIMONIALS } from '@/lib/constants'
 
-import 'swiper/css'
-import 'swiper/css/pagination'
-
-/** Animated testimonial slider for social proof on the home page. */
+/** Infinite scrolling animated testimonial strip for social proof. */
 export function TestimonialsSection() {
+  // We duplicate the testimonials list to create a seamless infinite loop
+  const duplicatedTestimonials = [...TESTIMONIALS, ...TESTIMONIALS, ...TESTIMONIALS]
+
   return (
-    <section className="bg-slate-100/50 px-4 py-20 dark:bg-white/[0.02] sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-5xl">
+    <section className="bg-slate-50 px-4 py-24 dark:bg-transparent sm:px-6 lg:px-8 overflow-hidden">
+      <div className="mx-auto max-w-7xl">
         <SectionHeader
           eyebrow="Testimonials"
-          title="Trusted by clients"
-          subtitle="Real feedback from schools, retailers, and professional firms."
+          title="What our partners say"
+          subtitle="Real, unfiltered feedback from high-growth enterprise agencies and brands."
         />
 
         <motion.div
           variants={fadeUpItem}
           initial="initial"
           whileInView="animate"
-          viewport={{ once: true }}
-          className="group rounded-3xl border border-slate-200/80 bg-white/70 p-6 shadow-lg backdrop-blur-md transition-[transform,box-shadow,border-color] duration-300 hover:-translate-y-0.5 hover:border-primary/25 hover:shadow-xl hover:shadow-primary/15 dark:border-white/10 dark:bg-white/5 dark:hover:border-accent/35 dark:hover:shadow-accent/15 md:p-10"
+          viewport={{ once: true, margin: '-100px' }}
+          className="relative mt-8 sm:mt-12"
         >
-          <Swiper
-            className="home-testimonials-swiper"
-            modules={[Autoplay, Pagination]}
-            spaceBetween={24}
-            slidesPerView={1}
-            autoplay={{ delay: 5000, disableOnInteraction: false }}
-            pagination={{ clickable: true }}
-            breakpoints={{
-              768: { slidesPerView: 1 },
-            }}
-          >
-            {TESTIMONIALS.map((t) => (
-              <SwiperSlide key={t.name} className="!h-auto">
-                <div className="flex flex-col items-center px-1 text-center">
-                  <Quote className="mb-4 h-10 w-10 text-primary/40 transition-transform duration-300 group-hover:scale-110 dark:text-accent/40" />
-                  <p className="max-w-2xl text-lg leading-relaxed text-slate-700 dark:text-slate-200">
-                    “{t.quote}”
-                  </p>
-                  <div className="mt-6">
-                    <p className="font-heading font-semibold text-secondary dark:text-white">{t.name}</p>
-                    <p className="text-sm text-slate-500 dark:text-slate-400">{t.role}</p>
+          {/* Gradient fade borders for marquee effect */}
+          <div className="absolute left-0 top-0 bottom-0 w-24 sm:w-48 bg-gradient-to-r from-slate-50 dark:from-[#0B1121] to-transparent z-10 pointer-events-none" />
+          <div className="absolute right-0 top-0 bottom-0 w-24 sm:w-48 bg-gradient-to-l from-slate-50 dark:from-[#0B1121] to-transparent z-10 pointer-events-none" />
+
+          {/* The Scrolling Track */}
+          <div className="flex overflow-hidden py-10">
+            <motion.div
+              animate={{ x: ["0%", "-33.333333%"] }}
+              transition={{ 
+                repeat: Infinity, 
+                ease: "linear", 
+                duration: 35 
+              }}
+              className="flex gap-6 sm:gap-8 w-max shrink-0 hover:[animation-play-state:paused]"
+            >
+              {duplicatedTestimonials.map((t, idx) => (
+                <div 
+                  key={`${t.name}-${idx}`} 
+                  className="group relative w-[85vw] sm:w-[450px] shrink-0 rounded-[2rem] border border-slate-200/60 bg-white p-8 shadow-xl transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl dark:border-white/10 dark:bg-[#151c2f]"
+                >
+                  <div className="absolute -top-6 -left-2 text-primary/10 dark:text-accent/10 transition-transform duration-500 group-hover:scale-125 group-hover:rotate-12 group-hover:text-primary/20 dark:group-hover:text-accent/20">
+                    <Quote className="h-24 w-24 fill-current stroke-none" />
+                  </div>
+                  
+                  <div className="relative z-10 flex flex-col h-full justify-between gap-8">
+                    <div className="flex gap-1">
+                      {[1, 2, 3, 4, 5].map((star) => (
+                        <Star key={star} className="h-4 w-4 fill-amber-400 text-amber-400" />
+                      ))}
+                    </div>
+                    
+                    <p className="text-[17px] leading-relaxed text-slate-700 dark:text-slate-300 font-medium">
+                      “{t.quote}”
+                    </p>
+                    
+                    <div className="flex items-center gap-4 border-t border-slate-100 dark:border-white/5 pt-6 mt-auto">
+                      <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-primary to-accent text-lg font-bold text-white shadow-lg">
+                        {t.name[0]}
+                      </div>
+                      <div>
+                        <p className="font-heading font-bold text-slate-900 dark:text-white leading-tight">{t.name}</p>
+                        <p className="text-sm font-medium text-primary dark:text-accent">{t.role}</p>
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </SwiperSlide>
-            ))}
-          </Swiper>
+              ))}
+            </motion.div>
+          </div>
         </motion.div>
       </div>
     </section>
