@@ -1,4 +1,6 @@
 import Stripe from 'stripe'
+import Razorpay from 'razorpay'
+import crypto from 'crypto'
 import { sendPurchaseConfirmation } from '../config/mailTransporter.js'
 import { Order } from '../models/Order.js'
 
@@ -204,5 +206,139 @@ export async function updateOrderStatus(req, res) {
   } catch (error) {
     console.error('[update-order-status]', error);
     res.status(500).json({ message: 'Failed to update order status' });
+  }
+}
+
+/* ─────────────────────────────────────────
+   RAZORPAY
+───────────────────────────────────────── */
+
+/** Plan amounts in paise (Razorpay uses smallest unit) */
+const PLAN_AMOUNTS_PAISE = {
+  basic: 499900,
+  standard: 999900,
+  premium: 1999900,
+}
+
+/**
+ * Create a Razorpay order and return order_id + key_id to the frontend.
+ * The frontend then opens the Razorpay checkout popup.
+ */
+export async function createRazorpayOrder(req, res) {
+  try {
+    const keyId = process.env.RAZORPAY_KEY_ID
+    const keySecret = process.env.RAZORPAY_KEY_SECRET
+    if (!keyId || !keySecret) {
+      return res.status(503).json({ message: 'Razorpay is not configured. Set RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET.' })
+    }
+
+    const { planKey } = req.body
+    if (!planKey || !PLAN_AMOUNTS_PAISE[planKey]) {
+      return res.status(400).json({ message: 'Invalid plan. Use basic, standard, or premium.' })
+    }
+
+    const razorpay = new Razorpay({ key_id: keyId, key_secret: keySecret })
+    const order = await razorpay.orders.create({
+      amount: PLAN_AMOUNTS_PAISE[planKey],
+      currency: 'INR',
+      receipt: `satbyte_${planKey}_${Date.now()}`,
+      notes: { planKey, source: 'satbyte_pricing_page' },
+    })
+
+    res.json({ orderId: order.id, keyId, amount: order.amount, planKey })
+  } catch (e) {
+    console.error('[razorpay/create-order] Full error:', JSON.stringify(e, null, 2))
+    const razorErr = e?.error?.description || e?.message || 'Could not create Razorpay order'
+    res.status(500).json({ message: razorErr, debug: e?.error || null })
+  }
+}
+
+/**
+ * Verify Razorpay payment signature, save order, send email.
+ */
+export async function verifyRazorpayPayment(req, res) {
+  try {
+    const keySecret = process.env.RAZORPAY_KEY_SECRET
+    if (!keySecret) return res.status(503).json({ message: 'Razorpay not configured' })
+
+    const { razorpay_order_id, razorpay_payment_id, razorpay_signature, planKey, email, customerName } = req.body
+
+    // Verify HMAC signature
+    const hmac = crypto.createHmac('sha256', keySecret)
+    hmac.update(`${razorpay_order_id}|${razorpay_payment_id}`)
+    const generatedSignature = hmac.digest('hex')
+
+    if (generatedSignature !== razorpay_signature) {
+      return res.status(400).json({ message: 'Payment signature verification failed' })
+    }
+
+    const planData = PLAN_LABELS[planKey] || { name: planKey }
+    const referenceNumber = `SB-RZP-${razorpay_payment_id.slice(-6).toUpperCase()}`
+
+    const existingOrder = await Order.findOne({ paymentGatewayReferenceId: razorpay_payment_id })
+    if (!existingOrder) {
+      await Order.create({
+        email,
+        customerName,
+        planKey,
+        planName: planData.name,
+        amountPaid: PLAN_AMOUNTS_PAISE[planKey],
+        paymentGatewayReferenceId: razorpay_payment_id,
+        emailReferenceId: referenceNumber,
+        status: 'paid',
+      })
+      await sendPurchaseConfirmation(email, planData.name, referenceNumber, razorpay_payment_id, PLAN_AMOUNTS_PAISE[planKey])
+    }
+
+    res.json({ message: 'Payment verified successfully', referenceNumber })
+  } catch (e) {
+    console.error('[razorpay/verify]', e)
+    res.status(500).json({ message: e.message || 'Verification failed' })
+  }
+}
+
+/* ─────────────────────────────────────────
+   PAYUMONEY
+───────────────────────────────────────── */
+
+const PLAN_AMOUNTS_RUPEES = { basic: 4999, standard: 9999, premium: 19999 }
+
+/**
+ * Generate a signed PayU session and return form fields.
+ * The frontend auto-submits these as a POST form to PayU's payment URL.
+ */
+export async function createPayuSession(req, res) {
+  try {
+    const merchantKey = process.env.PAYU_MERCHANT_KEY
+    const merchantSalt = process.env.PAYU_MERCHANT_SALT
+    const payuBaseUrl = process.env.PAYU_BASE_URL || 'https://test.payu.in/_payment'
+
+    if (!merchantKey || !merchantSalt) {
+      return res.status(503).json({ message: 'PayUMoney is not configured. Set PAYU_MERCHANT_KEY and PAYU_MERCHANT_SALT.' })
+    }
+
+    const { planKey, email, name, phone } = req.body
+    if (!planKey || !PLAN_AMOUNTS_RUPEES[planKey]) {
+      return res.status(400).json({ message: 'Invalid plan.' })
+    }
+
+    const txnid = `SB-PAY-${Date.now()}`
+    const amount = PLAN_AMOUNTS_RUPEES[planKey].toString()
+    const productInfo = PLAN_LABELS[planKey]?.name || planKey
+    const clientUrl = (process.env.CLIENT_URL || 'http://localhost:5173').replace(/\/$/, '')
+    const successUrl = `${clientUrl}/pricing/success`
+    const failureUrl = `${clientUrl}/pricing/canceled`
+
+    // PayU hash: key|txnid|amount|productinfo|firstname|email|||||||||||salt
+    const hashString = `${merchantKey}|${txnid}|${amount}|${productInfo}|${name}|${email}|||||||||||${merchantSalt}`
+    const hash = crypto.createHash('sha512').update(hashString).digest('hex')
+
+    res.json({
+      payuBaseUrl,
+      fields: { key: merchantKey, txnid, amount, productinfo: productInfo, firstname: name, email, phone: phone || '', surl: successUrl, furl: failureUrl, hash, service_provider: 'payu_paisa' },
+    })
+  } catch (e) {
+    console.error('[payu/create-session]', e)
+    res.status(500).json({ message: e.message || 'Could not create PayU session' })
   }
 }
