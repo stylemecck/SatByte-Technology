@@ -57,7 +57,6 @@ import {
 import { api, clearToken } from '@/lib/apiClient'
 import { RichTextEditor } from '@/components/admin/RichTextEditor'
 import { LazyImage } from '@/components/LazyImage'
-import type { BlogDTO, ProjectDTO } from '@/types/cms'
 
 const categories = ['Web', 'E-commerce', 'Software', 'Other'] as const
 
