@@ -237,7 +237,7 @@ export async function clientPasswordLogin(req, res) {
 
 export async function getProfile(req, res) {
   try {
-    const user = await User.findById(req.user.sub).select('-passwordHash')
+    const user = await User.findOne({ email: req.user.email.toLowerCase().trim() }).select('-passwordHash')
     if (!user) {
       // If no User record exists (OTP only client), return basic info from token
       if (req.user.role === 'client' && req.user.email) {

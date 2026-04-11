@@ -15,7 +15,10 @@ import {
   AlertCircle,
   FileText,
   ChevronRight,
-  Send
+  Send,
+  Pencil,
+  X,
+  Save
 } from 'lucide-react'
 
 import { api, getStoredToken, setAuthToken } from '@/lib/apiClient'
@@ -89,6 +92,7 @@ export default function ClientDashboardPage() {
 
   const [profileForm, setProfileForm] = useState({ name: '', phone: '', company: '' })
   const [profileLoading, setProfileLoading] = useState(false)
+  const [isEditingProfile, setIsEditingProfile] = useState(false)
 
   useEffect(() => {
     if (profile) {
@@ -115,13 +119,13 @@ export default function ClientDashboardPage() {
     navigate('/')
   }
 
-  const handleUpdateProfile = async (e: React.FormEvent) => {
-    e.preventDefault()
+  const handleUpdateProfile = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault()
     setProfileLoading(true)
     try {
       await api.put('/auth/profile', profileForm)
       refetchProfile()
-      alert('Profile updated successfully!')
+      setIsEditingProfile(false)
     } catch (err: any) {
       alert(err.response?.data?.message || 'Failed to update profile')
     } finally {
@@ -625,45 +629,89 @@ export default function ClientDashboardPage() {
                 <div className="grid lg:grid-cols-3 gap-8 items-start">
                   
                   {/* General Profile Section */}
-                  <motion.div variants={fadeAnim} className="lg:col-span-2 bg-[#0A111D]/80 backdrop-blur-xl border border-white/10 rounded-[2rem] p-8 md:p-10 shadow-2xl">
-                    <h3 className="text-2xl font-bold font-heading text-white mb-2">Personal Details</h3>
-                    <p className="text-slate-400 mb-8">Update your contact information for better project coordination.</p>
+                  <motion.div variants={fadeAnim} className="lg:col-span-2 bg-[#0A111D]/80 backdrop-blur-xl border border-white/10 rounded-[2rem] p-8 md:p-10 shadow-2xl relative overflow-hidden">
                     
-                    <form onSubmit={handleUpdateProfile} className="grid md:grid-cols-2 gap-6">
+                    <div className="flex items-center justify-between mb-8">
+                       <div>
+                         <h3 className="text-2xl font-bold font-heading text-white mb-2">Personal Details</h3>
+                         <p className="text-slate-400">Your professional contact information.</p>
+                       </div>
+                       {!isEditingProfile ? (
+                         <button 
+                          onClick={() => setIsEditingProfile(true)}
+                          className="p-3 bg-primary/10 text-primary border border-primary/20 rounded-xl hover:bg-primary/20 transition-all group"
+                          title="Edit Profile"
+                         >
+                           <Pencil className="h-5 w-5 group-hover:scale-110 transition-transform" />
+                         </button>
+                       ) : (
+                         <div className="flex items-center gap-2">
+                           <button 
+                            onClick={() => { setIsEditingProfile(false); refetchProfile(); }}
+                            className="p-3 bg-red-500/10 text-red-500 border border-red-500/20 rounded-xl hover:bg-red-500/20 transition-all"
+                           >
+                             <X className="h-5 w-5" />
+                           </button>
+                           <button 
+                            onClick={() => handleUpdateProfile()}
+                            disabled={profileLoading}
+                            className="p-3 bg-green-500/10 text-green-500 border border-green-500/20 rounded-xl hover:bg-green-500/20 transition-all disabled:opacity-50"
+                           >
+                             <Save className="h-5 w-5" />
+                           </button>
+                         </div>
+                       )}
+                    </div>
+                    
+                    <div className="grid md:grid-cols-2 gap-8">
                       <div className="space-y-2">
                         <label className="text-xs font-bold uppercase tracking-wider text-slate-500">Full Name</label>
-                        <input
-                          className="w-full bg-[#121A2F] border border-white/10 rounded-xl px-4 py-3.5 text-white placeholder-slate-600 focus:border-primary/50 focus:outline-none"
-                          placeholder="John Doe"
-                          value={profileForm.name}
-                          onChange={(e) => setProfileForm(p => ({...p, name: e.target.value}))}
-                        />
+                        {isEditingProfile ? (
+                          <input
+                            className="w-full bg-[#121A2F] border border-white/10 rounded-xl px-4 py-3.5 text-white placeholder-slate-600 focus:border-primary/50 focus:outline-none"
+                            placeholder="John Doe"
+                            value={profileForm.name}
+                            onChange={(e) => setProfileForm(p => ({...p, name: e.target.value}))}
+                          />
+                        ) : (
+                          <div className="px-4 py-3.5 bg-white/[0.02] border border-white/5 rounded-xl text-white font-medium min-h-[52px] flex items-center">
+                            {profileForm.name || <span className="text-slate-600 italic">Not set</span>}
+                          </div>
+                        )}
                       </div>
+
                       <div className="space-y-2">
                         <label className="text-xs font-bold uppercase tracking-wider text-slate-500">Phone Number</label>
-                        <input
-                          className="w-full bg-[#121A2F] border border-white/10 rounded-xl px-4 py-3.5 text-white placeholder-slate-600 focus:border-primary/50 focus:outline-none"
-                          placeholder="+91 98765 43210"
-                          value={profileForm.phone}
-                          onChange={(e) => setProfileForm(p => ({...p, phone: e.target.value}))}
-                        />
+                        {isEditingProfile ? (
+                          <input
+                            className="w-full bg-[#121A2F] border border-white/10 rounded-xl px-4 py-3.5 text-white placeholder-slate-600 focus:border-primary/50 focus:outline-none"
+                            placeholder="+91 98765 43210"
+                            value={profileForm.phone}
+                            onChange={(e) => setProfileForm(p => ({...p, phone: e.target.value}))}
+                          />
+                        ) : (
+                          <div className="px-4 py-3.5 bg-white/[0.02] border border-white/5 rounded-xl text-white font-medium min-h-[52px] flex items-center">
+                            {profileForm.phone || <span className="text-slate-600 italic">Not set</span>}
+                          </div>
+                        )}
                       </div>
+
                       <div className="space-y-2 md:col-span-2">
                         <label className="text-xs font-bold uppercase tracking-wider text-slate-500">Company / Organization</label>
-                        <input
-                          className="w-full bg-[#121A2F] border border-white/10 rounded-xl px-4 py-3.5 text-white placeholder-slate-600 focus:border-primary/50 focus:outline-none"
-                          placeholder="SatByte Technology Inc."
-                          value={profileForm.company}
-                          onChange={(e) => setProfileForm(p => ({...p, company: e.target.value}))}
-                        />
+                        {isEditingProfile ? (
+                          <input
+                            className="w-full bg-[#121A2F] border border-white/10 rounded-xl px-4 py-3.5 text-white placeholder-slate-600 focus:border-primary/50 focus:outline-none"
+                            placeholder="SatByte Technology Inc."
+                            value={profileForm.company}
+                            onChange={(e) => setProfileForm(p => ({...p, company: e.target.value}))}
+                          />
+                        ) : (
+                          <div className="px-4 py-3.5 bg-white/[0.02] border border-white/5 rounded-xl text-white font-medium min-h-[52px] flex items-center">
+                            {profileForm.company || <span className="text-slate-600 italic">Not set</span>}
+                          </div>
+                        )}
                       </div>
-                      
-                      <div className="md:col-span-2 pt-4">
-                        <Button type="submit" disabled={profileLoading} className="rounded-xl font-bold px-10 h-12 bg-primary text-white shadow-lg shadow-primary/20">
-                          {profileLoading ? 'Updating...' : 'Save Profile Details'}
-                        </Button>
-                      </div>
-                    </form>
+                    </div>
 
                     <div className="mt-12 pt-10 border-t border-white/5">
                        <h3 className="text-2xl font-bold font-heading text-white mb-2">Change Password</h3>
