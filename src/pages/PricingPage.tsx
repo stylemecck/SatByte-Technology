@@ -107,7 +107,7 @@ export default function PricingPage() {
 
   const stripeMutation = useMutation({
     mutationFn: async (planKey: PricingPlanId) => {
-      const { data } = await api.post<{ url: string }>('/checkout/create-session', { planKey, isMonthly })
+      const { data } = await api.post<{ url: string }>('checkout/create-session', { planKey, isMonthly })
       return data.url
     },
     onSuccess: (url) => { if (url) window.location.href = url },
@@ -130,7 +130,7 @@ export default function PricingPage() {
     setShowRzpModal(null)
     setLoadingPlan(planKey)
     try {
-      const { data } = await api.post<{ orderId: string; keyId: string; amount: number }>('/checkout/razorpay/create-order', { planKey })
+      const { data } = await api.post<{ orderId: string; keyId: string; amount: number }>('checkout/razorpay/create-order', { planKey })
       setLoadingPlan(null)
       const options = {
         key: data.keyId,
@@ -141,7 +141,7 @@ export default function PricingPage() {
         order_id: data.orderId,
         handler: async (response: { razorpay_order_id: string; razorpay_payment_id: string; razorpay_signature: string }) => {
           try {
-            await api.post('/checkout/razorpay/verify', {
+            await api.post('checkout/razorpay/verify', {
               ...response, planKey,
               email: userInfo.email,
               customerName: userInfo.name,
@@ -170,7 +170,7 @@ export default function PricingPage() {
     if (!userInfo.email || !userInfo.name) return
     setLoadingPlan(planKey)
     try {
-      const { data } = await api.post<{ payuBaseUrl: string; fields: Record<string, string> }>('/checkout/payu/create-session', {
+      const { data } = await api.post<{ payuBaseUrl: string; fields: Record<string, string> }>('checkout/payu/create-session', {
         planKey, email: userInfo.email, name: userInfo.name, phone: userInfo.phone,
       })
       submitPayuForm(data.payuBaseUrl, data.fields)

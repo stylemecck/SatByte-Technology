@@ -27,7 +27,7 @@ export default function ClientLoginPage() {
     setLoading(true)
     setError('')
     try {
-      const res = await api.post('/auth/client-password-login', { email, password })
+      const res = await api.post('auth/client-password-login', { email, password })
       saveToken(res.data.token)
       navigate('/portal')
     } catch (err: any) {
@@ -43,7 +43,7 @@ export default function ClientLoginPage() {
     setError('')
     setSuccess('')
     try {
-      const res = await api.post('/auth/client-register', { email, password })
+      const res = await api.post('auth/client-register', { email, password })
       saveToken(res.data.token)
       setSuccess('Account created successfully! Redirecting...')
       setTimeout(() => navigate('/portal'), 1500)
@@ -59,7 +59,7 @@ export default function ClientLoginPage() {
     setLoading(true)
     setError('')
     try {
-      await api.post('/auth/client-login', { email })
+      await api.post('auth/client-login', { email })
       setStep(2)
     } catch (err: any) {
       setError(err.response?.data?.message || 'Failed to send OTP')
@@ -73,7 +73,7 @@ export default function ClientLoginPage() {
     setLoading(true)
     setError('')
     try {
-      const res = await api.post('/auth/client-verify', { email, otp })
+      const res = await api.post('auth/client-verify', { email, otp })
       saveToken(res.data.token)
       navigate('/portal')
     } catch (err: any) {

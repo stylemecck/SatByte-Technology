@@ -207,7 +207,7 @@ function InternshipApplyModal({ internship, onClose }: { internship: Internship,
 
    const applyMutation = useMutation({
      mutationFn: async (payload: any) => {
-       const { data } = await api.post('/internships/apply', payload)
+       const { data } = await api.post('internships/apply', payload)
        return data
      },
      onSuccess: () => {

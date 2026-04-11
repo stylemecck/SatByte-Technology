@@ -21,7 +21,7 @@ export default function PricingSuccessPage() {
     hasFired.current = true
 
     // Trigger the backend to verify the session and send the email
-    api.post('/purchase-success', { session_id: sessionId })
+    api.post('purchase-success', { session_id: sessionId })
       .then(() => setEmailSent(true))
       .catch((err) => console.error('Failed to trigger confirmation email', err))
   }, [sessionId])

@@ -103,7 +103,7 @@ function CertificationCard({ cert }: { cert: Certification }) {
 
   const enrollMutation = useMutation({
     mutationFn: async () => {
-       const { data } = await api.post('/certifications/enroll', { certificationId: cert._id })
+       const { data } = await api.post('certifications/enroll', { certificationId: cert._id })
        return data
     },
     onSuccess: (data) => {

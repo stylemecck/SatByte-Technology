@@ -290,7 +290,7 @@ function OrdersPanel() {
     const fd = new FormData()
     fd.append('file', file)
     try {
-      await api.post(`/checkout/orders/${orderId}/assets`, fd, { headers: { 'Content-Type': 'multipart/form-data' } })
+      await api.post(`checkout/orders/${orderId}/assets`, fd, { headers: { 'Content-Type': 'multipart/form-data' } })
       refetch()
     } catch (e: any) { alert(e.response?.data?.message || 'Failed to upload') } 
     finally { setUploadingId(null) }
@@ -298,7 +298,7 @@ function OrdersPanel() {
 
   const deleteAsset = async (orderId: string, assetId: string) => {
     if (!confirm('Delete this file?')) return;
-    try { await api.delete(`/checkout/orders/${orderId}/assets/${assetId}`); refetch() } 
+    try { await api.delete(`checkout/orders/${orderId}/assets/${assetId}`); refetch() } 
     catch (e: any) { alert('Failed to delete asset') }
   }
 
@@ -480,7 +480,7 @@ function TicketsPanel() {
     e.preventDefault()
     if (!replyMessage || !selectedTicketId) return
     try {
-      await api.post(`/tickets/${selectedTicketId}/reply`, { message: replyMessage })
+      await api.post(`tickets/${selectedTicketId}/reply`, { message: replyMessage })
       setReplyMessage('')
       refetch()
     } catch (err: any) { alert(err.response?.data?.message || 'Failed to reply') }
@@ -488,7 +488,7 @@ function TicketsPanel() {
 
   const handleCloseTicket = async () => {
     if (!selectedTicketId || !confirm('Close this ticket?')) return
-    try { await api.put(`/tickets/${selectedTicketId}/close`); refetch(); setSelectedTicketId(null); } 
+    try { await api.put(`tickets/${selectedTicketId}/close`); refetch(); setSelectedTicketId(null); } 
     catch (err: any) { alert(err.response?.data?.message || 'Failed to close') }
   }
 
@@ -589,7 +589,7 @@ function ProjectsPanel({ onChanged }: { onChanged: () => void }) {
     const fd = new FormData(); fd.append('title', values.title); fd.append('description', values.description);
     fd.append('technologies', JSON.stringify(values.technologies.split(',').map(t=>t.trim())));
     fd.append('category', values.category); fd.append('image', file);
-    await api.post('/projects', fd); reset(); if(fileRef.current) fileRef.current.value=''; onChanged();
+    await api.post('projects', fd); reset(); if(fileRef.current) fileRef.current.value=''; onChanged();
   }
 
   return (
@@ -661,7 +661,7 @@ function BlogsPanel({ onChanged }: { onChanged: () => void }) {
     if(!img || !contentHtml) return alert('Missing info');
     const fd = new FormData(); fd.append('title', v.title); fd.append('content', contentHtml); fd.append('excerpt', v.excerpt);
     fd.append('readTime', v.readTime); fd.append('author', v.author); fd.append('category', v.category); fd.append('image', img);
-    await api.post('/blogs', fd); reset(); setContentHtml(''); onChanged();
+    await api.post('blogs', fd); reset(); setContentHtml(''); onChanged();
   }
 
   return (
@@ -728,7 +728,7 @@ function ServicesPanel({ onChanged }: { onChanged: () => void }) {
     if(!img) return alert('Choose icon');
     const fd = new FormData(); fd.append('title', v.title); fd.append('description', v.description);
     fd.append('iconKey', v.iconKey || 'Globe'); fd.append('image', img);
-    await api.post('/services', fd); reset(); onChanged();
+    await api.post('services', fd); reset(); onChanged();
   }
 
   return (

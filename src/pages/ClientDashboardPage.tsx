@@ -42,7 +42,7 @@ function useMyOrdersQuery() {
     queryFn: async () => {
       const stored = getStoredToken()
       if (stored) setAuthToken(stored)
-      const { data } = await api.get('/checkout/my-orders')
+      const { data } = await api.get('checkout/my-orders')
       return data as any[]
     },
     retry: 2,
@@ -55,7 +55,7 @@ function useTicketsQuery() {
   return useQuery({
     queryKey: ['my-tickets'],
     queryFn: async () => {
-      const { data } = await api.get('/tickets')
+      const { data } = await api.get('tickets')
       return data as any[]
     },
     refetchInterval: 3000, // Real-time refresh every 3s
@@ -66,7 +66,7 @@ function useProfileQuery() {
   return useQuery({
     queryKey: ['profile'],
     queryFn: async () => {
-      const { data } = await api.get('/auth/profile')
+      const { data } = await api.get('auth/profile')
       return data
     }
   })
@@ -123,7 +123,7 @@ export default function ClientDashboardPage() {
     if (e) e.preventDefault()
     setProfileLoading(true)
     try {
-      await api.put('/auth/profile', profileForm)
+      await api.put('auth/profile', profileForm)
       refetchProfile()
       setIsEditingProfile(false)
     } catch (err: any) {
@@ -142,7 +142,7 @@ export default function ClientDashboardPage() {
     setPassLoading(true)
     setPassMsg(null)
     try {
-      await api.post('/auth/client-set-password', { password: newPassword })
+      await api.post('auth/client-set-password', { password: newPassword })
       setPassMsg({ type: 'success', text: 'Password successfully updated!' })
       setNewPassword('')
     } catch (err: any) {
@@ -157,7 +157,7 @@ export default function ClientDashboardPage() {
     if (!activeTicketParams.subject || !activeTicketParams.message) return alert("Subject and message are required.")
     
     try {
-      await api.post('/tickets', activeTicketParams)
+      await api.post('tickets', activeTicketParams)
       setActiveTicketParams({ subject: '', orderId: '', message: '' })
       refetchTickets()
     } catch (err: any) {
@@ -170,7 +170,7 @@ export default function ClientDashboardPage() {
     if (!replyMessage || !selectedTicketId) return
     
     try {
-      await api.post(`/tickets/${selectedTicketId}/reply`, { message: replyMessage })
+      await api.post(`tickets/${selectedTicketId}/reply`, { message: replyMessage })
       setReplyMessage('')
       refetchTickets()
     } catch (err: any) {
@@ -181,7 +181,7 @@ export default function ClientDashboardPage() {
   const handleCloseTicket = async () => {
     if (!selectedTicketId || !confirm('Are you sure you want to resolve this ticket?')) return
     try {
-      await api.put(`/tickets/${selectedTicketId}/close`)
+      await api.put(`tickets/${selectedTicketId}/close`)
       refetchTickets()
       setSelectedTicketId(null)
     } catch (err: any) {
@@ -355,7 +355,7 @@ export default function ClientDashboardPage() {
                                   <button 
                                     onClick={async () => {
                                       if (!confirm('Delete this file permanently?')) return;
-                                      try { await api.delete(`/checkout/orders/${order._id}/assets/${asset._id}`); refetch(); } 
+                                      try { await api.delete(`checkout/orders/${order._id}/assets/${asset._id}`); refetch(); } 
                                       catch (e) { alert('Failed to delete file') }
                                     }}
                                     className="p-2 text-slate-500 hover:text-red-400 hover:bg-red-400/10 rounded-lg transition-colors opacity-0 group-hover/asset:opacity-100"
@@ -384,7 +384,7 @@ export default function ClientDashboardPage() {
                                 const uploadInput = document.getElementById(`file-upload-${order._id}`) as HTMLInputElement;
                                 if (uploadInput) uploadInput.disabled = true;
                                 try {
-                                  await api.post(`/checkout/orders/${order._id}/assets`, formData, { headers: { 'Content-Type': 'multipart/form-data' }});
+                                  await api.post(`checkout/orders/${order._id}/assets`, formData, { headers: { 'Content-Type': 'multipart/form-data' }});
                                   refetch();
                                 } catch (err: any) { alert(err.response?.data?.message || 'Failed to upload'); } 
                                 finally { if (uploadInput) { uploadInput.disabled = false; uploadInput.value = ''; } }

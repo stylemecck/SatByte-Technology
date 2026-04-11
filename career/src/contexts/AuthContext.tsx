@@ -18,7 +18,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const refreshProfile = async () => {
     try {
-      const { data } = await api.get('/auth/profile')
+      const { data } = await api.get('auth/profile')
       setUser(data)
     } catch (e) {
       console.error('Failed to fetch profile', e)

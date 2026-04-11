@@ -37,7 +37,7 @@ export default function QuotePage() {
     if (!email) return;
     setStatus('sending');
     try {
-      await api.post('/contact/estimate', {
+      await api.post('contact/estimate', {
         projectType,
         pages,
         timeline,
