@@ -38,8 +38,8 @@ export async function login(req, res) {
       user: { id: user._id, email: user.email, role: user.role },
     })
   } catch (e) {
-    console.error(e)
-    res.status(500).json({ message: 'Login failed' })
+    console.error('[login error]', e.message)
+    res.status(500).json({ message: `Login failed: ${e.message}` })
   }
 }
 
