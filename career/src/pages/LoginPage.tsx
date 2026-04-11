@@ -29,7 +29,9 @@ export default function LoginPage() {
       login(data.token, data.user || { email, role: data.role, id: data.id })
       navigate(from, { replace: true })
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Login failed. Please check your credentials.')
+      console.error('Login error:', err)
+      const msg = err.response?.data?.message || err.message || 'Login failed. Please check your credentials.'
+      setError(msg)
     } finally {
       setIsLoading(false)
     }

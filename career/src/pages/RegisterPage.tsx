@@ -30,7 +30,9 @@ export default function RegisterPage() {
       login(data.token, data.user)
       navigate('/dashboard', { replace: true })
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Registration failed. Please try again.')
+      console.error('Registration error:', err)
+      const msg = err.response?.data?.message || err.message || 'Registration failed. Please try again.'
+      setError(msg)
     } finally {
       setIsLoading(false)
     }
