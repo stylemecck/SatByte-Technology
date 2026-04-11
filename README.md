@@ -2,22 +2,36 @@
 
 **High-End Web Solutions | Custom Portals | Automated Business Architectures**
 
-SatByte Technology is a premium web development agency platform engineered to facilitate scalable agency growth, secure client portals, high-conversion project quoting, and rich content management.
+SatByte Technology is a premium web development agency platform engineered for scalable agency growth, secure client portals, high-conversion project quoting, and enterprise-grade content management.
 
 ## 🚀 Core Features
 
-- **Interactive Project Estimator**: A dynamic module generating real-time quotes, seamlessly integrated with Calendly for frictionless lead generation.
-- **Secure Client Portal**: Employs secure, passwordless OTP (One-Time Password) access ensuring clients can easily track project statuses and invoices without managing passwords.
-- **Admin Back-Office**: A comprehensive command center for managing order phases, generating/dispatching automated PDF invoices, and tracking client interactions.
-- **Enterprise CMS Engine**: A Tiptap-powered advanced rich-text blog management system featuring grid layouts, dynamic Tables of Contents, and newsletter integration.
-- **Premium UI/UX**: Designed meticulously with React, Framer Motion, and Tailwind CSS to deliver cutting-edge aesthetics and dynamic micro-animations.
+### 💎 Premium Portals (V2 Modernized)
+- **Glassmorphism Aesthetic**: Revamped Client and Admin dashboards with a modern, high-end "Glass" interface featuring specialized dark modes and backdrop effects.
+- **Fluid Micro-Animations**: Powered by **Framer Motion** for a seamless, application-like experience.
+- **Unified Branding**: Consistent high-end design across landing pages and management portals.
+
+### 🔐 Advanced Authentication
+- **Hybrid Login Flow**: Clients can choose between frictionless **OTP (One-Time Password)** entry or permanent **Secure Password** login for instant access.
+- **RBAC Security**: Role-based access control protecting the CMS and backend administrative routes.
+
+### 💳 Financial Infrastructure
+- **Triple-Gateway Integration**: Native support for **Stripe**, **Razorpay**, and **PayUMoney** ensuring global and regional payment compatibility.
+- **Subscription Retainers**: Automated recurring billing via Stripe Subscriptions for monthly project engagement.
+- **Branded Invoicing**: Automatic PDF generation and dispatch with SB-Reference tracking.
+
+### 🛠 Operational Excellence
+- **Global Ticketing System**: In-built support desk allowing clients to open queries and admins to reply in real-time.
+- **Secure Asset Management**: Integrated Cloudinary support for sharing production files, deliverables, and assets directly within the order panels.
+- **Tiptap CMS Engine**: Advanced rich-text blog management with dynamic Table of Contents and newsletter bridging.
 
 ## 🛠 Tech Stack
 
 - **Frontend**: React 19, TypeScript, Vite, Tailwind CSS, Framer Motion, Radix UI.
-- **Backend API**: Node.js, Express.
-- **Database**: MongoDB (Mongoose ORM).
-- **Core Integrations**: Nodemailer (OTP/Emailing), PDFKit (Invoicing), Tiptap (CMS).
+- **Backend API**: Node.js, Express, JWT, Bcrypt.
+- **Database**: MongoDB Atlas (Mongoose ORM).
+- **Core Cloud**: Cloudinary (Assets), Stripe/Razorpay/PayU (Payments).
+- **Automation**: Nodemailer (Transactional Email), PDFKit (Invoices).
 
 ## 📜 Copyright and License
 
