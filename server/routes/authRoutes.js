@@ -1,5 +1,14 @@
 import { Router } from 'express'
-import { login, register, clientLoginRequest, clientLoginVerify, clientSetPassword, clientPasswordLogin, getClients } from '../controllers/authController.js'
+import { 
+  login, 
+  register, 
+  clientLoginRequest, 
+  clientLoginVerify, 
+  clientSetPassword, 
+  clientPasswordLogin, 
+  clientRegister,
+  getClients 
+} from '../controllers/authController.js'
 import { requireAuth, requireAdmin } from '../middleware/auth.js'
 
 const router = Router()
@@ -7,6 +16,7 @@ const router = Router()
 // POST handlers (actual API endpoints)
 router.post('/login', login)
 router.post('/register', register)
+router.post('/client-register', clientRegister)
 router.post('/client-login', clientLoginRequest)
 router.post('/client-verify', clientLoginVerify)
 router.post('/client-password-login', clientPasswordLogin)

@@ -6,7 +6,15 @@ const userSchema = new mongoose.Schema(
     passwordHash: { type: String, required: true },
     role: { type: String, enum: ['admin', 'client'], default: 'client' },
   },
-  { timestamps: true },
+  { 
+    timestamps: true,
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true }
+  },
 )
+
+userSchema.virtual('hasPassword').get(function() {
+  return !!this.passwordHash
+})
 
 export const User = mongoose.models.User || mongoose.model('User', userSchema)

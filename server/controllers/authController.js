@@ -74,6 +74,35 @@ export async function register(req, res) {
   }
 }
 
+/** Explicit client registration. */
+export async function clientRegister(req, res) {
+  try {
+    const { email, password } = req.body
+    if (!email || !password || password.length < 8) {
+      return res.status(400).json({ message: 'Valid email and password (8+ chars) required' })
+    }
+    const normalizedEmail = email.toLowerCase().trim()
+    const exists = await User.findOne({ email: normalizedEmail })
+    if (exists) {
+      return res.status(409).json({ message: 'Email already registered' })
+    }
+    const passwordHash = await bcrypt.hash(password, 12)
+    const user = await User.create({
+      email: normalizedEmail,
+      passwordHash,
+      role: 'client',
+    })
+    const token = signToken(user)
+    res.status(201).json({
+      token,
+      user: { id: user._id, email: user.email, role: user.role },
+    })
+  } catch (e) {
+    console.error(e)
+    res.status(500).json({ message: 'Client registration failed' })
+  }
+}
+
 export async function clientLoginRequest(req, res) {
   try {
     const { email } = req.body
@@ -182,27 +211,23 @@ export async function clientPasswordLogin(req, res) {
     const user = await User.findOne({ email: normEmail })
 
     if (!user) {
-      return res.status(401).json({ message: 'Invalid credentials. If you are a new client, please use Email Code login.' })
+      return res.status(401).json({ message: 'Invalid credentials. If you are a new client, please register or use Email Code login.' })
     }
 
     if (user.role !== 'client' && user.role !== 'admin') {
       return res.status(401).json({ message: 'Invalid credentials. Incorrect account type.' })
     }
 
-    if (!user.hasPassword || !user.password) {
+    if (!user.passwordHash) {
       return res.status(401).json({ message: 'No password set for this account. Please use Email Code login first to set one.' })
     }
 
-    const isMatch = await bcrypt.compare(password, user.password)
+    const isMatch = await bcrypt.compare(password, user.passwordHash)
     if (!isMatch) {
       return res.status(401).json({ message: 'Invalid credentials' })
     }
 
-    const token = jwt.sign(
-      { sub: user._id, email: user.email, role: user.role },
-      process.env.JWT_SECRET,
-      { expiresIn: '7d' },
-    )
+    const token = signToken(user)
     res.json({ token, role: user.role })
   } catch (e) {
     console.error('[client-password-login]', e)
@@ -212,7 +237,7 @@ export async function clientPasswordLogin(req, res) {
 
 export async function getClients(req, res) {
   try {
-    const clients = await User.find({ role: 'client' }).select('-password').sort({ createdAt: -1 })
+    const clients = await User.find({ role: 'client' }).select('-passwordHash').sort({ createdAt: -1 })
     res.json(clients)
   } catch (e) {
     console.error('[get-clients]', e)
