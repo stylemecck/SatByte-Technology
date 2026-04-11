@@ -26,7 +26,7 @@ export async function getInternshipById(req, res) {
 export async function applyForInternship(req, res) {
   try {
     const { internshipId, resumeUrl, coverLetter, college, course, skills } = req.body
-    const userId = req.user.sub
+    const userId = req.user.id
 
     const application = await Application.create({
       user: userId,

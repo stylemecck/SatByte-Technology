@@ -26,7 +26,7 @@ export async function getJobById(req, res) {
 export async function applyForJob(req, res) {
   try {
     const { jobId, resumeUrl, coverLetter, skills } = req.body
-    const userId = req.user.sub // Assuming sub is the userId from JWT
+    const userId = req.user.id // Assuming id is the userId from JWT
 
     const application = await Application.create({
       user: userId,
@@ -71,7 +71,7 @@ export async function getAllApplications(req, res) {
 /** Authenticated: View user's own applications */
 export async function getMyApplications(req, res) {
   try {
-    const userId = req.user.sub
+    const userId = req.user.id
     const apps = await Application.find({ user: userId })
       .populate('job', 'title')
       .populate('internship', 'title')

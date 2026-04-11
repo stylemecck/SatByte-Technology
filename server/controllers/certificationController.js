@@ -37,7 +37,7 @@ export async function createCertification(req, res) {
 export async function createEnrollmentSession(req, res) {
   try {
     const { certificationId } = req.body
-    const userId = req.user.sub
+    const userId = req.user.id
     
     const cert = await Certification.findById(certificationId)
     if (!cert) return res.status(404).json({ message: 'Certification not found' })
@@ -149,7 +149,7 @@ export async function verifyEnrollment(req, res) {
 /** Authenticated: Get user's enrollments */
 export async function getMyEnrollments(req, res) {
   try {
-    const enrollments = await Enrollment.find({ user: req.user.sub })
+    const enrollments = await Enrollment.find({ user: req.user.id })
       .populate('certification')
       .sort({ createdAt: -1 })
     res.json(enrollments)
