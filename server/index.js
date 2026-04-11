@@ -9,6 +9,7 @@ import checkoutRoutes from './routes/checkoutRoutes.js'
 import contactRoutes from './routes/contactRoutes.js'
 import projectRoutes from './routes/projectRoutes.js'
 import serviceRoutes from './routes/serviceRoutes.js'
+import ticketRoutes from './routes/ticketRoutes.js'
 import { handlePurchaseSuccess } from './controllers/checkoutController.js'
 
 const app = express()
@@ -38,6 +39,7 @@ app.use('/api/blogs', blogRoutes)
 app.use('/api/services', serviceRoutes)
 app.use('/api/contact', contactRoutes)
 app.use('/api/checkout', checkoutRoutes)
+app.use('/api/tickets', ticketRoutes)
 
 // Sample route for purchase success confirmation
 app.post('/api/purchase-success', handlePurchaseSuccess)

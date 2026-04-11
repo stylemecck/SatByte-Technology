@@ -13,6 +13,26 @@ export function useOrdersQuery() {
   })
 }
 
+export function useClientsQuery() {
+  return useQuery({
+    queryKey: ['clients'],
+    queryFn: async () => {
+      const { data } = await api.get<any[]>('/auth/clients')
+      return data
+    },
+  })
+}
+
+export function useTicketsQuery() {
+  return useQuery({
+    queryKey: ['tickets'],
+    queryFn: async () => {
+      const { data } = await api.get<any[]>('/tickets')
+      return data
+    },
+  })
+}
+
 export function useProjectsQuery() {
   return useQuery({
     queryKey: ['projects'],
