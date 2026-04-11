@@ -12,6 +12,15 @@ const orderSchema = new mongoose.Schema(
     status: { type: String, default: 'paid' },
     projectStatus: { type: String, default: 'Pending Validation' },
     progress: { type: Number, default: 0 },
+    assets: [
+      {
+        fileName: { type: String, required: true },
+        fileUrl: { type: String, required: true },
+        cloudinaryPublicId: { type: String, required: true },
+        uploadedBy: { type: String, required: true },
+        uploadedAt: { type: Date, default: Date.now }
+      }
+    ]
   },
   { timestamps: true },
 )

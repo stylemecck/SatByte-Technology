@@ -54,12 +54,46 @@ export function uploadImageBuffer(buffer, folder, publicId) {
 }
 
 /**
+ * Upload any file buffer to Cloudinary (image, pdf, zip).
+ */
+export function uploadAnyFileBuffer(buffer, folder, originalFilename) {
+  return new Promise((resolve, reject) => {
+    const uploadStream = cloudinary.uploader.upload_stream(
+      {
+        folder: `satbyte/${folder}`,
+        resource_type: 'auto', // Auto-detects raw vs image
+        public_id: originalFilename ? originalFilename.replace(/[^a-zA-Z0-9_-]/g, '_').slice(0, 50) + '_' + Date.now() : undefined,
+      },
+      (err, result) => {
+        if (err) return reject(err)
+        if (!result?.secure_url || !result?.public_id) {
+          return reject(new Error('Cloudinary upload returned no URL'))
+        }
+        resolve({ secure_url: result.secure_url, public_id: result.public_id })
+      },
+    )
+    // For non-image types, we might need to tell cloudinary the exact filename to determine resource_type properly,
+    // actually `auto` handles it.
+    uploadStream.end(buffer)
+  })
+}
+
+
+/**
  * Remove an image from Cloudinary by public_id (stored in MongoDB).
  * @param {string} publicId
  */
 export async function deleteImage(publicId) {
   if (!publicId) return { result: 'noop' }
   return cloudinary.uploader.destroy(publicId, { resource_type: 'image' })
+}
+
+/**
+ * Remove any file from Cloudinary (need to try raw, or auto isn't supported for destroy).
+ */
+export async function deleteAnyFile(publicId, isImage = false) {
+  if (!publicId) return { result: 'noop' }
+  return cloudinary.uploader.destroy(publicId, { resource_type: isImage ? 'image' : 'raw' })
 }
 
 /**
