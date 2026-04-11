@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useParams, Link, useNavigate } from 'react-router-dom'
-import { ArrowLeft, MapPin, Briefcase, Clock, Calendar, CheckCircle2, Send, Upload, FileText, Loader2, User, ChevronRight, X, ShieldCheck, Zap, Star } from 'lucide-react'
+import { motion } from 'framer-motion'
+import { ArrowLeft, MapPin, Clock, Calendar, CheckCircle2, Send, Upload, FileText, Loader2, User, X, ShieldCheck, Zap, Star } from 'lucide-react'
 import { useQuery, useMutation } from '@tanstack/react-query'
 import { api } from '../lib/apiClient'
 import { SEO } from '../components/SEO'
