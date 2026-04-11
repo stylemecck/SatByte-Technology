@@ -228,7 +228,7 @@ export async function clientPasswordLogin(req, res) {
     }
 
     const token = signToken(user)
-    res.json({ token, role: user.role })
+    res.json({ token, role: user.role, id: user._id })
   } catch (e) {
     console.error('[client-password-login]', e)
     res.status(500).json({ message: 'Login failed' })

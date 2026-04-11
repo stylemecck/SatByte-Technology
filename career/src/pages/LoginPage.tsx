@@ -24,9 +24,9 @@ export default function LoginPage() {
     setError('')
     
     try {
-      const { data } = await api.post('auth/login', { email, password })
+      const { data } = await api.post('auth/client-password-login', { email, password })
       saveToken(data.token)
-      login(data.token, data.user)
+      login(data.token, data.user || { email, role: data.role, id: data.id })
       navigate(from, { replace: true })
     } catch (err: any) {
       setError(err.response?.data?.message || 'Login failed. Please check your credentials.')
