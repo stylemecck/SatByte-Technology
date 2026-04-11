@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { Mail, MapPin, Globe, LinkedIn, Twitter, GitHub } from 'lucide-react'
+import { Mail, MapPin, Globe, ExternalLink, X, Link as LinkIcon } from 'lucide-react'
 import { SITE } from '../lib/constants'
 
 export function Footer() {
@@ -23,14 +23,14 @@ export function Footer() {
               Building the next generation of IT solutions and empowering the workforce of tomorrow with industry-grade skills.
             </p>
             <div className="flex gap-4">
-              <a href="#" className="h-10 w-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-primary transition-colors border border-white/10">
-                <LinkedIn size={18} />
+              <a href="#" className="h-10 w-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-primary transition-colors border border-white/10" aria-label="LinkedIn">
+                <ExternalLink size={18} />
               </a>
-              <a href="#" className="h-10 w-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-primary transition-colors border border-white/10">
-                <Twitter size={18} />
+              <a href="#" className="h-10 w-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-primary transition-colors border border-white/10" aria-label="Twitter">
+                <X size={18} />
               </a>
-              <a href="#" className="h-10 w-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-primary transition-colors border border-white/10">
-                <GitHub size={18} />
+              <a href="#" className="h-10 w-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-primary transition-colors border border-white/10" aria-label="GitHub">
+                <LinkIcon size={18} />
               </a>
             </div>
           </div>
