@@ -25,7 +25,7 @@ export default function RegisterPage() {
     setError('')
     
     try {
-      const { data } = await api.post('/auth/register', formData)
+      const { data } = await api.post('auth/register', formData)
       saveToken(data.token)
       login(data.token, data.user)
       navigate('/dashboard', { replace: true })

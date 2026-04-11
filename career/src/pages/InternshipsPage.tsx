@@ -14,7 +14,7 @@ export default function InternshipsPage() {
   const { data: internships, isLoading } = useQuery<Internship[]>({
     queryKey: ['internships'],
     queryFn: async () => {
-      const { data } = await api.get('/internships')
+      const { data } = await api.get('internships')
       return data
     }
   })

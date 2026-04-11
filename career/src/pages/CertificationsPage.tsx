@@ -12,7 +12,7 @@ export default function CertificationsPage() {
   const { data: certifications, isLoading } = useQuery<Certification[]>({
     queryKey: ['certifications'],
     queryFn: async () => {
-      const { data } = await api.get('/certifications')
+      const { data } = await api.get('certifications')
       return data
     }
   })

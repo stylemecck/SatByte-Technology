@@ -15,7 +15,7 @@ export default function CareersPage() {
   const { data: jobs, isLoading } = useQuery<Job[]>({
     queryKey: ['jobs'],
     queryFn: async () => {
-      const { data } = await api.get('/jobs')
+      const { data } = await api.get('jobs')
       return data
     }
   })

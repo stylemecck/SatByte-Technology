@@ -24,7 +24,7 @@ export default function LoginPage() {
     setError('')
     
     try {
-      const { data } = await api.post('/auth/login', { email, password })
+      const { data } = await api.post('auth/login', { email, password })
       saveToken(data.token)
       login(data.token, data.user)
       navigate(from, { replace: true })

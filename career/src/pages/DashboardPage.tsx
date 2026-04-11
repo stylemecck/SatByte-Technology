@@ -14,7 +14,7 @@ export default function DashboardPage() {
   const { data: applications, isLoading: loadingApps } = useQuery<Application[]>({
     queryKey: ['my-applications'],
     queryFn: async () => {
-      const { data } = await api.get('/jobs/admin/applications') // In a real app, this would be /jobs/my/applications
+      const { data } = await api.get('jobs/admin/applications') // In a real app, this would be /jobs/my/applications
       // For demo, filtering client side
       return data.filter((a: any) => a.user._id === user?.id || a.user === user?.id)
     },
@@ -24,7 +24,7 @@ export default function DashboardPage() {
   const { data: enrollments, isLoading: loadingCerts } = useQuery<Enrollment[]>({
     queryKey: ['my-enrollments'],
     queryFn: async () => {
-      const { data } = await api.get('/certifications/my')
+      const { data } = await api.get('certifications/my')
       return data
     },
     enabled: !!user

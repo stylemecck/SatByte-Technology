@@ -20,14 +20,14 @@ export default function JobDetailsPage() {
   const { data: job, isLoading, error } = useQuery<Job>({
     queryKey: ['job', id],
     queryFn: async () => {
-      const { data } = await api.get(`/jobs/${id}`)
+      const { data } = await api.get(`jobs/${id}`)
       return data
     }
   })
 
   const applyMutation = useMutation({
     mutationFn: async (payload: any) => {
-      const { data } = await api.post('/jobs/apply', payload)
+      const { data } = await api.post('jobs/apply', payload)
       return data
     },
     onSuccess: () => {
