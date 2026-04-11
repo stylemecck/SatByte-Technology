@@ -174,8 +174,12 @@ function createMailTransporter() {
   console.log(`[mail] Transporter ready — user=${user}, pass=${pass.slice(0, 4)}****`)
 
   return nodemailer.createTransport({
-    service: 'gmail',
+    host: 'smtp.gmail.com',
+    port: 465,
+    secure: true, // Use SSL
     auth: { user, pass },
+    connectionTimeout: 10000, // 10 seconds
+    greetingTimeout: 10000,
   })
 }
 
