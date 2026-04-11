@@ -1,5 +1,6 @@
 import { Router } from 'express'
-import { login, register, clientLoginRequest, clientLoginVerify } from '../controllers/authController.js'
+import { login, register, clientLoginRequest, clientLoginVerify, clientSetPassword, clientPasswordLogin } from '../controllers/authController.js'
+import { requireAuth } from '../middleware/auth.js'
 
 const router = Router()
 
@@ -8,6 +9,8 @@ router.post('/login', login)
 router.post('/register', register)
 router.post('/client-login', clientLoginRequest)
 router.post('/client-verify', clientLoginVerify)
+router.post('/client-password-login', clientPasswordLogin)
+router.post('/client-set-password', requireAuth, clientSetPassword)
 
 // GET fallbacks — return a helpful JSON message when someone opens these URLs in a browser
 const postOnly = (_req, res) =>

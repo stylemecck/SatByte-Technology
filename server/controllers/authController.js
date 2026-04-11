@@ -141,3 +141,69 @@ export async function clientLoginVerify(req, res) {
     res.status(500).json({ message: 'Verification failed' })
   }
 }
+
+export async function clientSetPassword(req, res) {
+  try {
+    const { password } = req.body
+    if (!password || password.length < 8) {
+      return res.status(400).json({ message: 'Password must be at least 8 characters long' })
+    }
+
+    const email = req.user?.email
+    if (!email || req.user?.role !== 'client') {
+      return res.status(401).json({ message: 'Unauthorized. Must be logged in as a client.' })
+    }
+
+    const passwordHash = await bcrypt.hash(password, 12)
+    const normalizedEmail = email.toLowerCase().trim()
+
+    // Create or Update the client User record
+    await User.findOneAndUpdate(
+      { email: normalizedEmail },
+      { email: normalizedEmail, passwordHash, role: 'client' },
+      { upsert: true, new: true }
+    )
+
+    res.json({ message: 'Password updated successfully' })
+  } catch (e) {
+    console.error(e)
+    res.status(500).json({ message: 'Failed to set password' })
+  }
+}
+
+export async function clientPasswordLogin(req, res) {
+  try {
+    const { email, password } = req.body
+    if (!email || !password) {
+      return res.status(400).json({ message: 'Email and password required' })
+    }
+
+    const normalizedEmail = email.toLowerCase().trim()
+    
+    // Ensure they have an order and they exist in User collection
+    const hasOrders = await Order.findOne({ email: normalizedEmail })
+    if (!hasOrders) {
+      return res.status(404).json({ message: 'No purchases found for this email.' })
+    }
+
+    const user = await User.findOne({ email: normalizedEmail, role: 'client' })
+    if (!user || !(await bcrypt.compare(password, user.passwordHash))) {
+      return res.status(401).json({ message: 'Invalid credentials' })
+    }
+
+    const secret = process.env.JWT_SECRET
+    const token = jwt.sign(
+      { sub: user._id.toString(), email: user.email, role: 'client' },
+      secret,
+      { expiresIn: '7d' }
+    )
+
+    res.json({
+      token,
+      user: { id: user._id, email: user.email, role: 'client' },
+    })
+  } catch (e) {
+    console.error(e)
+    res.status(500).json({ message: 'Login failed' })
+  }
+}
