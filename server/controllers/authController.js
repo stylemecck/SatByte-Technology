@@ -235,6 +235,39 @@ export async function clientPasswordLogin(req, res) {
   }
 }
 
+export async function getProfile(req, res) {
+  try {
+    const user = await User.findById(req.user.sub).select('-passwordHash')
+    if (!user) {
+      // If no User record exists (OTP only client), return basic info from token
+      if (req.user.role === 'client' && req.user.email) {
+        return res.json({ email: req.user.email, role: 'client', name: '', phone: '', company: '' })
+      }
+      return res.status(404).json({ message: 'User not found' })
+    }
+    res.json(user)
+  } catch (e) {
+    console.error('[get-profile]', e)
+    res.status(500).json({ message: 'Failed to fetch profile' })
+  }
+}
+
+export async function updateProfile(req, res) {
+  try {
+    const { name, phone, company } = req.body
+    const user = await User.findOneAndUpdate(
+      { email: req.user.email.toLowerCase().trim() },
+      { name, phone, company, role: req.user.role },
+      { upsert: true, new: true }
+    ).select('-passwordHash')
+    
+    res.json({ message: 'Profile updated successfully', user })
+  } catch (e) {
+    console.error('[update-profile]', e)
+    res.status(500).json({ message: 'Failed to update profile' })
+  }
+}
+
 export async function getClients(req, res) {
   try {
     const clients = await User.find({ role: 'client' }).select('-passwordHash').sort({ createdAt: -1 })

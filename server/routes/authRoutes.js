@@ -7,6 +7,8 @@ import {
   clientSetPassword, 
   clientPasswordLogin, 
   clientRegister,
+  getProfile,
+  updateProfile,
   getClients 
 } from '../controllers/authController.js'
 import { requireAuth, requireAdmin } from '../middleware/auth.js'
@@ -21,6 +23,8 @@ router.post('/client-login', clientLoginRequest)
 router.post('/client-verify', clientLoginVerify)
 router.post('/client-password-login', clientPasswordLogin)
 router.post('/client-set-password', requireAuth, clientSetPassword)
+router.get('/profile', requireAuth, getProfile)
+router.put('/profile', requireAuth, updateProfile)
 
 // GET fallbacks — return a helpful JSON message when someone opens these URLs in a browser
 const postOnly = (_req, res) =>

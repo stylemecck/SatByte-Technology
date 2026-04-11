@@ -59,6 +59,16 @@ function useTicketsQuery() {
   })
 }
 
+function useProfileQuery() {
+  return useQuery({
+    queryKey: ['profile'],
+    queryFn: async () => {
+      const { data } = await api.get('/auth/profile')
+      return data
+    }
+  })
+}
+
 export default function ClientDashboardPage() {
   const token = localStorage.getItem('satbyte_token')
   const navigate = useNavigate()
@@ -72,9 +82,23 @@ export default function ClientDashboardPage() {
   const [replyMessage, setReplyMessage] = useState('')
   const { data, isPending, isError, refetch } = useMyOrdersQuery()
   const { data: ticketsItems, refetch: refetchTickets } = useTicketsQuery()
+  const { data: profile, refetch: refetchProfile } = useProfileQuery()
 
   const [selectedTicketId, setSelectedTicketId] = useState<string | null>(null)
   const selectedTicket = ticketsItems?.find(t => t._id === selectedTicketId)
+
+  const [profileForm, setProfileForm] = useState({ name: '', phone: '', company: '' })
+  const [profileLoading, setProfileLoading] = useState(false)
+
+  useEffect(() => {
+    if (profile) {
+      setProfileForm({
+        name: profile.name || '',
+        phone: profile.phone || '',
+        company: profile.company || ''
+      })
+    }
+  }, [profile])
 
   // Force dark mode aesthetic on body
   useEffect(() => {
@@ -89,6 +113,20 @@ export default function ClientDashboardPage() {
   const logout = () => {
     localStorage.removeItem('satbyte_token')
     navigate('/')
+  }
+
+  const handleUpdateProfile = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setProfileLoading(true)
+    try {
+      await api.put('/auth/profile', profileForm)
+      refetchProfile()
+      alert('Profile updated successfully!')
+    } catch (err: any) {
+      alert(err.response?.data?.message || 'Failed to update profile')
+    } finally {
+      setProfileLoading(false)
+    }
   }
 
   const handleUpdatePassword = async (e: React.FormEvent) => {
@@ -584,58 +622,104 @@ export default function ClientDashboardPage() {
 
               {/* TAB: SETTINGS */}
               {activeTab === 'settings' && (
-                <div className="grid md:grid-cols-2 gap-8">
-                  <motion.div variants={fadeAnim} className="bg-[#0A111D]/80 backdrop-blur-xl border border-white/10 rounded-[2rem] p-8 md:p-10 shadow-2xl">
-                    <h3 className="text-2xl font-bold font-heading text-white mb-2">Set Password</h3>
-                    <p className="text-slate-400 mb-8 max-w-sm">Skip the email OTPs next time you log in to your portal by setting a permanent password.</p>
+                <div className="grid lg:grid-cols-3 gap-8 items-start">
+                  
+                  {/* General Profile Section */}
+                  <motion.div variants={fadeAnim} className="lg:col-span-2 bg-[#0A111D]/80 backdrop-blur-xl border border-white/10 rounded-[2rem] p-8 md:p-10 shadow-2xl">
+                    <h3 className="text-2xl font-bold font-heading text-white mb-2">Personal Details</h3>
+                    <p className="text-slate-400 mb-8">Update your contact information for better project coordination.</p>
                     
-                    <form onSubmit={handleUpdatePassword} className="space-y-5">
+                    <form onSubmit={handleUpdateProfile} className="grid md:grid-cols-2 gap-6">
                       <div className="space-y-2">
-                        <label className="text-xs font-bold uppercase tracking-wider text-slate-500">New Password</label>
+                        <label className="text-xs font-bold uppercase tracking-wider text-slate-500">Full Name</label>
                         <input
-                          type="password"
                           className="w-full bg-[#121A2F] border border-white/10 rounded-xl px-4 py-3.5 text-white placeholder-slate-600 focus:border-primary/50 focus:outline-none"
-                          placeholder="••••••••"
-                          value={newPassword}
-                          onChange={(e) => setNewPassword(e.target.value)}
-                          required
+                          placeholder="John Doe"
+                          value={profileForm.name}
+                          onChange={(e) => setProfileForm(p => ({...p, name: e.target.value}))}
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <label className="text-xs font-bold uppercase tracking-wider text-slate-500">Phone Number</label>
+                        <input
+                          className="w-full bg-[#121A2F] border border-white/10 rounded-xl px-4 py-3.5 text-white placeholder-slate-600 focus:border-primary/50 focus:outline-none"
+                          placeholder="+91 98765 43210"
+                          value={profileForm.phone}
+                          onChange={(e) => setProfileForm(p => ({...p, phone: e.target.value}))}
+                        />
+                      </div>
+                      <div className="space-y-2 md:col-span-2">
+                        <label className="text-xs font-bold uppercase tracking-wider text-slate-500">Company / Organization</label>
+                        <input
+                          className="w-full bg-[#121A2F] border border-white/10 rounded-xl px-4 py-3.5 text-white placeholder-slate-600 focus:border-primary/50 focus:outline-none"
+                          placeholder="SatByte Technology Inc."
+                          value={profileForm.company}
+                          onChange={(e) => setProfileForm(p => ({...p, company: e.target.value}))}
                         />
                       </div>
                       
-                      {passMsg && (
-                        <div className={`p-4 rounded-xl text-sm font-semibold border ${
-                          passMsg.type === 'success' ? 'bg-green-500/10 text-green-400 border-green-500/20' : 'bg-red-500/10 text-red-400 border-red-500/20'
-                        }`}>
-                          {passMsg.text}
-                        </div>
-                      )}
-
-                      <Button type="submit" disabled={passLoading} className="rounded-xl font-bold px-8 shadow-lg shadow-white/5 border border-white/10 hover:border-white/20 hover:bg-white/10 bg-white/5 text-white w-full sm:w-auto">
-                        {passLoading ? 'Saving...' : 'Save Password'}
-                      </Button>
+                      <div className="md:col-span-2 pt-4">
+                        <Button type="submit" disabled={profileLoading} className="rounded-xl font-bold px-10 h-12 bg-primary text-white shadow-lg shadow-primary/20">
+                          {profileLoading ? 'Updating...' : 'Save Profile Details'}
+                        </Button>
+                      </div>
                     </form>
-                  </motion.div>
 
-                  <motion.div variants={fadeAnim} className="h-fit bg-[#0A111D]/40 backdrop-blur-xl border border-white/5 rounded-[2rem] p-8 md:p-10">
-                    <h3 className="text-xl font-bold font-heading text-white mb-6">Account Profile</h3>
-                    
-                    <div className="space-y-6">
-                      <div className="pb-6 border-b border-white/5">
-                        <label className="text-xs font-bold uppercase tracking-wider text-slate-500 block mb-2">Primary Email</label>
-                        <div className="font-mono text-lg text-white">
-                          {data?.[0]?.email || 'Loading...'}
+                    <div className="mt-12 pt-10 border-t border-white/5">
+                       <h3 className="text-2xl font-bold font-heading text-white mb-2">Change Password</h3>
+                       <p className="text-slate-400 mb-8 max-w-sm">Secure your account with a permanent access key.</p>
+                       <form onSubmit={handleUpdatePassword} className="space-y-5 max-w-md">
+                        <div className="space-y-2">
+                          <label className="text-xs font-bold uppercase tracking-wider text-slate-500">New Password</label>
+                          <input
+                            type="password"
+                            className="w-full bg-[#121A2F] border border-white/10 rounded-xl px-4 py-3.5 text-white placeholder-slate-600 focus:border-primary/50 focus:outline-none"
+                            placeholder="••••••••"
+                            value={newPassword}
+                            onChange={(e) => setNewPassword(e.target.value)}
+                            required
+                          />
                         </div>
-                      </div>
-                      
-                      <div>
-                        <label className="text-xs font-bold uppercase tracking-wider text-slate-500 block mb-2">Registration Status</label>
-                        <span className="inline-flex items-center gap-1.5 rounded-full border border-blue-500/30 bg-blue-500/10 px-3 py-1 text-sm font-semibold text-blue-400 shadow-inner">
-                          <span className="h-1.5 w-1.5 rounded-full bg-blue-400 animate-pulse" />
-                          Authenticated Client
-                        </span>
-                      </div>
+                        {passMsg && (
+                          <div className={`p-4 rounded-xl text-sm font-semibold border ${
+                            passMsg.type === 'success' ? 'bg-green-500/10 text-green-400 border-green-500/20' : 'bg-red-500/10 text-red-400 border-red-500/20'
+                          }`}>
+                            {passMsg.text}
+                          </div>
+                        )}
+                        <Button type="submit" disabled={passLoading} className="rounded-xl font-bold px-8 h-12 border border-white/10 hover:border-white/20 hover:bg-white/10 bg-white/5 text-white w-full sm:w-auto">
+                          {passLoading ? 'Saving...' : 'Update Password'}
+                        </Button>
+                      </form>
                     </div>
                   </motion.div>
+
+                  <div className="space-y-8">
+                    <motion.div variants={fadeAnim} className="h-fit bg-[#0A111D]/40 backdrop-blur-xl border border-white/5 rounded-[2rem] p-8 md:p-10 shadow-xl">
+                      <h3 className="text-xl font-bold font-heading text-white mb-6">Account Overview</h3>
+                      <div className="space-y-6">
+                        <div className="pb-6 border-b border-white/5">
+                          <label className="text-xs font-bold uppercase tracking-wider text-slate-500 block mb-2">Registered Email</label>
+                          <div className="font-mono text-[15px] text-white">
+                            {profile?.email || 'Loading...'}
+                          </div>
+                        </div>
+                        <div>
+                          <label className="text-xs font-bold uppercase tracking-wider text-slate-500 block mb-2">Status</label>
+                          <span className="inline-flex items-center gap-1.5 rounded-full border border-blue-500/30 bg-blue-500/10 px-3 py-1 text-xs font-bold text-blue-400 shadow-inner">
+                            <span className="h-1.5 w-1.5 rounded-full bg-blue-400 animate-pulse" />
+                            Premium Client
+                          </span>
+                        </div>
+                      </div>
+                    </motion.div>
+
+                    <motion.div variants={fadeAnim} className="bg-gradient-to-br from-primary/10 to-transparent border border-white/5 rounded-[2rem] p-8 shadow-xl">
+                       <h4 className="text-white font-bold mb-3">Developer Mode</h4>
+                       <p className="text-xs text-slate-500 leading-relaxed mb-4">Enable API access to integrate SatByte workflows into your own internal dashboards and tools.</p>
+                       <Button variant="outline" className="text-xs rounded-lg border-white/10 h-9 opacity-50 cursor-not-allowed">Request API Key</Button>
+                    </motion.div>
+                  </div>
                 </div>
               )}
 
