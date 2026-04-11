@@ -1,7 +1,8 @@
 import axios from 'axios'
 import Cookies from 'js-cookie'
 
-const baseURL = import.meta.env.VITE_API_URL?.trim() || 'https://satbyte-technology.onrender.com/api/'
+const rawBaseURL = import.meta.env.VITE_API_URL?.trim() || 'https://satbyte-technology.onrender.com/api/'
+const baseURL = rawBaseURL.endsWith('/') ? rawBaseURL : `${rawBaseURL}/`
 
 export const api = axios.create({
   baseURL,
