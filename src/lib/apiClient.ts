@@ -1,7 +1,13 @@
 import axios from 'axios'
 import Cookies from 'js-cookie'
 
-const rawBaseURL = import.meta.env.VITE_API_URL?.trim() || '/api'
+let rawBaseURL = import.meta.env.VITE_API_URL?.trim() || '/api'
+
+// Robustness: Ensure /api suffix is present for absolute URLs
+if (rawBaseURL.startsWith('http') && !rawBaseURL.endsWith('/api') && !rawBaseURL.includes('/api/')) {
+  rawBaseURL = rawBaseURL.endsWith('/') ? `${rawBaseURL}api` : `${rawBaseURL}/api`
+}
+
 const baseURL = rawBaseURL.endsWith('/') ? rawBaseURL : `${rawBaseURL}/`
 
 export const api = axios.create({

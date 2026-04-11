@@ -1,8 +1,18 @@
 import axios from 'axios'
 import Cookies from 'js-cookie'
 
-const rawBaseURL = import.meta.env.VITE_API_URL?.trim() || 'https://satbyte-technology.onrender.com/api/'
+let rawBaseURL = import.meta.env.VITE_API_URL?.trim() || 'https://satbyte-technology.onrender.com/api'
+
+// Robustness: Ensure /api suffix is present for production domain
+if (rawBaseURL.startsWith('http') && !rawBaseURL.endsWith('/api') && !rawBaseURL.includes('/api/')) {
+  rawBaseURL = rawBaseURL.endsWith('/') ? `${rawBaseURL}api` : `${rawBaseURL}/api`
+}
+
 const baseURL = rawBaseURL.endsWith('/') ? rawBaseURL : `${rawBaseURL}/`
+
+if (import.meta.env.PROD) {
+  console.log('SatByte API Client initialized with baseURL:', baseURL)
+}
 
 export const api = axios.create({
   baseURL,
