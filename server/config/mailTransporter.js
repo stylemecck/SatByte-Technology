@@ -153,20 +153,41 @@ const generateInvoiceBuffer = (planName, referenceNumber, amountTotal) => {
   })
 }
 
-export const mailTransporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: process.env.GMAIL_USER,
-    pass: process.env.GMAIL_APP_PASS,
-  },
-});
+/**
+ * Lazily creates a nodemailer transporter.
+ * - Strips any accidental surrounding quotes from GMAIL_APP_PASS
+ *   (a common mistake when setting env vars in Render / Heroku dashboards)
+ * - Throws a clear error if credentials are missing so logs are actionable
+ */
+function createMailTransporter() {
+  const user = process.env.GMAIL_USER?.trim()
+  // Strip surrounding single or double quotes, e.g. "tpuu djin huxf fzio" → tpuu djin huxf fzio
+  const pass = process.env.GMAIL_APP_PASS?.trim().replace(/^["']|["']$/g, '')
+
+  if (!user || !pass) {
+    throw new Error(
+      `[mail] Missing credentials — GMAIL_USER="${user ?? '(unset)'}", GMAIL_APP_PASS=${pass ? '(set)' : '(unset)'}. ` +
+      'Set both in your Render environment variables (no surrounding quotes).'
+    )
+  }
+
+  console.log(`[mail] Transporter ready — user=${user}, pass=${pass.slice(0, 4)}****`)
+
+  return nodemailer.createTransport({
+    service: 'gmail',
+    auth: { user, pass },
+  })
+}
+
+// Exported singleton — created once on first import
+export const mailTransporter = createMailTransporter()
 
 export const sendPurchaseConfirmation = async (userEmail, planName, referenceNumber, gatewayReference, amountTotal) => {
   
   const invoiceBuffer = await generateInvoiceBuffer(planName, referenceNumber, amountTotal || 0);
 
   const mailOptions = {
-    from: `"SatByte Technologies" <${process.env.GMAIL_USER}>`,
+    from: `"SatByte Technologies" <${process.env.GMAIL_USER?.trim()}>`,
     to: userEmail,
     subject: `Payment Confirmation - ${planName} | SatByte Technologies`,
     attachments: [
@@ -221,10 +242,10 @@ export const sendPurchaseConfirmation = async (userEmail, planName, referenceNum
 
   try {
     const info = await mailTransporter.sendMail(mailOptions);
-    console.log('Confirmation email sent successfully:', info.messageId);
+    console.log('[mail] Confirmation email sent:', info.messageId);
     return info;
   } catch (error) {
-    console.error('Error sending confirmation email:', error);
+    console.error('[mail] Failed to send confirmation email:', error.message, '| code:', error.code, '| response:', error.response)
     throw error;
   }
 };

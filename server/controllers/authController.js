@@ -106,7 +106,7 @@ export async function clientLoginRequest(req, res) {
 
     res.json({ message: 'OTP sent to your email.' })
   } catch (e) {
-    console.error(e)
+    console.error('[auth/client-login] Failed to send OTP:', e.message, '| code:', e.code, '| response:', e.response)
     res.status(500).json({ message: 'Failed to send OTP' })
   }
 }
