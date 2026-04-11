@@ -175,15 +175,15 @@ function createMailTransporter() {
 
   return nodemailer.createTransport({
     host: 'smtp.gmail.com',
-    port: 587,
-    secure: false,
+    port: 465,
+    secure: true, // Use SMTPS on port 465
     auth: { user, pass },
-    connectionTimeout: 30000, // 30 seconds
+    connectionTimeout: 30000,
     greetingTimeout: 30000,
-    socketTimeout: 60000, // 60 seconds
+    socketTimeout: 60000,
     family: 4,
-    logger: true, // Log to console
-    debug: true, // Include SMTP traffic in logs
+    logger: true,
+    debug: true,
     tls: {
       rejectUnauthorized: false
     }
