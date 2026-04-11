@@ -175,13 +175,16 @@ function createMailTransporter() {
 
   return nodemailer.createTransport({
     host: 'smtp.gmail.com',
-    port: 465,
-    secure: true, // Use SSL
+    port: 587,
+    secure: false, // Use STARTTLS on port 587
     auth: { user, pass },
-    connectionTimeout: 15000, // 15 seconds
-    greetingTimeout: 15000,
-    socketTimeout: 30000, // 30 seconds
-    family: 4, // Force IPv4 to avoid IPv6 issues in cloud environments
+    connectionTimeout: 20000, // 20 seconds
+    greetingTimeout: 20000,
+    socketTimeout: 30000,
+    family: 4,
+    tls: {
+      rejectUnauthorized: false // Helps in some cloud environments with cert issues
+    }
   })
 }
 
