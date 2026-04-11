@@ -6,24 +6,29 @@ SatByte Technology is a premium web development agency platform engineered for s
 
 ## 🚀 Core Features
 
-### 💎 Premium Portals (V2 Modernized)
-- **Glassmorphism Aesthetic**: Revamped Client and Admin dashboards with a modern, high-end "Glass" interface featuring specialized dark modes and backdrop effects.
-- **Fluid Micro-Animations**: Powered by **Framer Motion** for a seamless, application-like experience.
-- **Unified Branding**: Consistent high-end design across landing pages and management portals.
+### 💎 Premium Portals (V2 "Minimal & Professional")
+- **High-Fidelity Minimalism**: Standardized on **Inter** typography with a focus on negative space, tracking, and premium contrast.
+- **Glassmorphism 2.0**: Enhanced dashboard interfaces using advanced backdrop filters and deep slate backgrounds for a luxury feel.
+- **Fluid Micro-Animations**: Refined Framer Motion interactions for a high-end application-like experience.
 
 ### 🔐 Advanced Authentication
-- **Hybrid Login Flow**: Clients can choose between frictionless **OTP (One-Time Password)** entry or permanent **Secure Password** login for instant access.
-- **RBAC Security**: Role-based access control protecting the CMS and backend administrative routes.
+- **Hybrid Login Flow**: Frictionless **OTP (One-Time Password)** entry or permanent **Secure Password** login.
+- **Cross-Domain Persistence**: Shared authentication state across the main portal and the career subsystem.
+
+### 💼 Talent & Career Infrastructure (NEW)
+- **Integrated Admin CMS**: Full CRUD control for Jobs, Internships, and Certifications directly within the SAT RMS.
+- **Candidate Pipeline**: Real-time review of applications, document verification, and status management.
+- **Professional Education**: Management of masterclasses, curricula, and enrollment fees.
 
 ### 💳 Financial Infrastructure
-- **Triple-Gateway Integration**: Native support for **Stripe**, **Razorpay**, and **PayUMoney** ensuring global and regional payment compatibility.
-- **Subscription Retainers**: Automated recurring billing via Stripe Subscriptions for monthly project engagement.
+- **Triple-Gateway Integration**: Native support for **Stripe**, **Razorpay**, and **PayUMoney**.
+- **Subscription Retainers**: Automated recurring billing via Stripe Subscriptions.
 - **Branded Invoicing**: Automatic PDF generation and dispatch with SB-Reference tracking.
 
 ### 🛠 Operational Excellence
-- **Global Ticketing System**: In-built support desk allowing clients to open queries and admins to reply in real-time.
-- **Secure Asset Management**: Integrated Cloudinary support for sharing production files, deliverables, and assets directly within the order panels.
-- **Tiptap CMS Engine**: Advanced rich-text blog management with dynamic Table of Contents and newsletter bridging.
+- **Global Ticketing System**: In-built support desk for real-time client interaction.
+- **Secure Asset Management**: Integrated Cloudinary support for sharing production deliverables.
+- **Tiptap CMS Engine**: Advanced rich-text blog management with dynamic Newsletter bridging.
 
 ## 🛠 Tech Stack
 

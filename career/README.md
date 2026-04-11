@@ -1,73 +1,43 @@
-# React + TypeScript + Vite
+# SatByte Career Portal
+**The Engineering Standard for Talent Acquisition and Professional Excellence**
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+The SatByte Career Portal is a high-performance subsystem of the SatByte Technology ecosystem, designed to attract, train, and manage the next generation of engineers, designers, and innovators.
 
-Currently, two official plugins are available:
+## 🌌 Core Modules
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+### 👔 Global Careers
+- **Role Discovery**: High-fidelity job board featuring specialized roles in Web, E-commerce, and Software Architecture.
+- **Binary Ownership**: A recruitment ideology focused on high-trust and high-impact placement.
+- **Identity Synthesis**: Frictionless application tracking for registered candidates.
 
-## React Compiler
+### 🎓 Internship Program
+- **Production Immersion**: Structured programs allowing students to work on real-world production codebases.
+- **Performance-Based Benefits**: Letter of Recommendation (LOR) and PPO (Pre-Placement Offer) integration.
+- **Verifiable Achievement**: Digital credentials issued upon successful cohort completion.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### 🏆 Professional Masterclasses
+- **Industry Specialization**: Premium certification tracks (MERN, Cloud Ops, AI Architecture).
+- **Stripe-Powered Enrollment**: Secure payment processing for curriculum access.
+- **Dashboard Progress**: Student portal for tracking enrollments and certification status.
 
-## Expanding the ESLint configuration
+## 🎨 Design Philosophy: "Professional & Minimal"
+The portal adheres to the SatByte **Design System V2**:
+- **Typography**: Optimized for **Inter** to ensure maximum readability and a corporate-premium feel.
+- **Palette**: A deep, sophisticated dark mode using a specialized slate palette with vibrant accent highlights.
+- **Interactive Layers**: Glassmorphic components with subtle motion paths powered by **Framer Motion**.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## 🛡 Administration
+This portal is controlled remotely via the **SAT RMS (Relationship Management System)** located in the main platform. Admins can:
+- Publish and manage job/internship roles.
+- Review candidate resumes and update application statuses.
+- Manage certification curricula and monitor student enrollments.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## 🛠 Tech Stack
+- **Library**: React 19 (Vite)
+- **Typing**: TypeScript
+- **Design**: Vanilla CSS & Tailwind (Modular)
+- **Animation**: Framer Motion
+- **Data**: TanStack Query (React Query)
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+---
+**© 2026 SatByte Technology. All Rights Reserved.**
