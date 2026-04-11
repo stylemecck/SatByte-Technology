@@ -103,10 +103,11 @@ export default function PricingPage() {
   const [showRzpModal, setShowRzpModal] = useState<PricingPlanId | null>(null)
   const [loadingPlan, setLoadingPlan] = useState<PricingPlanId | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const [isMonthly, setIsMonthly] = useState(false)
 
   const stripeMutation = useMutation({
     mutationFn: async (planKey: PricingPlanId) => {
-      const { data } = await api.post<{ url: string }>('/checkout/create-session', { planKey })
+      const { data } = await api.post<{ url: string }>('/checkout/create-session', { planKey, isMonthly })
       return data.url
     },
     onSuccess: (url) => { if (url) window.location.href = url },
@@ -285,6 +286,27 @@ export default function PricingPage() {
       {/* ── Pricing Cards ── */}
       <section className="bg-[#050B14] py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          
+          <div className="flex justify-center mb-16">
+            <div className="bg-white/5 border border-white/10 rounded-full p-1.5 flex items-center">
+              <button
+                className={cn("px-6 py-2.5 rounded-full text-sm font-semibold transition-all duration-300", !isMonthly ? "bg-primary text-white shadow-lg" : "text-slate-400 hover:text-white")}
+                onClick={() => setIsMonthly(false)}
+              >
+                One-Time Payment
+              </button>
+              <button
+                className={cn("px-6 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 flex items-center gap-2", isMonthly ? "bg-primary text-white shadow-lg" : "text-slate-400 hover:text-white")}
+                onClick={() => {
+                  setIsMonthly(true)
+                  setGateways({ basic: 'stripe', standard: 'stripe', premium: 'stripe' }) // Retainers are Stripe-only for subscriptions
+                }}
+              >
+                Monthly Retainer <span className="bg-accent/20 text-accent text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full border border-accent/20">Stripe Only</span>
+              </button>
+            </div>
+          </div>
+
           {error && (
             <div className="mb-8 rounded-2xl border border-red-500/30 bg-red-500/10 px-6 py-4 text-sm text-red-400 text-center max-w-xl mx-auto">
               {error}
@@ -296,6 +318,17 @@ export default function PricingPage() {
               const styles = PLAN_STYLES[plan.id]
               const isRecommended = plan.recommended
               const selectedGw = gateways[plan.id]
+
+              // Calculate display price
+              let displayPrice = plan.price
+              let planNumber = 0
+              if (plan.price.includes('₹4,999')) planNumber = 4999
+              else if (plan.price.includes('₹9,999')) planNumber = 9999
+              else if (plan.price.includes('₹19,999')) planNumber = 19999
+              
+              if (isMonthly && planNumber) {
+                displayPrice = `₹${Math.floor(planNumber / 2).toLocaleString('en-IN')}`
+              }
 
               return (
                 <motion.div
@@ -326,9 +359,10 @@ export default function PricingPage() {
                       <span className={cn('inline-block rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-wider', styles.badge)}>{plan.name}</span>
                       <p className="mt-4 text-slate-400 text-sm leading-relaxed">{plan.description}</p>
                       <div className="mt-6 flex items-end gap-1">
-                        <span className={cn('font-heading text-5xl font-extrabold tracking-tight', styles.icon)}>{plan.price}</span>
+                        <span className={cn('font-heading text-5xl font-extrabold tracking-tight', styles.icon)}>{displayPrice}</span>
+                        {isMonthly && <span className="text-slate-500 font-medium pb-2 text-lg">/mo</span>}
                       </div>
-                      <p className="mt-1 text-xs text-slate-500 uppercase tracking-wider">One-time · No recurring fees</p>
+                      <p className="mt-1 text-xs text-slate-500 uppercase tracking-wider">{isMonthly ? 'Cancel anytime' : 'One-time · No recurring fees'}</p>
                     </div>
 
                     <div className="mx-8 mt-8 h-px bg-white/5" />
@@ -361,12 +395,14 @@ export default function PricingPage() {
                         {GATEWAYS.map(gw => (
                           <button
                             key={gw.id}
+                            disabled={isMonthly && gw.id !== 'stripe'}
                             onClick={() => setGateways(prev => ({ ...prev, [plan.id]: gw.id }))}
                             className={cn(
                               'flex flex-col items-center gap-1.5 rounded-xl border py-3 px-2 text-center transition-all duration-200 text-xs font-bold',
                               selectedGw === gw.id
                                 ? 'border-primary/60 bg-primary/15 text-white shadow-inner'
                                 : 'border-white/10 bg-white/5 text-slate-400 hover:border-white/25 hover:text-white',
+                              isMonthly && gw.id !== 'stripe' && 'opacity-20 cursor-not-allowed hover:border-white/10 hover:text-slate-400'
                             )}
                           >
                             <span className="text-xl">{gw.logo}</span>

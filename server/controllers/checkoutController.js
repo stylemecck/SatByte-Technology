@@ -30,7 +30,7 @@ export async function createCheckoutSession(req, res) {
       })
     }
 
-    const { planKey } = req.body
+    const { planKey, isMonthly } = req.body
     if (!planKey || !PLAN_AMOUNTS_INR[planKey]) {
       return res.status(400).json({ message: 'Invalid plan. Use basic, standard, or premium.' })
     }
@@ -47,35 +47,42 @@ export async function createCheckoutSession(req, res) {
           : process.env.STRIPE_PRICE_PREMIUM
 
     let line_items
-    if (priceId) {
+    if (priceId && !isMonthly) {
       line_items = [{ price: priceId, quantity: 1 }]
     } else {
       const meta = PLAN_LABELS[planKey]
+      const priceData = {
+        currency: 'inr',
+        product_data: {
+          name: isMonthly ? `${meta.name} (Monthly Retainer)` : meta.name,
+          description: meta.description,
+        },
+        unit_amount: isMonthly ? Math.floor(PLAN_AMOUNTS_INR[planKey] / 2) : PLAN_AMOUNTS_INR[planKey],
+      }
+      
+      if (isMonthly) {
+        priceData.recurring = { interval: 'month' }
+      }
+
       line_items = [
         {
-          price_data: {
-            currency: 'inr',
-            product_data: {
-              name: meta.name,
-              description: meta.description,
-            },
-            unit_amount: PLAN_AMOUNTS_INR[planKey],
-          },
+          price_data: priceData,
           quantity: 1,
         },
       ]
     }
 
     const session = await stripe.checkout.sessions.create({
-      mode: 'payment',
+      mode: isMonthly ? 'subscription' : 'payment',
       line_items,
       success_url: `${clientUrl}/pricing/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${clientUrl}/pricing/canceled`,
       metadata: {
         planKey,
+        isMonthly: isMonthly ? 'true' : 'false',
         source: 'satbyte_pricing_page',
       },
-      customer_creation: 'always',
+      customer_creation: isMonthly ? undefined : 'always', // customer_creation cannot be passed when mode=subscription 
       billing_address_collection: 'required',
     })
 
@@ -207,6 +214,71 @@ export async function updateOrderStatus(req, res) {
   } catch (error) {
     console.error('[update-order-status]', error);
     res.status(500).json({ message: 'Failed to update order status' });
+  }
+}
+
+import { uploadAnyFileBuffer, deleteAnyFile } from '../config/cloudinary.js';
+
+export async function uploadOrderAsset(req, res) {
+  try {
+    const { id } = req.params;
+    const order = await Order.findById(id);
+    if (!order) return res.status(404).json({ message: 'Order not found' });
+
+    // Clients can only upload to their own orders, Admins can upload to all
+    if (req.user?.role !== 'admin' && order.email !== req.user?.email) {
+      return res.status(403).json({ message: 'Forbidden' });
+    }
+
+    if (!req.file?.buffer) {
+      return res.status(400).json({ message: 'File is required' });
+    }
+
+    const { secure_url, public_id } = await uploadAnyFileBuffer(
+      req.file.buffer,
+      'order_assets',
+      req.file.originalname
+    );
+
+    order.assets.push({
+      fileName: req.file.originalname || 'unknown_file',
+      fileUrl: secure_url,
+      cloudinaryPublicId: public_id,
+      uploadedBy: req.user?.email || 'Unknown',
+    });
+
+    await order.save();
+    res.json(order);
+  } catch (error) {
+    console.error('[upload-order-asset]', error);
+    res.status(500).json({ message: 'Failed to upload asset' });
+  }
+}
+
+export async function removeOrderAsset(req, res) {
+  try {
+    const { id, assetId } = req.params;
+    const order = await Order.findById(id);
+    if (!order) return res.status(404).json({ message: 'Order not found' });
+
+    // Clients can only remove their own orders, Admins can remove from all
+    if (req.user?.role !== 'admin' && order.email !== req.user?.email) {
+      return res.status(403).json({ message: 'Forbidden' });
+    }
+
+    const asset = order.assets.id(assetId);
+    if (!asset) return res.status(404).json({ message: 'Asset not found' });
+
+    await deleteAnyFile(asset.cloudinaryPublicId, asset.fileUrl.match(/\.(jpeg|jpg|gif|png)$/) != null);
+    
+    // Remote asset from array
+    asset.deleteOne();
+    await order.save();
+
+    res.json(order);
+  } catch (error) {
+    console.error('[remove-order-asset]', error);
+    res.status(500).json({ message: 'Failed to remove asset' });
   }
 }
 
