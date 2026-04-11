@@ -1,6 +1,6 @@
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
-import nodemailer from 'nodemailer'
+import { mailTransporter } from '../config/mailTransporter.js'
 import { User } from '../models/User.js'
 import { Order } from '../models/Order.js'
 import { Otp } from '../models/Otp.js'
@@ -90,21 +90,15 @@ export async function clientLoginRequest(req, res) {
     await Otp.deleteMany({ email: normalizedEmail })
     await Otp.create({ email: normalizedEmail, otp: code })
 
-    const user = process.env.GMAIL_USER
-    const pass = process.env.GMAIL_APP_PASS
+    const gmailUser = process.env.GMAIL_USER
 
-    if (!user || !pass) {
-      console.warn('GMAIL_USER or GMAIL_APP_PASS not config. Outputting OTP to console:', code)
+    if (!gmailUser) {
+      console.warn('GMAIL_USER not configured. Outputting OTP to console:', code)
       return res.json({ message: 'OTP sent (check server logs)' })
     }
 
-    const transporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: { user, pass },
-    })
-
-    await transporter.sendMail({
-      from: `"SatByte Portal" <${user}>`,
+    await mailTransporter.sendMail({
+      from: `"SatByte Portal" <${gmailUser}>`,
       to: normalizedEmail,
       subject: `Your Login Code: ${code}`,
       html: `<h2>SatByte Client Portal</h2><p>Your one-time login code is: <strong>${code}</strong></p><p>This code expires in 5 minutes.</p>`,
