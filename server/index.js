@@ -18,14 +18,25 @@ import { handlePurchaseSuccess } from './controllers/checkoutController.js'
 const app = express()
 const PORT = Number(process.env.PORT || 5000)
 
-const clientOrigins = (process.env.CLIENT_URL || 'http://localhost:5173')
-  .split(',')
-  .map((s) => s.trim())
-  .filter(Boolean)
+const allowedOrigins = [
+  'http://localhost:5173',
+  'http://localhost:5174',
+  'https://services.satbyte.in',
+  'https://career.satbyte.in',
+  ...((process.env.CLIENT_URL || '').split(',').map(s => s.trim()))
+].filter(Boolean)
 
 app.use(
   cors({
-    origin: clientOrigins,
+    origin: (origin, callback) => {
+      // Allow requests with no origin (like mobile apps or curl)
+      if (!origin) return callback(null, true)
+      if (allowedOrigins.indexOf(origin) !== -1 || origin.endsWith('.satbyte.in')) {
+        callback(null, true)
+      } else {
+        callback(new Error('Not allowed by CORS'))
+      }
+    },
     credentials: true,
   }),
 )
