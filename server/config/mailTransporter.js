@@ -1,4 +1,4 @@
-import nodemailer from 'nodemailer';
+import axios from 'axios';
 import PDFDocument from 'pdfkit';
 
 const BRAND_BLUE = '#2563EB'
@@ -154,44 +154,52 @@ const generateInvoiceBuffer = (planName, referenceNumber, amountTotal) => {
 }
 
 /**
- * Lazily creates a nodemailer transporter.
- * - Strips any accidental surrounding quotes from GMAIL_APP_PASS
- *   (a common mistake when setting env vars in Render / Heroku dashboards)
- * - Throws a clear error if credentials are missing so logs are actionable
+ * Custom mail transporter that mimics nodemailer's sendMail signature
+ * but uses Resend's REST API to bypass Render's SMTP port blocks.
  */
-function createMailTransporter() {
-  const user = process.env.GMAIL_USER?.trim()
-  // Strip surrounding single or double quotes, e.g. "tpuu djin huxf fzio" → tpuu djin huxf fzio
-  const pass = process.env.GMAIL_APP_PASS?.trim().replace(/^["']|["']$/g, '')
+export const mailTransporter = {
+  sendMail: async (options) => {
+    try {
+      // Use env var or the fallback token you provided
+      const resendApiKey = process.env.RESEND_API_KEY?.trim() || 're_JnYFtcut_BCJXZotm5RCwpKYiSvRvqLDv';
+      
+      // Resend expects attachments as base64 strings
+      const attachments = options.attachments?.map(att => ({
+        filename: att.filename,
+        content: Buffer.isBuffer(att.content) ? att.content.toString('base64') : att.content
+      }));
 
-  if (!user || !pass) {
-    throw new Error(
-      `[mail] Missing credentials — GMAIL_USER="${user ?? '(unset)'}", GMAIL_APP_PASS=${pass ? '(set)' : '(unset)'}. ` +
-      'Set both in your Render environment variables (no surrounding quotes).'
-    )
-  }
+      // Resend requires verified sending domains.
+      // We explicitly override the 'from' field to your domain's email
+      const payload = {
+        from: 'SatByte Technologies <info@satbyte.in>',
+        to: options.to,
+        subject: options.subject,
+        html: options.html,
+      };
 
-  console.log(`[mail] Transporter ready — user=${user}, pass=${pass.slice(0, 4)}****`)
+      if (attachments?.length > 0) {
+        payload.attachments = attachments;
+      }
 
-  return nodemailer.createTransport({
-    host: 'smtp.gmail.com',
-    port: 465,
-    secure: true, // Use SMTPS on port 465
-    auth: { user, pass },
-    connectionTimeout: 30000,
-    greetingTimeout: 30000,
-    socketTimeout: 60000,
-    family: 4,
-    logger: true,
-    debug: true,
-    tls: {
-      rejectUnauthorized: false
+      console.log(`[mail] Sending via Resend to ${options.to}...`);
+
+      const response = await axios.post('https://api.resend.com/emails', payload, {
+        headers: {
+          'Authorization': `Bearer ${resendApiKey}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      console.log('[mail] Resend API success, id:', response.data.id);
+      return { messageId: response.data.id };
+
+    } catch (e) {
+        console.error('[mail] Resend API error:', e.response?.data || e.message);
+        throw e;
     }
-  })
-}
-
-// Exported singleton — created once on first import
-export const mailTransporter = createMailTransporter()
+  }
+};
 
 export const sendPurchaseConfirmation = async (userEmail, planName, referenceNumber, gatewayReference, amountTotal) => {
   
