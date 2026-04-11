@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { api, saveToken } from '@/lib/apiClient'
+import { Navigate, useNavigate } from 'react-router-dom'
+import { api, getStoredToken, saveToken } from '@/lib/apiClient'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -8,6 +8,9 @@ import { SEO } from '@/components/SEO'
 import { SectionHeader } from '@/components/SectionHeader'
 
 export default function ClientLoginPage() {
+  if (getStoredToken()) {
+    return <Navigate to="/portal" replace />
+  }
   const [authMode, setAuthMode] = useState<'login' | 'register'>('login')
   const [loginMethod, setLoginMethod] = useState<'password' | 'otp'>('password')
   

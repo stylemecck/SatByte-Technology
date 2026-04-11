@@ -1,12 +1,15 @@
 import { useState } from 'react'
-import { Link, useNavigate, useLocation } from 'react-router-dom'
+import { Link, useNavigate, useLocation, Navigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { Mail, Lock, LogIn, ArrowRight, Loader2, ChevronLeft, X } from 'lucide-react'
-import { api, saveToken } from '../lib/apiClient'
+import { api, getStoredToken, saveToken } from '../lib/apiClient'
 import { SEO } from '../components/SEO'
 import { useAuth } from '../contexts/AuthContext'
 
 export default function LoginPage() {
+  if (getStoredToken()) {
+    return <Navigate to="/dashboard" replace />
+  }
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [isLoading, setIsLoading] = useState(false)

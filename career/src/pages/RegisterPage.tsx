@@ -1,12 +1,15 @@
 import { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, Navigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { User, Mail, Lock, ArrowRight, ShieldCheck, Loader2, Sparkles, ChevronLeft } from 'lucide-react'
-import { api, saveToken } from '../lib/apiClient'
+import { api, getStoredToken, saveToken } from '../lib/apiClient'
 import { SEO } from '../components/SEO'
 import { useAuth } from '../contexts/AuthContext'
 
 export default function RegisterPage() {
+  if (getStoredToken()) {
+    return <Navigate to="/dashboard" replace />
+  }
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
