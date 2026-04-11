@@ -153,7 +153,7 @@ const generateInvoiceBuffer = (planName, referenceNumber, amountTotal) => {
   })
 }
 
-const transporter = nodemailer.createTransport({
+export const mailTransporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
     user: process.env.GMAIL_USER,
@@ -220,7 +220,7 @@ export const sendPurchaseConfirmation = async (userEmail, planName, referenceNum
   };
 
   try {
-    const info = await transporter.sendMail(mailOptions);
+    const info = await mailTransporter.sendMail(mailOptions);
     console.log('Confirmation email sent successfully:', info.messageId);
     return info;
   } catch (error) {
