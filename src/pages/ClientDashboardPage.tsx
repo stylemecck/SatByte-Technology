@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { Navigate, useNavigate } from 'react-router-dom'
-import { api } from '@/lib/apiClient'
+import { api, getStoredToken, setAuthToken } from '@/lib/apiClient'
 import { SEO } from '@/components/SEO'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -9,10 +9,17 @@ function useMyOrdersQuery() {
   return useQuery({
     queryKey: ['my-orders'],
     queryFn: async () => {
+      // Safety net: ensure the token header is attached even if hydration
+      // ran before React had a chance to mount (StrictMode double-render)
+      const stored = getStoredToken()
+      if (stored) setAuthToken(stored)
+
       const { data } = await api.get('/checkout/my-orders')
       return data as any[]
     },
-    retry: false,
+    retry: 2,
+    retryDelay: 800,
+    staleTime: 30_000,
   })
 }
 
@@ -24,7 +31,7 @@ export default function ClientDashboardPage() {
     return <Navigate to="/client-login" replace />
   }
 
-  const { data, isPending, isError } = useMyOrdersQuery()
+  const { data, isPending, isError, refetch } = useMyOrdersQuery()
 
   const logout = () => {
     localStorage.removeItem('satbyte_token')
@@ -46,9 +53,21 @@ export default function ClientDashboardPage() {
         </div>
 
         {isPending ? (
-          <p className="text-slate-500">Loading your projects...</p>
+          <div className="grid gap-6">
+            {[1, 2].map((i) => (
+              <div key={i} className="h-36 w-full animate-pulse rounded-xl bg-slate-100 dark:bg-white/5" />
+            ))}
+          </div>
         ) : isError ? (
-          <p className="text-red-500">Failed to load projects. Please try logging in again if your session expired.</p>
+          <div className="flex flex-col items-center gap-4 py-16 text-center">
+            <p className="text-red-500 font-medium">Failed to load projects.</p>
+            <p className="text-sm text-slate-500 dark:text-slate-400">
+              There was a problem fetching your data. Please try again.
+            </p>
+            <Button onClick={() => refetch()} variant="outline">
+              Retry
+            </Button>
+          </div>
         ) : data?.length === 0 ? (
           <Card className="p-10 text-center border-dashed">
             <p className="text-slate-500">No active projects found.</p>
