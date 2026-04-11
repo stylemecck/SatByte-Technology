@@ -105,6 +105,81 @@ export function useDeleteService() {
   })
 }
 
+export function useJobsQuery() {
+  return useQuery({
+    queryKey: ['jobs'],
+    queryFn: async () => {
+      const { data } = await api.get<any[]>('jobs')
+      return data
+    },
+  })
+}
+
+export function useInternshipsQuery() {
+  return useQuery({
+    queryKey: ['internships'],
+    queryFn: async () => {
+      const { data } = await api.get<any[]>('internships')
+      return data
+    },
+  })
+}
+
+export function useCertificationsQuery() {
+  return useQuery({
+    queryKey: ['certifications'],
+    queryFn: async () => {
+      const { data } = await api.get<any[]>('certifications')
+      return data
+    },
+  })
+}
+
+export function useApplicationsQuery() {
+  return useQuery({
+    queryKey: ['applications'],
+    queryFn: async () => {
+      const { data } = await api.get<any[]>('jobs/admin/applications')
+      return data
+    },
+  })
+}
+
+export function useDeleteJob() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: async (id: string) => { await api.delete(`jobs/${id}`) },
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['jobs'] }),
+  })
+}
+
+export function useDeleteInternship() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: async (id: string) => { await api.delete(`internships/${id}`) },
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['internships'] }),
+  })
+}
+
+export function useDeleteCertification() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: async (id: string) => { await api.delete(`certifications/${id}`) },
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['certifications'] }),
+  })
+}
+
+export function useUpdateApplicationStatus() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: async ({ id, status }: { id: string; status: string }) => {
+      const { data } = await api.put(`jobs/applications/${id}/status`, { status })
+      return data
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['applications'] }),
+  })
+}
+
 export function useUpdateOrderStatus() {
   const qc = useQueryClient()
   return useMutation({

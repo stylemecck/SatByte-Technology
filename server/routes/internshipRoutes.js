@@ -3,7 +3,9 @@ import {
   getAllInternships, 
   getInternshipById, 
   applyForInternship, 
-  createInternship 
+  createInternship,
+  updateInternship,
+  deleteInternship
 } from '../controllers/internshipController.js'
 import { requireAuth, requireAdmin } from '../middleware/auth.js'
 
@@ -15,5 +17,7 @@ router.post('/apply', requireAuth, applyForInternship)
 
 // Admin only
 router.post('/', requireAdmin, createInternship)
+router.put('/:id', requireAdmin, updateInternship)
+router.delete('/:id', requireAdmin, deleteInternship)
 
 export default router

@@ -48,13 +48,12 @@ export function HeroSection() {
           {/* Epic Headline */}
           <motion.h1
             variants={fadeUpItem}
-            className="font-heading text-4xl font-extrabold leading-[1.1] tracking-tight text-white sm:text-7xl lg:text-[5.5rem]"
+            className="font-sans text-4xl font-extrabold leading-[1.1] tracking-tighter text-white sm:text-7xl lg:text-[6rem]"
           >
             Engineering scale through{' '}
             <br className="hidden md:block" />
             <span className="relative inline-block mt-2 md:mt-0">
-              <span className="absolute -inset-2 bg-gradient-to-r from-primary/20 to-accent/20 blur-2xl z-0" />
-              <span className="relative bg-gradient-to-r from-accent via-white to-primary bg-clip-text text-transparent italic pr-2 break-words">
+              <span className="bg-gradient-to-r from-slate-300 via-blue-200 to-slate-400 bg-clip-text text-transparent pr-2">
                 Digital Excellence
               </span>
             </span>
@@ -62,9 +61,9 @@ export function HeroSection() {
 
           <motion.p
             variants={fadeUpItem}
-            className="mt-8 max-w-2xl text-lg text-slate-300 sm:text-xl md:text-2xl font-medium leading-relaxed drop-shadow-md"
+            className="mt-8 max-w-2xl text-lg text-slate-400 sm:text-xl font-medium leading-[1.6]"
           >
-            We deploy highly-aesthetic, data-driven web solutions, portals, and software designed exclusively for high-growth modern agencies.
+            Deploying high-fidelity, data-driven web solutions and software architectures designed for modern high-growth agencies.
           </motion.p>
 
           <motion.div

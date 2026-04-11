@@ -55,3 +55,25 @@ export async function createInternship(req, res) {
     res.status(500).json({ message: 'Failed to create internship' })
   }
 }
+
+/** Admin: Update internship */
+export async function updateInternship(req, res) {
+  try {
+    const intern = await Internship.findByIdAndUpdate(req.params.id, req.body, { new: true })
+    if (!intern) return res.status(404).json({ message: 'Internship not found' })
+    res.json(intern)
+  } catch (e) {
+    res.status(500).json({ message: 'Failed to update internship' })
+  }
+}
+
+/** Admin: Delete internship */
+export async function deleteInternship(req, res) {
+  try {
+    const intern = await Internship.findByIdAndDelete(req.params.id)
+    if (!intern) return res.status(404).json({ message: 'Internship not found' })
+    res.json({ message: 'Internship deleted successfully' })
+  } catch (e) {
+    res.status(500).json({ message: 'Failed to delete internship' })
+  }
+}

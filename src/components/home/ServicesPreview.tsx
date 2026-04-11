@@ -58,8 +58,8 @@ export function ServicesPreview() {
                 >
                   <div className="flex flex-col gap-2 max-w-lg">
                     <h3 className={cn(
-                      "font-heading text-3xl sm:text-4xl font-extrabold tracking-tight transition-colors duration-300",
-                      isActive ? "text-white" : "text-white group-hover:text-slate-300"
+                      "font-sans text-3xl sm:text-5xl font-black tracking-tighter transition-colors duration-500",
+                      isActive ? "text-white" : "text-white/10 group-hover:text-white/40"
                     )}>
                       {s.title}
                     </h3>

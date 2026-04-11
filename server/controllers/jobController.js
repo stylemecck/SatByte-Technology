@@ -54,6 +54,40 @@ export async function createJob(req, res) {
   }
 }
 
+/** Admin: Update existing job */
+export async function updateJob(req, res) {
+  try {
+    const job = await Job.findByIdAndUpdate(req.params.id, req.body, { new: true })
+    if (!job) return res.status(404).json({ message: 'Job not found' })
+    res.json(job)
+  } catch (e) {
+    res.status(500).json({ message: 'Failed to update job' })
+  }
+}
+
+/** Admin: Delete job */
+export async function deleteJob(req, res) {
+  try {
+    const job = await Job.findByIdAndDelete(req.params.id)
+    if (!job) return res.status(404).json({ message: 'Job not found' })
+    res.json({ message: 'Job deleted successfully' })
+  } catch (e) {
+    res.status(500).json({ message: 'Failed to delete job' })
+  }
+}
+
+/** Admin: Update Application Status */
+export async function updateApplicationStatus(req, res) {
+  try {
+    const { status } = req.body
+    const app = await Application.findByIdAndUpdate(req.params.id, { status }, { new: true })
+    if (!app) return res.status(404).json({ message: 'Application not found' })
+    res.json(app)
+  } catch (e) {
+    res.status(500).json({ message: 'Failed to update status' })
+  }
+}
+
 /** Admin: View all applications */
 export async function getAllApplications(req, res) {
   try {

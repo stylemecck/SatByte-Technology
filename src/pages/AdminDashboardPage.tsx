@@ -26,7 +26,9 @@ import {
   PlusCircle,
   TrendingUp,
   DollarSign,
-  TrendingDown
+  TrendingDown,
+  GraduationCap,
+  ClipboardList
 } from 'lucide-react'
 import { 
   Area, 
@@ -53,6 +55,14 @@ import {
   useClientsQuery,
   useTicketsQuery,
   useUpdateOrderStatus,
+  useJobsQuery,
+  useInternshipsQuery,
+  useCertificationsQuery,
+  useApplicationsQuery,
+  useDeleteJob,
+  useDeleteInternship,
+  useDeleteCertification,
+  useUpdateApplicationStatus
 } from '@/hooks/useCmsQueries'
 import { api, clearToken } from '@/lib/apiClient'
 import { RichTextEditor } from '@/components/admin/RichTextEditor'
@@ -60,7 +70,7 @@ import { LazyImage } from '@/components/LazyImage'
 
 const categories = ['Web', 'E-commerce', 'Software', 'Other'] as const
 
-type TabId = 'analytics' | 'orders' | 'clients' | 'tickets' | 'projects' | 'blogs' | 'services'
+type TabId = 'analytics' | 'orders' | 'clients' | 'tickets' | 'projects' | 'blogs' | 'services' | 'careers' | 'applications' | 'education'
 
 export default function AdminDashboardPage() {
   const navigate = useNavigate()
@@ -87,6 +97,9 @@ export default function AdminDashboardPage() {
     { id: 'projects', label: 'Portfolio', icon: Briefcase },
     { id: 'blogs', label: 'Blog', icon: FileText },
     { id: 'services', label: 'Services', icon: Layers },
+    { id: 'careers', label: 'Careers', icon: Briefcase },
+    { id: 'applications', label: 'Applications', icon: ClipboardList },
+    { id: 'education', label: 'Education', icon: GraduationCap },
   ] as const
 
   return (
@@ -179,12 +192,292 @@ export default function AdminDashboardPage() {
               {activeTab === 'projects' && <ProjectsPanel onChanged={() => qc.invalidateQueries({ queryKey: ['projects'] })} />}
               {activeTab === 'blogs' && <BlogsPanel onChanged={() => qc.invalidateQueries({ queryKey: ['blogs'] })} />}
               {activeTab === 'services' && <ServicesPanel onChanged={() => qc.invalidateQueries({ queryKey: ['services'] })} />}
+              {activeTab === 'careers' && <CareersPanel />}
+              {activeTab === 'applications' && <ApplicationsPanel />}
+              {activeTab === 'education' && <EducationPanel />}
             </motion.div>
           </AnimatePresence>
         </div>
       </main>
     </div>
   )
+}
+
+function CareersPanel() {
+  const { data: jobs, isLoading: jobsLoading } = useJobsQuery();
+  const { data: internships, isLoading: internshipsLoading } = useInternshipsQuery();
+  const deleteJob = useDeleteJob();
+  const deleteInternship = useDeleteInternship();
+  const [showForm, setShowForm] = useState<'Job' | 'Internship' | null>(null);
+
+  const { register, handleSubmit, reset } = useForm<any>();
+
+  const onSubmit = async (data: any) => {
+    try {
+      const endpoint = showForm === 'Job' ? 'jobs' : 'internships';
+      const payload = {
+        ...data,
+        requirements: data.requirements?.split('\n').filter((l: string) => l.trim()),
+        responsibilities: data.responsibilities?.split('\n').filter((l: string) => l.trim()),
+        skills: data.skills?.split('\n').filter((l: string) => l.trim()),
+      };
+      await api.post(endpoint, payload);
+      reset();
+      setShowForm(null);
+    } catch (e: any) { alert(e.response?.data?.message || 'Failed to save'); }
+  };
+
+  return (
+    <div className="space-y-10">
+      <div className="flex items-center justify-between">
+        <div>
+          <h2 className="text-3xl font-black text-white tracking-tighter">Career Management</h2>
+          <p className="text-slate-500 text-sm">Control talent acquisition and internship pipelines.</p>
+        </div>
+        <div className="flex gap-3">
+          <Button onClick={() => setShowForm('Job')} className="rounded-2xl bg-primary shadow-xl shadow-primary/20 h-12 px-6">New Job Role</Button>
+          <Button onClick={() => setShowForm('Internship')} variant="outline" className="rounded-2xl border-white/10 bg-white/5 h-12 px-6">New Internship</Button>
+        </div>
+      </div>
+
+      <AnimatePresence>
+        {showForm && (
+          <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="overflow-hidden">
+            <div className="bg-[#0A111D]/80 border border-white/10 p-10 rounded-[2.5rem] shadow-2xl mb-10">
+              <div className="flex justify-between items-center mb-8">
+                <h3 className="text-xl font-bold text-white">Create New {showForm}</h3>
+                <Button variant="ghost" onClick={() => setShowForm(null)}><X size={20} /></Button>
+              </div>
+              <form onSubmit={handleSubmit(onSubmit)} className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-2"><Label>Title</Label><Input {...register('title')} required className="bg-white/5 border-white/10 h-12" /></div>
+                <div className="space-y-2"><Label>Location</Label><Input {...register('location')} defaultValue="Remote" className="bg-white/5 border-white/10 h-12" /></div>
+                
+                {showForm === 'Job' ? (
+                  <>
+                    <div className="space-y-2"><Label>Experience</Label><Input {...register('experience')} placeholder="1-3 years" className="bg-white/5 border-white/10 h-12" /></div>
+                    <div className="space-y-2"><Label>Salary</Label><Input {...register('salary')} placeholder="₹10L - ₹15L" className="bg-white/5 border-white/10 h-12" /></div>
+                    <div className="space-y-2">
+                       <Label>Category</Label>
+                       <select {...register('category')} className="w-full h-12 bg-white/5 border border-white/10 rounded-xl px-4 text-white appearance-none">
+                         <option value="Engineering" className="bg-slate-900">Engineering</option>
+                         <option value="Design" className="bg-slate-900">Design</option>
+                         <option value="Marketing" className="bg-slate-900">Marketing</option>
+                       </select>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div className="space-y-2"><Label>Duration</Label><Input {...register('duration')} placeholder="6 Months" className="bg-white/5 border-white/10 h-12" /></div>
+                    <div className="space-y-2"><Label>Stipend</Label><Input {...register('stipend')} placeholder="₹5,000/month" className="bg-white/5 border-white/10 h-12" /></div>
+                  </>
+                )}
+
+                <div className="md:col-span-2 space-y-2"><Label>Summary</Label><Textarea {...register('description')} required className="bg-white/5 border-white/10 min-h-[100px]" /></div>
+                <div className="space-y-2"><Label>Requirements (One per line)</Label><Textarea {...register('requirements')} className="bg-white/5 border-white/10 min-h-[120px]" /></div>
+                <div className="space-y-2"><Label>{showForm === 'Job' ? 'Responsibilities' : 'Skills'} (One per line)</Label><Textarea {...register(showForm === 'Job' ? 'responsibilities' : 'skills')} className="bg-white/5 border-white/10 min-h-[120px]" /></div>
+                
+                <Button type="submit" className="md:col-span-2 h-14 bg-primary text-white font-bold text-lg rounded-2xl mt-4">Publish Role Globally</Button>
+              </form>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        {/* Jobs Section */}
+        <div className="bg-[#0A111D]/80 border border-white/5 rounded-[2.5rem] p-8">
+          <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-3">
+             <div className="h-2 w-2 rounded-full bg-blue-500 animate-pulse" /> Live Job Openings
+          </h3>
+          <div className="space-y-4">
+            {jobsLoading ? <p className="text-slate-600 text-sm">Syncing jobs...</p> : 
+              jobs?.map(job => (
+                <div key={job._id} className="p-5 rounded-2xl bg-white/[0.03] border border-white/5 group hover:border-white/10 transition-all flex items-center justify-between">
+                  <div>
+                    <h4 className="font-bold text-white">{job.title}</h4>
+                    <p className="text-xs text-slate-500">{job.location} • {job.experience || 'Entry Level'}</p>
+                  </div>
+                  <Button variant="ghost" onClick={() => deleteJob.mutate(job._id)} className="opacity-0 group-hover:opacity-100 text-red-400 hover:bg-red-400/10 rounded-lg"><Trash2 size={16} /></Button>
+                </div>
+              ))}
+          </div>
+        </div>
+
+        {/* Internships Section */}
+        <div className="bg-[#0A111D]/80 border border-white/5 rounded-[2.5rem] p-8">
+          <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-3">
+             <div className="h-2 w-2 rounded-full bg-accent animate-pulse" /> Active Internship Cohorts
+          </h3>
+          <div className="space-y-4">
+            {internshipsLoading ? <p className="text-slate-600 text-sm">Syncing internships...</p> : 
+              internships?.map(intern => (
+                <div key={intern._id} className="p-5 rounded-2xl bg-white/[0.03] border border-white/5 group hover:border-white/10 transition-all flex items-center justify-between">
+                  <div>
+                    <h4 className="font-bold text-white">{intern.title}</h4>
+                    <p className="text-xs text-slate-500">{intern.duration} • {intern.stipend || 'Unpaid'}</p>
+                  </div>
+                  <Button variant="ghost" onClick={() => deleteInternship.mutate(intern._id)} className="opacity-0 group-hover:opacity-100 text-red-400 hover:bg-red-400/10 rounded-lg"><Trash2 size={16} /></Button>
+                </div>
+              ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ApplicationsPanel() {
+  const { data: apps, isLoading } = useApplicationsQuery();
+  const updateStatus = useUpdateApplicationStatus();
+  const [filter, setFilter] = useState<'All' | 'Job' | 'Internship'>('All');
+
+  const filteredApps = apps?.filter(a => filter === 'All' || a.type === filter);
+
+  const statuses = ['Pending', 'Reviewed', 'Interviewing', 'Selected', 'Rejected'];
+
+  return (
+    <div className="space-y-8">
+      <div className="flex items-center justify-between">
+        <div>
+          <h2 className="text-3xl font-black text-white tracking-tighter">Candidate Pipeline</h2>
+          <p className="text-slate-500 text-sm">Review applications and manage potential talent.</p>
+        </div>
+        <div className="flex bg-white/5 rounded-2xl p-1 border border-white/10">
+          {(['All', 'Job', 'Internship'] as const).map(f => (
+            <button key={f} onClick={() => setFilter(f)} className={`px-5 py-2 rounded-xl text-xs font-bold transition-all ${filter === f ? 'bg-primary text-white shadow-lg' : 'text-slate-500 hover:text-white'}`}>{f}</button>
+          ))}
+        </div>
+      </div>
+
+      <div className="bg-[#0A111D]/80 border border-white/5 rounded-[2.5rem] overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="w-full text-left text-sm">
+            <thead className="bg-white/5 text-[10px] font-bold uppercase tracking-widest text-slate-500">
+              <tr>
+                <th className="px-8 py-5">Candidate</th>
+                <th className="px-8 py-5">Applied For</th>
+                <th className="px-8 py-5">Status</th>
+                <th className="px-8 py-5 text-right">Resume</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-white/5">
+              {isLoading ? (
+                [1,2,3].map(i => <tr key={i}><td colSpan={4} className="h-20 animate-pulse bg-white/[0.01]" /></tr>)
+              ) : filteredApps?.map((app) => (
+                <tr key={app._id} className="hover:bg-white/[0.02] group transition-colors">
+                  <td className="px-8 py-6">
+                    <p className="font-bold text-white">{app.user?.name || 'Unknown'}</p>
+                    <p className="text-xs text-slate-500">{app.user?.email}</p>
+                  </td>
+                  <td className="px-8 py-6">
+                    <p className="font-bold text-slate-300">{app.job?.title || app.internship?.title}</p>
+                    <span className={`text-[10px] px-2 py-0.5 rounded-full font-black uppercase tracking-widest ${app.type === 'Job' ? 'bg-blue-500/10 text-blue-400' : 'bg-accent/10 text-accent'}`}>{app.type}</span>
+                  </td>
+                  <td className="px-8 py-6">
+                    <select 
+                      value={app.status}
+                      onChange={(e) => updateStatus.mutate({ id: app._id, status: e.target.value })}
+                      className="bg-transparent text-xs font-bold border-none focus:outline-none focus:ring-0 text-primary cursor-pointer"
+                    >
+                      {statuses.map(s => <option key={s} value={s} className="bg-slate-900">{s}</option>)}
+                    </select>
+                  </td>
+                  <td className="px-8 py-6 text-right">
+                    <a href={app.resumeUrl} target="_blank" className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-xs font-bold text-slate-300 hover:bg-primary hover:text-white hover:border-transparent transition-all">
+                      <FileText size={14} /> View Document
+                    </a>
+                  </td>
+                </tr>
+              ))}
+              {!filteredApps?.length && !isLoading && (
+                <tr><td colSpan={4} className="py-20 text-center text-slate-600 text-sm italic">No applications found in this category.</td></tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function EducationPanel() {
+  const { data: certs, isLoading } = useCertificationsQuery();
+  const deleteCert = useDeleteCertification();
+  const [isAdding, setIsAdding] = useState(false);
+  const { register, handleSubmit, reset } = useForm<any>();
+
+  const onSubmit = async (data: any) => {
+    try {
+      await api.post('certifications', { 
+        ...data, 
+        price: Number(data.price),
+        features: data.features?.split('\n').filter((l: string) => l.trim())
+      });
+      reset();
+      setIsAdding(false);
+    } catch (e: any) { alert(e.response?.data?.message || 'Failed to save'); }
+  };
+
+  return (
+    <div className="space-y-10">
+      <div className="flex items-center justify-between">
+        <div>
+          <h2 className="text-3xl font-black text-white tracking-tighter">Education CMS</h2>
+          <p className="text-slate-500 text-sm">Manage professional masterclasses and curricula.</p>
+        </div>
+        <Button onClick={() => setIsAdding(!isAdding)} className="rounded-2xl bg-primary h-12 px-6 font-bold shadow-xl shadow-primary/20">
+          {isAdding ? 'Cancel Entry' : 'New Masterclass'}
+        </Button>
+      </div>
+
+      <AnimatePresence>
+        {isAdding && (
+          <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }}>
+            <div className="bg-[#0A111D]/80 border border-white/10 p-10 rounded-[2.5rem] shadow-2xl mb-10">
+              <form onSubmit={handleSubmit(onSubmit)} className="grid md:grid-cols-2 gap-8">
+                <div className="space-y-2"><Label>Course Title</Label><Input {...register('title')} required className="bg-white/5 border-white/10 h-12" /></div>
+                <div className="space-y-2"><Label>Access Price (INR)</Label><Input type="number" {...register('price')} required className="bg-white/5 border-white/10 h-12" /></div>
+                <div className="space-y-2"><Label>Duration</Label><Input {...register('duration')} placeholder="4 Weeks" className="bg-white/5 border-white/10 h-12" /></div>
+                <div className="space-y-2">
+                   <Label>Status</Label>
+                   <select {...register('status')} className="w-full h-12 bg-white/5 border border-white/10 rounded-xl px-4 text-white appearance-none">
+                     <option value="Active" className="bg-slate-900">Active</option>
+                     <option value="Draft" className="bg-slate-900">Draft</option>
+                   </select>
+                </div>
+                <div className="md:col-span-2 space-y-2"><Label>Detailed Description</Label><Textarea {...register('description')} required className="bg-white/5 border-white/10 min-h-[100px]" /></div>
+                <div className="md:col-span-2 space-y-2"><Label>Features & Modules (One per line)</Label><Textarea {...register('features')} className="bg-white/5 border-white/10 min-h-[120px]" /></div>
+                <Button type="submit" className="md:col-span-2 h-14 bg-primary text-white font-bold text-lg rounded-2xl">Publish Course Material</Button>
+              </form>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {isLoading ? <p>Loading courses...</p> : 
+          certs?.map(cert => (
+            <div key={cert._id} className="relative group bg-[#0A111D]/80 border border-white/5 rounded-[2.5rem] p-8 hover:border-white/15 transition-all">
+              <div className="flex justify-between items-start mb-6">
+                <div className="h-12 w-12 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary">
+                  <GraduationCap size={24} />
+                </div>
+                <div className="text-right">
+                  <p className="text-[10px] font-black uppercase text-slate-500 tracking-widest">Enrollment Fee</p>
+                  <p className="text-xl font-black text-white">₹{cert.price}</p>
+                </div>
+              </div>
+              <h4 className="text-xl font-bold text-white mb-2">{cert.title}</h4>
+              <p className="text-xs text-slate-500 line-clamp-2 mb-6">{cert.description}</p>
+              <div className="flex items-center justify-between border-t border-white/5 pt-6">
+                 <span className={`text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full ${cert.status === 'Active' ? 'bg-green-500/10 text-green-400' : 'bg-yellow-500/10 text-yellow-500'}`}>{cert.status}</span>
+                 <Button variant="ghost" onClick={() => deleteCert.mutate(cert._id)} className="text-red-400 hover:bg-red-400/10 rounded-xl"><Trash2 size={16} /></Button>
+              </div>
+            </div>
+          ))}
+      </div>
+    </div>
+  );
 }
 
 function AnalyticsPanel() {
@@ -196,7 +489,7 @@ function AnalyticsPanel() {
     { label: 'Total Revenue', value: `₹${((data || []).reduce((acc, o) => acc + (o.amountPaid || 0), 0) / 100).toLocaleString()}`, icon: DollarSign, trend: '+12.5%', trendUp: true, color: 'text-green-400' },
     { label: 'Active Projects', value: (data || []).length, icon: Briefcase, trend: '+3', trendUp: true, color: 'text-blue-400' },
     { label: 'Total Clients', value: (clients || []).length, icon: Users, trend: '+8', trendUp: true, color: 'text-purple-400' },
-    { label: 'Unresolved Tickets', value: (tickets || []).filter(t => t.status !== 'Closed').length, icon: MessageSquare, trend: '-2', trendUp: false, color: 'text-orange-400' },
+    { label: 'Unresolved Tickets', value: (tickets || []).filter((t: any) => t.status !== 'Closed').length, icon: MessageSquare, trend: '-2', trendUp: false, color: 'text-orange-400' },
   ]
 
   const chartData = (data || []).reduce((acc: any[], order) => {
@@ -501,7 +794,7 @@ function TicketsPanel() {
         </div>
         <div className="flex-1 overflow-y-auto p-4 space-y-2 hide-scrollbar">
           {isPending ? <p className="text-center p-8 animate-pulse text-slate-600">Syncing...</p> : 
-            ticketsItems?.map(ticket => (
+            ticketsItems?.map((ticket: any) => (
               <button 
                 key={ticket._id} 
                 onClick={() => setSelectedTicketId(ticket._id)}

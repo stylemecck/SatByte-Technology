@@ -146,6 +146,28 @@ export async function verifyEnrollment(req, res) {
 }
 
 
+/** Admin: Update existing certification */
+export async function updateCertification(req, res) {
+  try {
+    const cert = await Certification.findByIdAndUpdate(req.params.id, req.body, { new: true })
+    if (!cert) return res.status(404).json({ message: 'Certification not found' })
+    res.json(cert)
+  } catch (e) {
+    res.status(500).json({ message: 'Failed to update certification' })
+  }
+}
+
+/** Admin: Delete certification */
+export async function deleteCertification(req, res) {
+  try {
+    const cert = await Certification.findByIdAndDelete(req.params.id)
+    if (!cert) return res.status(404).json({ message: 'Certification not found' })
+    res.json({ message: 'Certification deleted successfully' })
+  } catch (e) {
+    res.status(500).json({ message: 'Failed to delete certification' })
+  }
+}
+
 /** Authenticated: Get user's enrollments */
 export async function getMyEnrollments(req, res) {
   try {

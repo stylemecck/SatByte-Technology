@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
 
 @import "tailwindcss";
 
@@ -6,40 +6,39 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  --font-heading: "Poppins", ui-sans-serif, system-ui, sans-serif;
+  --font-heading: "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-body: "Inter", ui-sans-serif, system-ui, sans-serif;
 
-  --color-primary: #2563eb;
+  --color-primary: #3b82f6;
   --color-secondary: #0f172a;
-  --color-accent: #38bdf8;
+  --color-accent: #60a5fa;
   --color-background: #020617;
 
-  --radius-lg: 0.75rem;
-  --radius-xl: 1rem;
-  --radius-2xl: 1.25rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.25rem;
+  --radius-2xl: 1.5rem;
+  --radius-3xl: 2rem;
 }
 
 @layer base {
   html {
     scroll-behavior: smooth;
+    font-size: 15px; /* Refined base size */
   }
 
   body {
     font-family: var(--font-body);
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
     @apply antialiased bg-slate-50 text-slate-900 transition-colors duration-300;
   }
 
   .dark body {
-    @apply bg-[#020617] text-slate-100;
+    @apply bg-[#030712] text-slate-100; /* Deeper, cleaner black */
   }
 
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
+  h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-heading);
+    @apply tracking-tighter;
   }
 }
 

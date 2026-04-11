@@ -1,13 +1,13 @@
 import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
-import { Briefcase, GraduationCap, Award, CheckCircle2, ArrowRight, ShieldCheck, Zap, Laptop, Star, Users, Globe, ExternalLink } from 'lucide-react'
+import { Briefcase, GraduationCap, Award, ArrowRight, ShieldCheck, Zap, Laptop, Star, Globe, ExternalLink } from 'lucide-react'
 import { SEO } from '../components/SEO'
 import { SITE } from '../lib/constants'
 import { cn } from '../utils/cn'
 
 export default function HomePage() {
   return (
-    <div className="bg-[#FDFDFF]">
+    <div className="bg-[#030712] selection:bg-primary/30">
       <SEO title="Home" description="Build your future with SatByte. Careers, Internships, and Professional Certifications." />
 
       {/* --- Cinematic Hero Section --- */}
@@ -27,14 +27,14 @@ export default function HomePage() {
               <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-md text-white border border-white/20 font-extrabold text-[10px] uppercase tracking-[0.2em] mb-8 shadow-2xl">
                 <ShieldCheck size={14} className="text-accent shadow-glow" /> The Engineering Standard
               </span>
-              <h1 className="font-heading text-5xl sm:text-7xl lg:text-8xl font-black text-white tracking-tighter leading-[0.95] mb-8">
+              <h1 className="font-sans text-5xl sm:text-7xl lg:text-[7rem] font-black text-white tracking-tighter leading-[0.9] mb-10">
                 {SITE.tagline.split(' — ')[0]} <br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent to-emerald-400">
+                <span className="bg-gradient-to-r from-blue-400 to-white bg-clip-text text-transparent italic">
                    {SITE.tagline.split(' — ')[1]}
                 </span>
               </h1>
-              <p className="text-xl text-indigo-100/70 max-w-xl leading-relaxed mb-12 font-medium">
-                Join a world-class ecosystem of developers, designers, and innovators. From high-growth roles to structured masterclasses, your future starts at {SITE.parentName}.
+               <p className="text-lg text-slate-400 max-w-xl leading-relaxed mb-12 font-medium">
+                Join a world-class ecosystem of developers and innovators. From career roles to structured masterclasses.
               </p>
               
               <div className="flex flex-wrap items-center gap-6">
@@ -101,8 +101,8 @@ export default function HomePage() {
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-20">
              <div className="max-w-2xl">
                 <span className="text-primary font-black uppercase tracking-[0.3em] text-[10px]">Your Journey</span>
-                <h2 className="mt-4 font-heading text-4xl sm:text-6xl font-extrabold text-secondary tracking-tight leading-none">
-                  Choose your next <br /> <span className="text-primary italic">Career Orbit.</span>
+                <h2 className="mt-4 font-sans text-4xl sm:text-6xl font-black text-white tracking-tighter leading-none">
+                  Choose your next <br /> <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent italic">Career Orbit.</span>
                 </h2>
              </div>
              <p className="text-slate-500 font-medium max-w-md">Our ecosystem is built for high-performers. Whether you're a student or a senior lead, we have a pathway for your orbit.</p>
@@ -257,8 +257,8 @@ function QuickStat({ label, value }: { label: string, value: string }) {
 function FeatureCard({ icon: Icon, title, description, link, accent, sub }: any) {
   return (
     <motion.div
-      whileHover={{ y: -12 }}
-      className="group p-10 rounded-[3rem] bg-white border border-slate-100 shadow-2xl shadow-slate-200/40 flex flex-col h-full relative overflow-hidden transition-all duration-500 hover:border-primary/20"
+      whileHover={{ y: -8 }}
+      className="group p-10 rounded-[2.5rem] bg-white/[0.03] border border-white/5 shadow-2xl flex flex-col h-full relative overflow-hidden transition-all duration-500 hover:border-white/10"
     >
        <div className={cn('absolute top-0 right-0 w-32 h-32 opacity-5 blur-3xl rounded-full transform translate-x-12 -translate-y-12 transition-all group-hover:opacity-10', accent)} />
        
@@ -268,7 +268,7 @@ function FeatureCard({ icon: Icon, title, description, link, accent, sub }: any)
        
        <div className="flex-1">
           <span className="text-[10px] font-black text-slate-300 uppercase tracking-widest mb-4 block group-hover:text-primary transition-colors">{sub}</span>
-          <h3 className="font-heading text-3xl font-extrabold text-secondary tracking-tight mb-4 group-hover:text-primary transition-colors">{title}</h3>
+          <h3 className="font-sans text-3xl font-black text-white tracking-tighter mb-4 group-hover:text-primary transition-colors">{title}</h3>
           <p className="text-slate-500 leading-relaxed font-medium mb-10">{description}</p>
        </div>
        
