@@ -55,6 +55,7 @@ function useTicketsQuery() {
       const { data } = await api.get('/tickets')
       return data as any[]
     },
+    refetchInterval: 3000, // Real-time refresh every 3s
   })
 }
 
@@ -69,7 +70,11 @@ export default function ClientDashboardPage() {
 
   const [activeTicketParams, setActiveTicketParams] = useState({ subject: '', orderId: '', message: '' })
   const [replyMessage, setReplyMessage] = useState('')
-  const [selectedTicket, setSelectedTicket] = useState<any>(null)
+  const { data, isPending, isError, refetch } = useMyOrdersQuery()
+  const { data: ticketsItems, refetch: refetchTickets } = useTicketsQuery()
+
+  const [selectedTicketId, setSelectedTicketId] = useState<string | null>(null)
+  const selectedTicket = ticketsItems?.find(t => t._id === selectedTicketId)
 
   // Force dark mode aesthetic on body
   useEffect(() => {
@@ -80,9 +85,6 @@ export default function ClientDashboardPage() {
   if (!token) {
     return <Navigate to="/client-login" replace />
   }
-
-  const { data, isPending, isError, refetch } = useMyOrdersQuery()
-  const { data: ticketsItems, refetch: refetchTickets } = useTicketsQuery()
 
   const logout = () => {
     localStorage.removeItem('satbyte_token')
@@ -123,29 +125,23 @@ export default function ClientDashboardPage() {
 
   const handleReplyTicket = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!replyMessage || !selectedTicket) return
+    if (!replyMessage || !selectedTicketId) return
     
     try {
-      await api.post(`/tickets/${selectedTicket._id}/reply`, { message: replyMessage })
+      await api.post(`/tickets/${selectedTicketId}/reply`, { message: replyMessage })
       setReplyMessage('')
       refetchTickets()
-      
-      setSelectedTicket((prev: any) => ({
-        ...prev, 
-        status: 'Open', 
-        messages: [...prev.messages, { sender: 'client', content: replyMessage, createdAt: new Date() }]
-      }))
     } catch (err: any) {
       alert(err.response?.data?.message || 'Failed to send reply')
     }
   }
 
   const handleCloseTicket = async () => {
-    if (!selectedTicket || !confirm('Are you sure you want to resolve this ticket?')) return
+    if (!selectedTicketId || !confirm('Are you sure you want to resolve this ticket?')) return
     try {
-      await api.put(`/tickets/${selectedTicket._id}/close`)
+      await api.put(`/tickets/${selectedTicketId}/close`)
       refetchTickets()
-      setSelectedTicket(null)
+      setSelectedTicketId(null)
     } catch (err: any) {
       alert(err.response?.data?.message || 'Failed to close ticket')
     }
@@ -200,7 +196,7 @@ export default function ClientDashboardPage() {
           {NAV_ITEMS.map(({ id, label, icon: Icon }) => (
             <button
               key={id}
-              onClick={() => { setActiveTab(id); setSelectedTicket(null); }}
+              onClick={() => { setActiveTab(id); setSelectedTicketId(null); }}
               className={`relative px-5 py-3 text-sm font-semibold rounded-t-xl transition-all flex items-center gap-2 whitespace-nowrap ${
                 activeTab === id
                   ? 'text-white'
@@ -415,13 +411,13 @@ export default function ClientDashboardPage() {
                 <div className="h-[75vh] min-h-[600px] max-h-[800px] bg-[#0A111D]/80 backdrop-blur-xl border border-white/10 rounded-[2rem] overflow-hidden shadow-2xl flex flex-col md:flex-row">
                   
                   {/* Sidebar: Ticket List */}
-                  <div className={`md:w-1/3 border-r border-white/10 flex flex-col ${selectedTicket ? 'hidden md:flex' : 'flex w-full'}`}>
+                  <div className={`md:w-1/3 border-r border-white/10 flex flex-col ${selectedTicketId ? 'hidden md:flex' : 'flex w-full'}`}>
                     <div className="p-6 border-b border-white/10 bg-white/[0.02]">
                       <h3 className="text-xl font-bold text-white font-heading">Support Inbox</h3>
                       <p className="text-sm text-slate-400">We usually reply within hours.</p>
                       <button 
-                        onClick={() => setSelectedTicket(null)}
-                        className={`mt-4 w-full py-2.5 rounded-xl border-2 border-dashed border-primary/30 text-primary font-semibold hover:border-primary/60 hover:bg-primary/5 transition-colors ${!selectedTicket ? 'bg-primary/5 border-primary/50' : ''}`}
+                        onClick={() => setSelectedTicketId(null)}
+                        className={`mt-4 w-full py-2.5 rounded-xl border-2 border-dashed border-primary/30 text-primary font-semibold hover:border-primary/60 hover:bg-primary/5 transition-colors ${!selectedTicketId ? 'bg-primary/5 border-primary/50' : ''}`}
                       >
                         + New Ticket
                       </button>
@@ -434,9 +430,9 @@ export default function ClientDashboardPage() {
                       {ticketsItems?.map((ticket: any) => (
                         <button 
                           key={ticket._id}
-                          onClick={() => setSelectedTicket(ticket)}
+                          onClick={() => setSelectedTicketId(ticket._id)}
                           className={`w-full text-left p-4 rounded-xl border transition-all ${
-                            selectedTicket?._id === ticket._id 
+                            selectedTicketId === ticket._id 
                               ? 'bg-primary/10 border-primary/30 shadow-[inset_0_0_20px_rgba(37,99,235,0.1)]' 
                               : 'bg-transparent border-transparent hover:bg-white/5'
                           }`}
@@ -460,13 +456,13 @@ export default function ClientDashboardPage() {
                   </div>
 
                   {/* Main Chat / Create Area */}
-                  <div className={`flex-1 flex flex-col bg-[#050B14] ${!selectedTicket ? 'hidden md:flex' : 'flex'}`}>
+                  <div className={`flex-1 flex flex-col bg-[#050B14] ${!selectedTicketId ? 'hidden md:flex' : 'flex'}`}>
                     {selectedTicket ? (
                       /* Chat View */
                       <>
                         <div className="p-6 border-b border-white/10 flex items-center justify-between bg-white/[0.02]">
                           <div className="flex items-center gap-3">
-                            <button className="md:hidden text-slate-400 hover:text-white" onClick={() => setSelectedTicket(null)}>
+                            <button className="md:hidden text-slate-400 hover:text-white" onClick={() => setSelectedTicketId(null)}>
                               Back
                             </button>
                             <div>

@@ -471,33 +471,30 @@ function ClientsPanel() {
 
 function TicketsPanel() {
   const { data: ticketsItems, isPending, refetch } = useTicketsQuery()
-  const [selectedTicket, setSelectedTicket] = useState<any>(null)
+  const [selectedTicketId, setSelectedTicketId] = useState<string | null>(null)
   const [replyMessage, setReplyMessage] = useState('')
+
+  const selectedTicket = ticketsItems?.find(t => t._id === selectedTicketId)
 
   const handleReplyTicket = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!replyMessage || !selectedTicket) return
+    if (!replyMessage || !selectedTicketId) return
     try {
-      await api.post(`/tickets/${selectedTicket._id}/reply`, { message: replyMessage })
+      await api.post(`/tickets/${selectedTicketId}/reply`, { message: replyMessage })
       setReplyMessage('')
       refetch()
-      setSelectedTicket((prev: any) => ({
-        ...prev, 
-        status: 'Admin Replied', 
-        messages: [...prev.messages, { sender: 'admin', content: replyMessage, createdAt: new Date() }]
-      }))
     } catch (err: any) { alert(err.response?.data?.message || 'Failed to reply') }
   }
 
   const handleCloseTicket = async () => {
-    if (!selectedTicket || !confirm('Close this ticket?')) return
-    try { await api.put(`/tickets/${selectedTicket._id}/close`); refetch(); setSelectedTicket(null); } 
+    if (!selectedTicketId || !confirm('Close this ticket?')) return
+    try { await api.put(`/tickets/${selectedTicketId}/close`); refetch(); setSelectedTicketId(null); } 
     catch (err: any) { alert(err.response?.data?.message || 'Failed to close') }
   }
 
   return (
     <div className="h-[75vh] flex flex-col md:flex-row bg-[#0A111D]/80 border border-white/10 rounded-[2.5rem] overflow-hidden shadow-2xl">
-      <div className={`md:w-96 border-r border-white/10 flex flex-col ${selectedTicket ? 'hidden md:flex' : 'flex'}`}>
+      <div className={`md:w-96 border-r border-white/10 flex flex-col ${selectedTicketId ? 'hidden md:flex' : 'flex'}`}>
         <div className="p-8 border-b border-white/5">
           <h2 className="text-xl font-bold text-white font-heading mb-1">Support Queue</h2>
           <p className="text-xs text-slate-500 font-bold uppercase tracking-widest">Global Inquiries</p>
@@ -507,8 +504,8 @@ function TicketsPanel() {
             ticketsItems?.map(ticket => (
               <button 
                 key={ticket._id} 
-                onClick={() => setSelectedTicket(ticket)}
-                className={`w-full text-left p-5 rounded-[1.5rem] transition-all border ${selectedTicket?._id === ticket._id ? 'bg-primary/10 border-primary/20 shadow-inner' : 'border-transparent hover:bg-white/5'}`}
+                onClick={() => setSelectedTicketId(ticket._id)}
+                className={`w-full text-left p-5 rounded-[1.5rem] transition-all border ${selectedTicketId === ticket._id ? 'bg-primary/10 border-primary/20 shadow-inner' : 'border-transparent hover:bg-white/5'}`}
               >
                 <div className="flex justify-between items-start mb-2">
                   <h4 className="font-bold text-white text-[15px] truncate pr-4">{ticket.subject}</h4>
@@ -525,12 +522,12 @@ function TicketsPanel() {
         </div>
       </div>
 
-      <div className={`flex-1 flex flex-col bg-[#050B14] ${!selectedTicket ? 'hidden md:flex' : 'flex'}`}>
+      <div className={`flex-1 flex flex-col bg-[#050B14] ${!selectedTicketId ? 'hidden md:flex' : 'flex'}`}>
         {selectedTicket ? (
           <>
             <div className="p-8 border-b border-white/5 flex items-center justify-between bg-white/[0.02]">
               <div className="flex items-center gap-4">
-                <button className="md:hidden p-2 rounded-lg bg-white/5" onClick={() => setSelectedTicket(null)}><ChevronRight className="h-4 w-4 rotate-180" /></button>
+                <button className="md:hidden p-2 rounded-lg bg-white/5" onClick={() => setSelectedTicketId(null)}><ChevronRight className="h-4 w-4 rotate-180" /></button>
                 <div>
                   <h3 className="font-extrabold text-xl text-white tracking-tight">{selectedTicket.subject}</h3>
                   <p className="text-[11px] font-mono text-slate-500 mt-0.5">{selectedTicket.email}</p>

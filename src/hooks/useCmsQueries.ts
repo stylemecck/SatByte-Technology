@@ -30,6 +30,7 @@ export function useTicketsQuery() {
       const { data } = await api.get<any[]>('/tickets')
       return data
     },
+    refetchInterval: 3000, // Real-time refresh every 3s
   })
 }
 
