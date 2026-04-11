@@ -178,8 +178,10 @@ function createMailTransporter() {
     port: 465,
     secure: true, // Use SSL
     auth: { user, pass },
-    connectionTimeout: 10000, // 10 seconds
-    greetingTimeout: 10000,
+    connectionTimeout: 15000, // 15 seconds
+    greetingTimeout: 15000,
+    socketTimeout: 30000, // 30 seconds
+    family: 4, // Force IPv4 to avoid IPv6 issues in cloud environments
   })
 }
 
