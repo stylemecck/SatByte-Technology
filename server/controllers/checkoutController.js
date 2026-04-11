@@ -36,7 +36,8 @@ export async function createCheckoutSession(req, res) {
     }
 
     const stripe = new Stripe(secret)
-    const clientUrl = (process.env.CLIENT_URL || 'http://localhost:5173').replace(/\/$/, '')
+    // Take only the first origin — CLIENT_URL may be comma-separated for CORS
+    const clientUrl = (process.env.CLIENT_URL || 'http://localhost:5173').split(',')[0].trim().replace(/\/$/, '')
 
     const priceId =
       planKey === 'basic'
@@ -325,7 +326,8 @@ export async function createPayuSession(req, res) {
     const txnid = `SB-PAY-${Date.now()}`
     const amount = PLAN_AMOUNTS_RUPEES[planKey].toString()
     const productInfo = PLAN_LABELS[planKey]?.name || planKey
-    const clientUrl = (process.env.CLIENT_URL || 'http://localhost:5173').replace(/\/$/, '')
+    // Take only the first origin — CLIENT_URL may be comma-separated for CORS
+    const clientUrl = (process.env.CLIENT_URL || 'http://localhost:5173').split(',')[0].trim().replace(/\/$/, '')
     const successUrl = `${clientUrl}/pricing/success`
     const failureUrl = `${clientUrl}/pricing/canceled`
 
