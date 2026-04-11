@@ -48,6 +48,14 @@ export type OrderDTO = {
   status: string
   projectStatus?: string
   progress?: number
+  assets?: Array<{
+    _id: string
+    fileName: string
+    fileUrl: string
+    cloudinaryPublicId: string
+    uploadedBy: string
+    uploadedAt: string
+  }>
   createdAt: string
   updatedAt: string
 }

@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { useState, useEffect, useRef, type FormEvent } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useQueryClient } from '@tanstack/react-query'
 import { useForm } from 'react-hook-form'
@@ -12,7 +12,6 @@ import {
   FileText, 
   Layers, 
   LogOut, 
-  Globe, 
   ChevronRight, 
   Plus, 
   Trash2, 
@@ -58,7 +57,7 @@ import {
 import { api, clearToken } from '@/lib/apiClient'
 import { RichTextEditor } from '@/components/admin/RichTextEditor'
 import { LazyImage } from '@/components/LazyImage'
-import type { BlogDTO, ProjectDTO, ServiceDTO } from '@/types/cms'
+import type { BlogDTO, ProjectDTO } from '@/types/cms'
 
 const categories = ['Web', 'E-commerce', 'Software', 'Other'] as const
 
@@ -68,7 +67,7 @@ export default function AdminDashboardPage() {
   const navigate = useNavigate()
   const qc = useQueryClient()
   const [activeTab, setActiveTab] = useState<TabId>('analytics')
-  const [sidebarOpen, setSidebarOpen] = useState(true)
+  const [sidebarOpen] = useState(true)
 
   // Force dark mode
   useEffect(() => {
@@ -190,7 +189,7 @@ export default function AdminDashboardPage() {
 }
 
 function AnalyticsPanel() {
-  const { data, isPending } = useOrdersQuery()
+  const { data } = useOrdersQuery()
   const { data: clients } = useClientsQuery()
   const { data: tickets } = useTicketsQuery()
 
@@ -579,14 +578,12 @@ function TicketsPanel() {
 }
 
 function ProjectsPanel({ onChanged }: { onChanged: () => void }) {
-  const { data, isPending } = useProjectsQuery()
+  const { data } = useProjectsQuery()
   const del = useDeleteProject()
   const fileRef = useRef<HTMLInputElement>(null)
   const { register, getValues, reset } = useForm<{ title: string; description: string; technologies: string; category: (typeof categories)[number] }>({
     defaultValues: { category: 'Web', title: '', description: '', technologies: '' },
   })
-  const [editing, setEditing] = useState<ProjectDTO | null>(null)
-  const editFileRef = useRef<HTMLInputElement>(null)
 
   const createProject = async (e: FormEvent) => {
     e.preventDefault()
@@ -657,12 +654,11 @@ function ProjectsPanel({ onChanged }: { onChanged: () => void }) {
 }
 
 function BlogsPanel({ onChanged }: { onChanged: () => void }) {
-  const { data, isPending } = useBlogsQuery()
+  const { data } = useBlogsQuery()
   const del = useDeleteBlog()
   const fileRef = useRef<HTMLInputElement>(null)
   const { register, getValues, reset } = useForm<{ title: string; excerpt: string; readTime: string; author: string; category: string }>()
   const [contentHtml, setContentHtml] = useState('')
-  const [editing, setEditing] = useState<BlogDTO | null>(null)
 
   const createBlog = async (e: FormEvent) => {
     e.preventDefault(); const v = getValues(); const img = fileRef.current?.files?.[0];
