@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { Mail, Lock, LogIn, ArrowRight, ShieldCheck, Loader2, Star, Zap, ChevronLeft } from 'lucide-react'
+import { Mail, Lock, LogIn, ArrowRight, Loader2, ChevronLeft, X } from 'lucide-react'
 import { api, saveToken } from '../lib/apiClient'
 import { SEO } from '../components/SEO'
 import { useAuth } from '../contexts/AuthContext'
