@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { Briefcase, GraduationCap, Award, CheckCircle2, ArrowRight, ShieldCheck, Zap, Laptop } from 'lucide-react'
 import { SEO } from '../components/SEO'
 import { SITE } from '../lib/constants'
+import { cn } from '../utils/cn'
 
 export default function HomePage() {
   return (

@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { Mail, MapPin, Globe, Linkedin, Twitter, Github } from 'lucide-react'
+import { Mail, MapPin, Globe, LinkedIn, Twitter, GitHub } from 'lucide-react'
 import { SITE } from '../lib/constants'
 
 export function Footer() {
@@ -24,13 +24,13 @@ export function Footer() {
             </p>
             <div className="flex gap-4">
               <a href="#" className="h-10 w-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-primary transition-colors border border-white/10">
-                <Linkedin size={18} />
+                <LinkedIn size={18} />
               </a>
               <a href="#" className="h-10 w-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-primary transition-colors border border-white/10">
                 <Twitter size={18} />
               </a>
               <a href="#" className="h-10 w-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-primary transition-colors border border-white/10">
-                <Github size={18} />
+                <GitHub size={18} />
               </a>
             </div>
           </div>

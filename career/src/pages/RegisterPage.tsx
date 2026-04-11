@@ -5,7 +5,6 @@ import { Mail, Lock, User as UserIcon, Phone, ArrowRight, ShieldCheck, Loader2 }
 import { api, saveToken } from '../lib/apiClient'
 import { SEO } from '../components/SEO'
 import { useAuth } from '../contexts/AuthContext'
-import { cn } from '../utils/cn'
 
 export default function RegisterPage() {
   const [formData, setFormData] = useState({

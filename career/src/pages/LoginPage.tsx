@@ -5,7 +5,6 @@ import { Mail, Lock, LogIn, ArrowRight, ShieldCheck, Loader2 } from 'lucide-reac
 import { api, saveToken } from '../lib/apiClient'
 import { SEO } from '../components/SEO'
 import { useAuth } from '../contexts/AuthContext'
-import { cn } from '../utils/cn'
 
 export default function LoginPage() {
   const [email, setEmail] = useState('')
