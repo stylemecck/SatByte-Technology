@@ -1,6 +1,8 @@
-import { useState } from 'react'
-import { Briefcase, Award, Settings, LogOut, ChevronRight, CheckCircle2, FileText } from 'lucide-react'
-import { useQuery } from '@tanstack/react-query'
+import { useState, useEffect, useRef } from 'react'
+import { Briefcase, Award, Settings, LogOut, ChevronRight, CheckCircle2, FileText, Loader2, Sparkles, AlertCircle } from 'lucide-react'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { motion, AnimatePresence } from 'framer-motion'
+import { useSearchParams } from 'react-router-dom'
 import { api } from '../lib/apiClient'
 import { SEO } from '../components/SEO'
 import { useAuth } from '../contexts/AuthContext'
@@ -10,25 +12,65 @@ import { cn } from '../utils/cn'
 export default function DashboardPage() {
   const { user, logout } = useAuth()
   const [activeTab, setActiveTab] = useState<'applications' | 'certifications'>('applications')
+  const [params, setParams] = useSearchParams()
+  const qc = useQueryClient()
+
+  // Enrollment verification state
+  const [verifying, setVerifying] = useState(false)
+  const [verifyStatus, setVerifyStatus] = useState<'idle' | 'success' | 'error'>('idle')
+  const hasVerified = useRef(false)
 
   const { data: applications, isLoading: loadingApps } = useQuery<Application[]>({
     queryKey: ['my-applications'],
     queryFn: async () => {
-      const { data } = await api.get('jobs/admin/applications') // In a real app, this would be /jobs/my/applications
-      // For demo, filtering client side
-      return data.filter((a: any) => a.user._id === user?.id || a.user === user?.id)
-    },
-    enabled: !!user
-  })
-
-  const { data: enrollments, isLoading: loadingCerts } = useQuery<Enrollment[]>({
-    queryKey: ['my-enrollments'],
-    queryFn: async () => {
-      const { data } = await api.get('certifications/my')
+      const { data } = await api.get('jobs/my/applications')
+      if (!Array.isArray(data)) return []
       return data
     },
     enabled: !!user
   })
+
+  const { data: enrollments, isLoading: loadingCerts, refetch: refetchEnrollments } = useQuery<Enrollment[]>({
+    queryKey: ['my-enrollments'],
+    queryFn: async () => {
+      const { data } = await api.get('certifications/my')
+      if (!Array.isArray(data)) return []
+      return data
+    },
+    enabled: !!user
+  })
+
+  useEffect(() => {
+    const enrollSuccess = params.get('enroll_success')
+    const sessionId = params.get('session_id')
+
+    if (enrollSuccess === 'true' && sessionId && !hasVerified.current) {
+      hasVerified.current = true
+      setActiveTab('certifications')
+      handleVerifyEnrollment(sessionId)
+    }
+  }, [params])
+
+  const handleVerifyEnrollment = async (sessionId: string) => {
+    setVerifying(true)
+    try {
+      await api.post('certifications/verify', { session_id: sessionId })
+      setVerifyStatus('success')
+      refetchEnrollments()
+      qc.invalidateQueries({ queryKey: ['my-enrollments'] })
+      // Clear params after 5s
+      setTimeout(() => {
+        setParams({}, { replace: true })
+        setVerifyStatus('idle')
+      }, 5000)
+    } catch (e) {
+      console.error('Verification failed', e)
+      setVerifyStatus('error')
+    } finally {
+      setVerifying(false)
+    }
+  }
+
 
   return (
     <div className="min-h-screen bg-slate-50 pb-20">
@@ -65,6 +107,68 @@ export default function DashboardPage() {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12">
+         {/* Enrollment Verification Feedback */}
+         <AnimatePresence>
+            {(verifying || verifyStatus !== 'idle') && (
+               <motion.div 
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: 'auto', opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  className="mb-8 overflow-hidden"
+               >
+                  <div className={cn(
+                     "p-6 rounded-[2rem] flex items-center justify-between border shadow-lg transition-colors",
+                     verifying ? "bg-blue-50 border-blue-100" :
+                     verifyStatus === 'success' ? "bg-emerald-50 border-emerald-100" :
+                     "bg-red-50 border-red-100"
+                  )}>
+                     <div className="flex items-center gap-4">
+                        <div className={cn(
+                           "h-12 w-12 rounded-2xl flex items-center justify-center text-white shadow-xl shadow-inner",
+                           verifying ? "bg-blue-600" :
+                           verifyStatus === 'success' ? "bg-emerald-600" :
+                           "bg-red-600"
+                        )}>
+                           {verifying ? <Loader2 className="animate-spin" size={24} /> : 
+                            verifyStatus === 'success' ? <Sparkles size={24} /> :
+                            <AlertCircle size={24} />}
+                        </div>
+                        <div>
+                           <h4 className={cn(
+                              "font-bold text-lg",
+                              verifying ? "text-blue-900" :
+                              verifyStatus === 'success' ? "text-emerald-900" :
+                              "text-red-900"
+                           )}>
+                              {verifying ? 'Verifying payment...' : 
+                               verifyStatus === 'success' ? 'Enrollment Successful!' :
+                               'Verification Failed'}
+                           </h4>
+                           <p className={cn(
+                              "text-sm font-medium",
+                              verifying ? "text-blue-600" :
+                              verifyStatus === 'success' ? "text-emerald-600" :
+                              "text-red-600"
+                           )}>
+                              {verifying ? 'Please wait while we confirm your certification access.' : 
+                               verifyStatus === 'success' ? 'Your course is now available in "My Certifications".' :
+                               'We could not verify your session. Please contact support if you were charged.'}
+                           </p>
+                        </div>
+                     </div>
+                     {verifyStatus !== 'idle' && !verifying && (
+                        <button 
+                           onClick={() => { setVerifyStatus('idle'); setParams({}, { replace: true }) }}
+                           className="text-slate-400 hover:text-slate-600 p-2"
+                        >
+                           <ChevronRight className="rotate-90" />
+                        </button>
+                     )}
+                  </div>
+               </motion.div>
+            )}
+         </AnimatePresence>
+
          <div className="grid grid-cols-1 lg:grid-cols-4 gap-12">
             
             {/* Sidebar Tabs */}

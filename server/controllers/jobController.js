@@ -67,3 +67,19 @@ export async function getAllApplications(req, res) {
     res.status(500).json({ message: 'Failed to fetch applications' })
   }
 }
+
+/** Authenticated: View user's own applications */
+export async function getMyApplications(req, res) {
+  try {
+    const userId = req.user.sub
+    const apps = await Application.find({ user: userId })
+      .populate('job', 'title')
+      .populate('internship', 'title')
+      .sort({ createdAt: -1 })
+    res.json(apps)
+  } catch (e) {
+    console.error(e)
+    res.status(500).json({ message: 'Failed to fetch your applications' })
+  }
+}
+

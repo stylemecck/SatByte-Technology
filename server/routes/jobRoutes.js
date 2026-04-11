@@ -4,7 +4,8 @@ import {
   getJobById, 
   applyForJob, 
   createJob, 
-  getAllApplications 
+  getAllApplications,
+  getMyApplications
 } from '../controllers/jobController.js'
 import { requireAuth, requireAdmin } from '../middleware/auth.js'
 
@@ -12,6 +13,7 @@ const router = Router()
 
 router.get('/', getAllJobs)
 router.get('/:id', getJobById)
+router.get('/my/applications', requireAuth, getMyApplications)
 router.post('/apply', requireAuth, applyForJob)
 
 // Admin only
