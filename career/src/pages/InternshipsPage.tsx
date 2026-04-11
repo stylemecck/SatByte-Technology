@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Search, MapPin, GraduationCap, ArrowRight, IndianRupee, Clock, BookOpen, Send, Upload, Loader2, CheckCircle2, User, Zap, X, ShieldCheck, Star, Sparkles, FileText, Award, Eye } from 'lucide-react'
+import { Search, MapPin, GraduationCap, ArrowRight, IndianRupee, Clock, BookOpen, Send, Upload, Loader2, CheckCircle2, User, Zap, X, ShieldCheck, Star, Award, Eye } from 'lucide-react'
 import { useQuery, useMutation } from '@tanstack/react-query'
 import { api } from '../lib/apiClient'
 import { SEO } from '../components/SEO'
