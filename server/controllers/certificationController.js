@@ -47,6 +47,9 @@ export async function createEnrollmentSession(req, res) {
 
     const stripe = new Stripe(secret)
     const clientUrl = (process.env.CLIENT_URL || 'http://localhost:5173').split(',')[0].trim().replace(/\/$/, '')
+    
+    // Dynamic origin: use the request's origin to ensure we redirect back to the correct portal
+    const origin = req.get('origin')?.replace(/\/$/, '') || clientUrl
 
     const session = await stripe.checkout.sessions.create({
       mode: 'payment',
@@ -64,8 +67,8 @@ export async function createEnrollmentSession(req, res) {
           quantity: 1,
         },
       ],
-      success_url: `${clientUrl}/dashboard?enroll_success=true&session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${clientUrl}/certifications/${cert._id}`,
+      success_url: `${origin}/dashboard?enroll_success=true&session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${origin}/certifications/${cert._id}`,
       metadata: {
         certificationId: cert._id.toString(),
         userId,
