@@ -85,17 +85,38 @@ export async function createEnrollmentSession(req, res) {
 
 /** Verify enrollment after payment (usually called from frontend success page or webhook) */
 export async function verifyEnrollment(req, res) {
+  const { session_id } = req.body
+  console.log('[verify-enrollment] Starting verification for session:', session_id)
+
   try {
-    const { session_id } = req.body
     const secret = process.env.STRIPE_SECRET_KEY
+    if (!secret) {
+      console.error('[verify-enrollment] STRIPE_SECRET_KEY is missing from environment')
+      return res.status(503).json({ message: 'Stripe not configured on server' })
+    }
+
     const stripe = new Stripe(secret)
     
-    const session = await stripe.checkout.sessions.retrieve(session_id)
+    let session
+    try {
+      session = await stripe.checkout.sessions.retrieve(session_id)
+    } catch (stripeErr) {
+      console.error('[verify-enrollment] Stripe session retrieval failed:', stripeErr.message)
+      return res.status(400).json({ message: 'Invalid session ID or Stripe error' })
+    }
+
     if (session.payment_status !== 'paid') {
+      console.warn('[verify-enrollment] Payment status not paid:', session.payment_status)
       return res.status(400).json({ message: 'Payment not verified' })
     }
 
-    const { certificationId, userId } = session.metadata
+    const metadata = session.metadata
+    if (!metadata || !metadata.certificationId || !metadata.userId) {
+      console.error('[verify-enrollment] Missing metadata in session:', metadata)
+      return res.status(500).json({ message: 'Internal error: Session metadata is incomplete' })
+    }
+
+    const { certificationId, userId } = metadata
     
     // Check if already enrolled to prevent duplicates
     const existing = await Enrollment.findOne({ 
@@ -105,21 +126,25 @@ export async function verifyEnrollment(req, res) {
     })
 
     if (!existing) {
+      console.log('[verify-enrollment] Creating new enrollment for user:', userId, 'cert:', certificationId)
       await Enrollment.create({
         user: userId,
         certification: certificationId,
         status: 'Completed',
-        amount: session.amount_total / 100,
+        amount: (session.amount_total || 0) / 100,
         paymentId: session.id
       })
+    } else {
+      console.log('[verify-enrollment] Enrollment already exists for session:', session.id)
     }
 
     res.json({ message: 'Enrollment successful' })
   } catch (e) {
-    console.error(e)
-    res.status(500).json({ message: 'Failed to verify enrollment' })
+    console.error('[verify-enrollment] Unexpected Error:', e)
+    res.status(500).json({ message: `Verification failed: ${e.message}` })
   }
 }
+
 
 /** Authenticated: Get user's enrollments */
 export async function getMyEnrollments(req, res) {
