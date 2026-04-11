@@ -21,14 +21,12 @@ import {
 import { api, getStoredToken, setAuthToken } from '@/lib/apiClient'
 import { SEO } from '@/components/SEO'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
 
 const fadeAnim = {
   initial: { opacity: 0, y: 20 },
   animate: { opacity: 1, y: 0 },
   exit: { opacity: 0, y: -20 },
-  transition: { duration: 0.3, ease: [0.22, 1, 0.36, 1] }
+  transition: { duration: 0.3, ease: 'easeOut' }
 }
 
 const staggerContainer = {
