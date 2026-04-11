@@ -5,7 +5,7 @@ import {
   removeService,
   updateService,
 } from '../controllers/serviceController.js'
-import { requireAuth } from '../middleware/auth.js'
+import { requireAuth, requireAdmin } from '../middleware/auth.js'
 import { uploadSingleImage } from '../middleware/upload.js'
 
 const router = Router()
@@ -24,8 +24,8 @@ function optionalUpload(req, res, next) {
 }
 
 router.get('/', listServices)
-router.post('/', requireAuth, runUpload, createService)
-router.put('/:id', requireAuth, optionalUpload, updateService)
-router.delete('/:id', requireAuth, removeService)
+router.post('/', requireAuth, requireAdmin, runUpload, createService)
+router.put('/:id', requireAuth, requireAdmin, optionalUpload, updateService)
+router.delete('/:id', requireAuth, requireAdmin, removeService)
 
 export default router

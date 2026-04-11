@@ -6,7 +6,7 @@ import {
   removeBlog,
   updateBlog,
 } from '../controllers/blogController.js'
-import { requireAuth } from '../middleware/auth.js'
+import { requireAuth, requireAdmin } from '../middleware/auth.js'
 import { uploadSingleImage } from '../middleware/upload.js'
 
 const router = Router()
@@ -26,8 +26,8 @@ function optionalUpload(req, res, next) {
 
 router.get('/', listBlogs)
 router.get('/slug/:slug', getBlog)
-router.post('/', requireAuth, runUpload, createBlog)
-router.put('/:id', requireAuth, optionalUpload, updateBlog)
-router.delete('/:id', requireAuth, removeBlog)
+router.post('/', requireAuth, requireAdmin, runUpload, createBlog)
+router.put('/:id', requireAuth, requireAdmin, optionalUpload, updateBlog)
+router.delete('/:id', requireAuth, requireAdmin, removeBlog)
 
 export default router

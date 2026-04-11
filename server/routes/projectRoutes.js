@@ -6,7 +6,7 @@ import {
   removeProject,
   updateProject,
 } from '../controllers/projectController.js'
-import { requireAuth } from '../middleware/auth.js'
+import { requireAuth, requireAdmin } from '../middleware/auth.js'
 import { uploadSingleImage } from '../middleware/upload.js'
 
 const router = Router()
@@ -27,8 +27,8 @@ function optionalUpload(req, res, next) {
 
 router.get('/', listProjects)
 router.get('/:id', getProject)
-router.post('/', requireAuth, runUpload, createProject)
-router.put('/:id', requireAuth, optionalUpload, updateProject)
-router.delete('/:id', requireAuth, removeProject)
+router.post('/', requireAuth, requireAdmin, runUpload, createProject)
+router.put('/:id', requireAuth, requireAdmin, optionalUpload, updateProject)
+router.delete('/:id', requireAuth, requireAdmin, removeProject)
 
 export default router

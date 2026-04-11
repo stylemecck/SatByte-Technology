@@ -175,35 +175,47 @@ export async function clientPasswordLogin(req, res) {
   try {
     const { email, password } = req.body
     if (!email || !password) {
-      return res.status(400).json({ message: 'Email and password required' })
+      return res.status(400).json({ message: 'Email and password are required' })
     }
 
-    const normalizedEmail = email.toLowerCase().trim()
-    
-    // Ensure they have an order and they exist in User collection
-    const hasOrders = await Order.findOne({ email: normalizedEmail })
-    if (!hasOrders) {
-      return res.status(404).json({ message: 'No purchases found for this email.' })
+    const normEmail = email.toLowerCase().trim()
+    const user = await User.findOne({ email: normEmail })
+
+    if (!user) {
+      return res.status(401).json({ message: 'Invalid credentials. If you are a new client, please use Email Code login.' })
     }
 
-    const user = await User.findOne({ email: normalizedEmail, role: 'client' })
-    if (!user || !(await bcrypt.compare(password, user.passwordHash))) {
+    if (user.role !== 'client' && user.role !== 'admin') {
+      return res.status(401).json({ message: 'Invalid credentials. Incorrect account type.' })
+    }
+
+    if (!user.hasPassword || !user.password) {
+      return res.status(401).json({ message: 'No password set for this account. Please use Email Code login first to set one.' })
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password)
+    if (!isMatch) {
       return res.status(401).json({ message: 'Invalid credentials' })
     }
 
-    const secret = process.env.JWT_SECRET
     const token = jwt.sign(
-      { sub: user._id.toString(), email: user.email, role: 'client' },
-      secret,
-      { expiresIn: '7d' }
+      { sub: user._id, email: user.email, role: user.role },
+      process.env.JWT_SECRET,
+      { expiresIn: '7d' },
     )
-
-    res.json({
-      token,
-      user: { id: user._id, email: user.email, role: 'client' },
-    })
+    res.json({ token, role: user.role })
   } catch (e) {
-    console.error(e)
+    console.error('[client-password-login]', e)
     res.status(500).json({ message: 'Login failed' })
+  }
+}
+
+export async function getClients(req, res) {
+  try {
+    const clients = await User.find({ role: 'client' }).select('-password').sort({ createdAt: -1 })
+    res.json(clients)
+  } catch (e) {
+    console.error('[get-clients]', e)
+    res.status(500).json({ message: 'Failed to fetch clients' })
   }
 }

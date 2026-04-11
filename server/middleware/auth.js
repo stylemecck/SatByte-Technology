@@ -21,3 +21,14 @@ export function requireAuth(req, res, next) {
     return res.status(401).json({ message: 'Invalid or expired token' })
   }
 }
+
+/**
+ * Require the authenticated user to be an admin.
+ * Must be used AFTER requireAuth.
+ */
+export function requireAdmin(req, res, next) {
+  if (!req.user || req.user.role !== 'admin') {
+    return res.status(403).json({ message: 'Forbidden: Admin access required' })
+  }
+  next()
+}
