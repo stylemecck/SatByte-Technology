@@ -189,7 +189,29 @@ export default function PricingPage() {
 
   return (
     <>
-      <SEO title="Pricing" description="Transparent website and IT service packages — Basic ₹4,999, Standard ₹9,999, Premium ₹19,999." path="/pricing" />
+      <SEO 
+        title="Pricing" 
+        description="Transparent website and IT service packages — Basic ₹4,999, Standard ₹9,999, Premium ₹19,999." 
+        path="/pricing" 
+        schema={{
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "Home",
+              "item": "https://satbyte.in/"
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": "Pricing",
+              "item": "https://satbyte.in/pricing"
+            }
+          ]
+        }}
+      />
 
       {/* ── Shared Info Modal (Razorpay & PayU) ── */}
       <AnimatePresence>

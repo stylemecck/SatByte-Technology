@@ -35,9 +35,27 @@ export default function ServicesPage() {
   return (
     <>
       <SEO
-        title="Services"
-        description="Website development, web apps, e-commerce, UI/UX, SEO, digital marketing, maintenance, hosting, CCTV, repair, and IT consultancy."
+        title="Our Services"
+        description="Comprehensive IT solutions: web development, custom software, SEO optimization, and digital transformation for businesses."
         path="/services"
+        schema={{
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "Home",
+              "item": "https://satbyte.in/"
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": "Services",
+              "item": "https://satbyte.in/services"
+            }
+          ]
+        }}
       />
 
       {/* ── Hero ── */}

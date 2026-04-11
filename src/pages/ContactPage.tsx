@@ -161,9 +161,27 @@ export default function ContactPage() {
   return (
     <>
       <SEO
-        title="Contact"
+        title="Contact Us"
         description={`Contact ${SITE.name} — ${SITE.phone}, ${SITE.email}. Mahua, Vaishali, Bihar.`}
         path="/contact"
+        schema={{
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "Home",
+              "item": "https://satbyte.in/"
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": "Contact",
+              "item": "https://satbyte.in/contact"
+            }
+          ]
+        }}
       />
 
       {/* ── Hero Section ── */}

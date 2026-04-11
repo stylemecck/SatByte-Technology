@@ -30,8 +30,26 @@ export default function PortfolioPage() {
     <>
       <SEO
         title="Portfolio"
-        description="Selected projects: school systems, college sites, e-commerce, business websites, and billing software."
+        description="Explore our high-end digital products: school management systems, college portals, custom e-commerce stores, and enterprise billing tools."
         path="/portfolio"
+        schema={{
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "Home",
+              "item": "https://satbyte.in/"
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": "Portfolio",
+              "item": "https://satbyte.in/portfolio"
+            }
+          ]
+        }}
       />
       <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
         <SectionHeader
