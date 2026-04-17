@@ -11,7 +11,7 @@ export function TestimonialsSection() {
   const duplicatedTestimonials = [...TESTIMONIALS, ...TESTIMONIALS, ...TESTIMONIALS]
 
   return (
-    <section className="bg-slate-50 px-4 py-24 dark:bg-transparent sm:px-6 lg:px-8 overflow-hidden">
+    <section className="bg-[#020617] py-32 sm:px-6 lg:px-8 overflow-hidden relative border-t border-white/5">
       <div className="mx-auto max-w-7xl">
         <SectionHeader
           eyebrow="Testimonials"
@@ -27,8 +27,8 @@ export function TestimonialsSection() {
           className="relative mt-8 sm:mt-12"
         >
           {/* Gradient fade borders for marquee effect */}
-          <div className="absolute left-0 top-0 bottom-0 w-24 sm:w-48 bg-gradient-to-r from-slate-50 dark:from-[#0B1121] to-transparent z-10 pointer-events-none" />
-          <div className="absolute right-0 top-0 bottom-0 w-24 sm:w-48 bg-gradient-to-l from-slate-50 dark:from-[#0B1121] to-transparent z-10 pointer-events-none" />
+          <div className="absolute left-0 top-0 bottom-0 w-24 sm:w-48 bg-gradient-to-r from-[#020617] to-transparent z-10 pointer-events-none" />
+          <div className="absolute right-0 top-0 bottom-0 w-24 sm:w-48 bg-gradient-to-l from-[#020617] to-transparent z-10 pointer-events-none" />
 
           {/* The Scrolling Track */}
           <div className="flex overflow-hidden py-10">
@@ -44,7 +44,7 @@ export function TestimonialsSection() {
               {duplicatedTestimonials.map((t, idx) => (
                 <div 
                   key={`${t.name}-${idx}`} 
-                  className="group relative w-[85vw] sm:w-[450px] shrink-0 rounded-[2rem] border border-slate-200/60 bg-white p-8 shadow-xl transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl dark:border-white/10 dark:bg-[#151c2f]"
+                  className="group relative w-[85vw] sm:w-[450px] shrink-0 rounded-[2.5rem] border border-white/5 bg-[#0A111D]/80 p-8 sm:p-10 shadow-2xl backdrop-blur-xl transition-all duration-500 hover:-translate-y-2 hover:border-white/10"
                 >
                   <div className="absolute -top-6 -left-2 text-primary/10 dark:text-accent/10 transition-transform duration-500 group-hover:scale-125 group-hover:rotate-12 group-hover:text-primary/20 dark:group-hover:text-accent/20">
                     <Quote className="h-24 w-24 fill-current stroke-none" />
@@ -66,8 +66,8 @@ export function TestimonialsSection() {
                         {t.name[0]}
                       </div>
                       <div>
-                        <p className="font-heading font-bold text-slate-900 dark:text-white leading-tight">{t.name}</p>
-                        <p className="text-sm font-medium text-primary dark:text-accent">{t.role}</p>
+                        <p className="font-heading font-bold text-white leading-tight">{t.name}</p>
+                        <p className="text-sm font-medium text-accent">{t.role}</p>
                       </div>
                     </div>
                   </div>

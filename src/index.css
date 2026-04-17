@@ -58,6 +58,14 @@
   animation: gradient-shift 12s ease infinite;
 }
 
+@keyframes shine {
+  100% { left: 125%; }
+}
+
+.animate-shine {
+  animation: shine 1.5s infinite;
+}
+
 /* Swiper custom theming */
 .swiper-pagination-bullet-active {
   @apply !bg-primary;

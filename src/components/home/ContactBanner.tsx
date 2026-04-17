@@ -8,7 +8,7 @@ import { SITE } from '@/lib/constants'
 /** Bottom CTA strip driving users to contact / quote. */
 export function ContactBanner() {
   return (
-    <section className="px-4 pb-24 sm:px-6 lg:px-8">
+    <section className="bg-[#020617] px-4 pb-32 pt-10 sm:px-6 lg:px-8">
       <motion.div
         initial={{ opacity: 0, y: 24 }}
         whileInView={{ opacity: 1, y: 0 }}

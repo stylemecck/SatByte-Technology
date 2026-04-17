@@ -25,7 +25,7 @@ export function PortfolioPreview() {
   }, [data])
 
   return (
-    <section className="px-4 py-24 sm:px-6 lg:px-8 bg-slate-50 dark:bg-transparent">
+    <section className="px-4 py-32 sm:px-6 lg:px-8 bg-[#050B14] relative border-t border-white/5">
       <div className="mx-auto max-w-7xl">
         {/* Header Area */}
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 sm:mb-16">
@@ -33,7 +33,7 @@ export function PortfolioPreview() {
             eyebrow="Capabilities"
             title="Recent highlights"
             subtitle="A glimpse of the high-end experiences we craft for enterprises and agencies."
-            className="mb-0 text-left"
+            className="mb-0 text-left text-white [&_h2]:text-white [&_p]:text-slate-400 group-[&_p]:text-primary"
           />
           <Link to="/portfolio" className="hidden md:inline-flex items-center gap-2 text-[15px] font-bold text-primary dark:text-accent hover:opacity-80 transition-opacity mb-2">
             View full portfolio <ArrowRight className="h-4 w-4 stroke-[2.5]" />
