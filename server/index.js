@@ -21,6 +21,7 @@ const PORT = Number(process.env.PORT || 5000)
 const allowedOrigins = [
   'http://localhost:5173',
   'http://localhost:5174',
+  'https://satbyte.in',
   'https://services.satbyte.in',
   'https://career.satbyte.in',
   ...((process.env.CLIENT_URL || '').split(',').map(s => s.trim()))
@@ -31,7 +32,7 @@ app.use(
     origin: (origin, callback) => {
       // Allow requests with no origin (like mobile apps or curl)
       if (!origin) return callback(null, true)
-      if (allowedOrigins.indexOf(origin) !== -1 || origin.endsWith('.satbyte.in')) {
+      if (allowedOrigins.indexOf(origin) !== -1 || origin === 'https://satbyte.in' || origin.endsWith('.satbyte.in')) {
         callback(null, true)
       } else {
         callback(new Error('Not allowed by CORS'))

@@ -7,7 +7,7 @@ export const SITE = {
   subtitle: 'Explore Careers, Internships, and Certifications',
   location: 'Mahua, Vaishali, Bihar, India',
   email: 'careers@satbyte.in',
-  mainSiteUrl: 'https://services.satbyte.in',
+  mainSiteUrl: 'https://satbyte.in',
   apiUrl: 'https://satbyte-technology.onrender.com/api',
 } as const
 

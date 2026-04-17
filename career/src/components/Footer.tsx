@@ -71,7 +71,7 @@ export function Footer() {
               </li>
               <li className="flex items-start gap-3">
                 <Globe className="h-5 w-5 text-primary shrink-0" />
-                <a href={SITE.mainSiteUrl} className="text-slate-400 hover:text-white transition-colors text-sm">services.satbyte.in</a>
+                <a href={SITE.mainSiteUrl} className="text-slate-400 hover:text-white transition-colors text-sm">satbyte.in</a>
               </li>
             </ul>
           </div>

@@ -72,7 +72,7 @@ const generateInvoiceBuffer = (planName, referenceNumber, amountTotal) => {
     doc.fontSize(9).fillColor(BRAND_MID).font('Helvetica')
        .text('Mahua, Vaishali, Bihar – 844506', MARGIN, billedY + 29)
        .text('info@satbyte.in', MARGIN, billedY + 43)
-       .text('services.satbyte.in', MARGIN, billedY + 57)
+       .text('satbyte.in', MARGIN, billedY + 57)
 
     doc.fontSize(9).fillColor(BRAND_BLUE).font('Helvetica-Bold')
        .text('BILLED TO', 300, billedY)
@@ -137,7 +137,7 @@ const generateInvoiceBuffer = (planName, referenceNumber, amountTotal) => {
        .text('Thank you for choosing SatByte Technology!', MARGIN + 16, noteY + 10)
     doc.fontSize(9).fillColor(BRAND_MID).font('Helvetica')
        .text(
-         'A team member will contact you shortly to kick off your project. For any queries, email info@satbyte.in or visit services.satbyte.in/contact.',
+         'A team member will contact you shortly to kick off your project. For any queries, email info@satbyte.in or visit satbyte.in/contact.',
          MARGIN + 16, noteY + 28, { width: W - MARGIN * 2 - 32 }
        )
 
@@ -145,7 +145,7 @@ const generateInvoiceBuffer = (planName, referenceNumber, amountTotal) => {
     doc.rect(0, H - 48, W, 48).fill(BRAND_DARK)
     doc.fontSize(9).fillColor('#64748B').font('Helvetica')
        .text(
-         `© ${now.getFullYear()} SatByte Technology  •  Mahua, Vaishali, Bihar  •  info@satbyte.in  •  services.satbyte.in`,
+         `© ${now.getFullYear()} SatByte Technology  •  Mahua, Vaishali, Bihar  •  info@satbyte.in  •  satbyte.in`,
          0, H - 30, { width: W, align: 'center' }
        )
 
@@ -246,14 +246,14 @@ export const sendPurchaseConfirmation = async (userEmail, planName, referenceNum
         </p>
         
         <p style="font-size: 16px; color: #334155; line-height: 1.5;">
-          If you have any questions or need immediate assistance, please visit our <a href="https://services.satbyte.in/contact" style="color: #0ea5e9; text-decoration: none; font-weight: 500;">Support Portal</a> or reply directly to this email.
+          If you have any questions or need immediate assistance, please visit our <a href="https://satbyte.in/contact" style="color: #0ea5e9; text-decoration: none; font-weight: 500;">Support Portal</a> or reply directly to this email.
         </p>
         
         <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 35px 0;" />
         
         <div style="text-align: center; font-size: 13px; color: #94a3b8;">
           &copy; ${new Date().getFullYear()} SatByte Technologies. All rights reserved.<br/>
-          <a href="https://services.satbyte.in" style="color: #94a3b8; text-decoration: none;">services.satbyte.in</a>
+          <a href="https://satbyte.in" style="color: #94a3b8; text-decoration: none;">satbyte.in</a>
         </div>
       </div>
     `,
