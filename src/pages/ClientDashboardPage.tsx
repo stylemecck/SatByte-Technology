@@ -21,7 +21,7 @@ import {
   Save
 } from 'lucide-react'
 
-import { api, getStoredToken, setAuthToken } from '@/lib/apiClient'
+import { api, getStoredToken, setAuthToken, clearToken } from '@/lib/apiClient'
 import { SEO } from '@/components/SEO'
 import { Button } from '@/components/ui/button'
 
@@ -73,7 +73,7 @@ function useProfileQuery() {
 }
 
 export default function ClientDashboardPage() {
-  const token = localStorage.getItem('satbyte_token')
+  const token = getStoredToken()
   const navigate = useNavigate()
 
   const [activeTab, setActiveTab] = useState<'projects' | 'billing' | 'support' | 'settings'>('projects')
@@ -115,7 +115,7 @@ export default function ClientDashboardPage() {
   }
 
   const logout = () => {
-    localStorage.removeItem('satbyte_token')
+    clearToken()
     navigate('/')
   }
 
