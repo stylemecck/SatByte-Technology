@@ -24,30 +24,30 @@ const contactTiles = [
     label: 'Our Location',
     value: SITE.location,
     href: 'https://maps.google.com/?q=Mahua,Vaishali,Bihar',
-    color: 'from-blue-500/20 to-blue-600/5',
-    border: 'border-blue-500/30',
-    iconBg: 'bg-blue-500/20 text-blue-400',
-    glow: 'hover:shadow-blue-500/20',
+    color: 'from-brand-blue/10 to-brand-blue/5',
+    border: 'border-brand-blue/30',
+    iconBg: 'bg-brand-blue/10 text-brand-blue',
+    glow: 'hover:shadow-brand-blue/20',
   },
   {
     icon: Phone,
     label: 'Call Us',
     value: SITE.phone,
     href: `tel:${SITE.phoneDigits}`,
-    color: 'from-emerald-500/20 to-emerald-600/5',
-    border: 'border-emerald-500/30',
-    iconBg: 'bg-emerald-500/20 text-emerald-400',
-    glow: 'hover:shadow-emerald-500/20',
+    color: 'from-brand-emerald/10 to-brand-emerald/5',
+    border: 'border-brand-emerald/30',
+    iconBg: 'bg-brand-emerald/10 text-brand-emerald',
+    glow: 'hover:shadow-brand-emerald/20',
   },
   {
     icon: Mail,
     label: 'Email Us',
     value: SITE.email,
     href: `mailto:${SITE.email}`,
-    color: 'from-violet-500/20 to-violet-600/5',
-    border: 'border-violet-500/30',
-    iconBg: 'bg-violet-500/20 text-violet-400',
-    glow: 'hover:shadow-violet-500/20',
+    color: 'from-brand-violet/10 to-brand-violet/5',
+    border: 'border-brand-violet/30',
+    iconBg: 'bg-brand-violet/10 text-brand-violet',
+    glow: 'hover:shadow-brand-violet/20',
   },
 ]
 
@@ -71,10 +71,10 @@ function FloatingInput({
 }) {
   const [focused, setFocused] = useState(false)
 
-  const baseClass =
-    'w-full bg-transparent border-0 border-b-2 border-white/10 focus:outline-none focus:border-primary dark:focus:border-accent text-white placeholder-transparent transition-all duration-300 py-3 text-base resize-none'
+    const baseClass =
+      'w-full bg-transparent border-0 border-b-2 border-border focus:outline-none focus:border-primary text-foreground placeholder-transparent transition-all duration-300 py-3 text-base resize-none'
 
-  return (
+    return (
     <div className="relative mb-8">
       {multiline ? (
         <textarea
@@ -100,8 +100,8 @@ function FloatingInput({
       <label
         htmlFor={id}
         className={cn(
-          'absolute left-0 text-slate-400 transition-all duration-300 pointer-events-none',
-          focused ? 'top-0 text-xs font-semibold text-primary dark:text-accent' : 'top-4 text-base',
+          'absolute left-0 text-muted-foreground transition-all duration-300 pointer-events-none',
+          focused ? 'top-0 text-xs font-semibold text-primary' : 'top-4 text-base',
         )}
       >
         {label}
@@ -185,7 +185,7 @@ export default function ContactPage() {
       />
 
       {/* ── Hero Section ── */}
-      <section className="relative overflow-hidden bg-[#050B14] pt-28 pb-24">
+      <section className="relative overflow-hidden bg-background pt-28 pb-24">
         {/* Ambient orbs */}
         <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-primary/15 rounded-full blur-[130px] pointer-events-none" />
         <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-accent/10 rounded-full blur-[100px] pointer-events-none" />
@@ -198,18 +198,18 @@ export default function ContactPage() {
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
             >
-              <span className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-4 py-1.5 text-sm font-bold text-primary dark:text-accent mb-6">
+              <span className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-4 py-1.5 text-sm font-bold text-primary mb-6">
                 <Send className="h-3.5 w-3.5" />
                 Let's Connect
               </span>
-              <h1 className="font-heading text-5xl sm:text-6xl font-extrabold text-white leading-[1.1] tracking-tight">
+              <h1 className="font-heading text-5xl sm:text-6xl font-extrabold text-foreground leading-[1.1] tracking-tight">
                 Let's build{' '}
-                <span className="bg-gradient-to-r from-accent via-white to-primary bg-clip-text text-transparent">
+                <span className="bg-gradient-to-r from-accent via-foreground/90 to-primary bg-clip-text text-transparent">
                   something great
                 </span>{' '}
                 together
               </h1>
-              <p className="mt-6 text-lg text-slate-400 leading-relaxed max-w-md">
+              <p className="mt-6 text-lg text-muted-foreground leading-relaxed max-w-md">
                 Share your vision with us — we reply within one business day and are always ready to explore innovative ideas with ambitious teams.
               </p>
 
@@ -260,10 +260,10 @@ export default function ContactPage() {
                       <Icon className="h-6 w-6" />
                     </div>
                     <div className="min-w-0">
-                      <p className="text-xs font-bold uppercase tracking-widest text-slate-400">{tile.label}</p>
-                      <p className="mt-0.5 text-[15px] font-semibold text-white truncate">{tile.value}</p>
+                      <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground">{tile.label}</p>
+                      <p className="mt-0.5 text-[15px] font-semibold text-foreground truncate">{tile.value}</p>
                     </div>
-                    <ArrowRight className="ml-auto h-5 w-5 text-slate-500 opacity-0 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-1 shrink-0" />
+                    <ArrowRight className="ml-auto h-5 w-5 text-muted-foreground opacity-0 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-1 shrink-0" />
                   </motion.a>
                 )
               })}
@@ -273,7 +273,7 @@ export default function ContactPage() {
       </section>
 
       {/* ── Contact Form ── */}
-      <section className="bg-[#080E1A] py-24">
+      <section className="bg-muted py-24 border-y border-border">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
             {/* Left: Sticky context */}
@@ -283,10 +283,10 @@ export default function ContactPage() {
               viewport={{ once: true }}
               className="lg:sticky lg:top-32"
             >
-              <h2 className="font-heading text-4xl font-extrabold text-white leading-tight">
+              <h2 className="font-heading text-4xl font-extrabold text-foreground leading-tight">
                 Tell us about your project
               </h2>
-              <p className="mt-4 text-slate-400 text-lg leading-relaxed">
+              <p className="mt-4 text-muted-foreground text-lg leading-relaxed">
                 Fill in a few details and our engineering team will reach out with a clear proposal and no-obligation consultation.
               </p>
               <ul className="mt-8 space-y-4">
@@ -296,8 +296,8 @@ export default function ContactPage() {
                   'No long-term contracts required',
                   'Response within one business day',
                 ].map((item) => (
-                  <li key={item} className="flex items-center gap-3 text-slate-300">
-                    <CheckCircle2 className="h-5 w-5 shrink-0 text-primary dark:text-accent" />
+                  <li key={item} className="flex items-center gap-3 text-muted-foreground">
+                    <CheckCircle2 className="h-5 w-5 shrink-0 text-primary" />
                     {item}
                   </li>
                 ))}
@@ -310,7 +310,7 @@ export default function ContactPage() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.1 }}
-              className="rounded-[2rem] border border-white/10 bg-white/5 p-8 sm:p-12 backdrop-blur-xl shadow-2xl"
+              className="rounded-[2rem] border border-border bg-card p-8 sm:p-12 backdrop-blur-xl shadow-xl"
             >
               <AnimatePresence mode="wait">
                 {status === 'ok' ? (
@@ -322,15 +322,15 @@ export default function ContactPage() {
                     className="flex flex-col items-center justify-center py-16 text-center gap-4"
                   >
                     <div className="flex h-20 w-20 items-center justify-center rounded-full bg-primary/20 shadow-lg shadow-primary/20">
-                      <CheckCircle2 className="h-10 w-10 text-primary dark:text-accent" />
+                      <CheckCircle2 className="h-10 w-10 text-primary" />
                     </div>
-                    <h3 className="font-heading text-2xl font-bold text-white">Message Sent!</h3>
-                    <p className="text-slate-400 max-w-xs">
+                    <h3 className="font-heading text-2xl font-bold text-foreground">Message Sent!</h3>
+                    <p className="text-muted-foreground max-w-xs">
                       Thank you for reaching out. We'll get back to you within one business day.
                     </p>
                     <button
                       onClick={() => setStatus('idle')}
-                      className="mt-4 text-sm font-medium text-primary dark:text-accent underline"
+                      className="mt-4 text-sm font-medium text-primary underline"
                     >
                       Send another message
                     </button>
@@ -384,7 +384,7 @@ export default function ContactPage() {
                     <button
                       type="submit"
                       disabled={status === 'sending'}
-                      className="group relative inline-flex h-14 w-full items-center justify-center gap-3 rounded-full bg-gradient-to-r from-primary to-accent text-white font-bold text-base overflow-hidden shadow-xl shadow-primary/30 hover:shadow-primary/50 transition-all duration-300 hover:-translate-y-1 disabled:opacity-70 disabled:cursor-not-allowed"
+                      className="group relative inline-flex h-14 w-full items-center justify-center gap-3 rounded-full bg-primary text-primary-foreground font-bold text-base overflow-hidden shadow-xl shadow-primary/20 transition-all duration-300 hover:-translate-y-1 disabled:opacity-70 disabled:cursor-not-allowed"
                     >
                       {status === 'sending' ? (
                         <>
@@ -408,16 +408,16 @@ export default function ContactPage() {
       </section>
 
       {/* ── Calendly Booking ── */}
-      <section className="bg-[#050B14] py-24">
+      <section className="bg-background py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <span className="inline-block rounded-full border border-primary/30 bg-primary/10 px-4 py-1.5 text-sm font-bold text-primary dark:text-accent mb-4">
+            <span className="inline-block rounded-full border border-primary/30 bg-primary/10 px-4 py-1.5 text-sm font-bold text-primary mb-4">
               Book a Call
             </span>
-            <h2 className="font-heading text-4xl font-extrabold text-white">Schedule a Discovery Call</h2>
-            <p className="mt-4 text-slate-400 text-lg">Pick a time that works for you — no commitment required.</p>
+            <h2 className="font-heading text-4xl font-extrabold text-foreground">Schedule a Discovery Call</h2>
+            <p className="mt-4 text-muted-foreground text-lg">Pick a time that works for you — no commitment required.</p>
           </div>
-          <div className="overflow-hidden rounded-[2rem] border border-white/10 bg-white/5 shadow-2xl backdrop-blur-sm">
+          <div className="overflow-hidden rounded-[2rem] border border-border bg-card shadow-lg backdrop-blur-sm">
             <iframe
               src="https://calendly.com/satyamkashyapoffical/30min?hide_event_type_details=1&hide_gdpr_banner=1"
               width="100%"
@@ -431,7 +431,7 @@ export default function ContactPage() {
 
       {/* ── Google Map ── */}
       <div className="mx-auto max-w-7xl px-4 pb-24 sm:px-6 lg:px-8">
-        <div className="overflow-hidden rounded-[2rem] border border-white/10 shadow-2xl">
+        <div className="overflow-hidden rounded-[2rem] border border-border shadow-lg">
           <iframe
             title="SatByte Technologies location"
             src={MAP_EMBED}

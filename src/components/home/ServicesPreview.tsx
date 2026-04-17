@@ -3,7 +3,6 @@ import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { ArrowRight, ArrowUpRight } from 'lucide-react'
 
-import { SectionHeader } from '@/components/SectionHeader'
 import { LazyImage } from '@/components/LazyImage'
 import { useServicesQuery } from '@/hooks/useCmsQueries'
 import { HOME_SERVICES } from '@/lib/constants'
@@ -29,11 +28,11 @@ export function ServicesPreview() {
   const activeService = services[activeIdx]
 
   return (
-    <section className="px-4 py-32 sm:px-6 lg:px-8 bg-[#020617] overflow-hidden relative border-y border-white/5">
+    <section className="px-4 py-32 sm:px-6 lg:px-8 bg-background overflow-hidden relative border-y border-border">
       
       {/* Immersive ambient blend tied to content */}
       <div className="absolute inset-0 z-0 pointer-events-none flex justify-center items-center opacity-40">
-         <div className="w-full max-w-[1000px] h-[600px] bg-gradient-to-r from-primary/10 via-transparent to-accent/10 blur-[150px] transition-all duration-[2000ms] rounded-full mix-blend-screen" />
+         <div className="w-full max-w-[1000px] h-[600px] bg-gradient-to-r from-primary/10 via-transparent to-accent/10 blur-[150px] transition-all duration-[2000ms] rounded-full dark:mix-blend-screen" />
       </div>
 
       <div className="mx-auto max-w-[85rem] relative z-10">
@@ -42,8 +41,8 @@ export function ServicesPreview() {
               <span className="w-12 h-px bg-primary/50" />
               Core Capabilities
            </h2>
-           <h3 className="text-4xl sm:text-6xl font-black text-white tracking-tighter leading-[1.1]">
-              Architecting <span className="text-slate-500">digital ecosystems</span> that scale with you.
+           <h3 className="text-4xl sm:text-6xl font-black text-foreground tracking-tighter leading-[1.1]">
+              Architecting <span className="text-muted-foreground">digital ecosystems</span> that scale with you.
            </h3>
         </div>
 
@@ -51,7 +50,7 @@ export function ServicesPreview() {
           
           {/* Left Side: Magnetic List */}
           <div className="lg:col-span-7 flex flex-col w-full relative">
-            <div className="absolute left-0 top-0 bottom-0 w-px bg-white/[0.03]" />
+            <div className="absolute left-0 top-0 bottom-0 w-px bg-border" />
             {services.map((s, i) => {
               const isActive = activeIdx === i
               return (
@@ -68,19 +67,19 @@ export function ServicesPreview() {
                   />
                   
                   <div className={cn(
-                    "flex flex-col py-10 pl-8 sm:pl-12 transition-all duration-500 border-b border-white/[0.03]",
+                    "flex flex-col py-10 pl-8 sm:pl-12 transition-all duration-500 border-b border-border",
                     isActive ? "opacity-100" : "opacity-40 hover:opacity-70"
                   )}>
                      <div className="flex items-center justify-between gap-6">
                        <h4 className={cn(
                          "font-heading text-4xl sm:text-5xl font-black tracking-tighter transition-all duration-500",
-                         isActive ? "text-white translate-x-2" : "text-white"
+                         isActive ? "text-foreground translate-x-2" : "text-foreground"
                        )}>
                          {s.title}
                        </h4>
                        <div className={cn(
-                         "hidden sm:flex items-center justify-center h-14 w-14 rounded-full border border-white/10 transition-all duration-500",
-                         isActive ? "bg-white text-primary rotate-0 scale-100 shadow-[0_0_30px_rgba(255,255,255,0.2)]" : "bg-transparent text-white -rotate-45 scale-75 opacity-0"
+                         "hidden sm:flex items-center justify-center h-14 w-14 rounded-full border transition-all duration-500",
+                         isActive ? "bg-foreground text-background border-transparent rotate-0 scale-100 shadow-md" : "bg-transparent text-foreground border-border -rotate-45 scale-75 opacity-0"
                        )}>
                          <ArrowRight className="h-6 w-6 stroke-[3]" />
                        </div>
@@ -95,12 +94,12 @@ export function ServicesPreview() {
                             transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
                             className="overflow-hidden"
                           >
-                            <p className="mt-8 text-slate-400 text-xl leading-relaxed max-w-lg font-medium">
+                            <p className="mt-8 text-muted-foreground text-xl leading-relaxed max-w-lg font-medium">
                               {s.description}
                             </p>
                             <Link
                               to="/services"
-                              className="inline-flex items-center gap-2 mt-8 px-6 py-3 rounded-full bg-white/5 border border-white/10 text-[14px] font-bold text-white hover:bg-white hover:text-primary transition-all group/btn"
+                              className="inline-flex items-center gap-2 mt-8 px-6 py-3 rounded-full bg-card border border-border text-[14px] font-bold text-card-foreground hover:bg-foreground hover:text-background transition-all group/btn"
                             >
                               Explore Capability <ArrowUpRight className="h-4 w-4 stroke-[2.5] group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform" />
                             </Link>
@@ -122,31 +121,31 @@ export function ServicesPreview() {
                 animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
                 exit={{ opacity: 0, scale: 1.05, filter: 'blur(10px)' }}
                 transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-                className="absolute inset-0 rounded-[3rem] overflow-hidden flex items-center justify-center bg-[#070D18] border border-white/5 shadow-2xl"
+                className="absolute inset-0 rounded-[3rem] overflow-hidden flex items-center justify-center bg-card border border-border shadow-md"
               >
                 {/* Complex Internal Glass Layering */}
-                <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
-                <div className="absolute inset-y-0 left-0 w-px bg-gradient-to-b from-transparent via-white/10 to-transparent" />
+                <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-foreground/10 to-transparent" />
+                <div className="absolute inset-y-0 left-0 w-px bg-gradient-to-b from-transparent via-foreground/5 to-transparent" />
                 
-                <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-accent/5 opacity-50 mix-blend-screen z-0" />
+                <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-accent/5 opacity-50 dark:mix-blend-screen z-0" />
                 
                 {/* 3D Orb Effect */}
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-[radial-gradient(ellipse_at_center,rgba(59,130,246,0.15)_0%,transparent_70%)] opacity-60 z-0" />
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-[radial-gradient(ellipse_at_center,rgba(59,130,246,0.1)_0%,transparent_70%)] opacity-60 z-0" />
 
-                <div className="relative z-10 w-72 h-72 flex items-center justify-center rounded-3xl bg-white/5 backdrop-blur-2xl border border-white/10 shadow-2xl overflow-hidden group">
-                  <div className="absolute inset-0 bg-gradient-to-tr from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                <div className="relative z-10 w-72 h-72 flex items-center justify-center rounded-3xl bg-secondary/50 backdrop-blur-2xl border border-border shadow-2xl overflow-hidden group">
+                  <div className="absolute inset-0 bg-gradient-to-tr from-foreground/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
                   
                   {activeService?.iconUrl ? (
                     <LazyImage 
                       src={activeService.iconUrl} 
                       alt={activeService.title}
-                      className="w-40 h-40 object-contain drop-shadow-[0_0_30px_rgba(255,255,255,0.2)]"
+                      className="w-40 h-40 object-contain drop-shadow-[0_0_30px_rgba(0,0,0,0.1)] dark:drop-shadow-[0_0_30px_rgba(255,255,255,0.2)]"
                       aspectClassName="w-40 h-40" 
                     />
                   ) : (
                     (() => {
                       const IconRaw = getServiceIcon(activeService?.iconKey || 'Globe')
-                      return <IconRaw className="w-32 h-32 text-white stroke-[1.5] drop-shadow-[0_0_40px_rgba(255,255,255,0.3)] transition-transform duration-700 group-hover:scale-110" />
+                      return <IconRaw className="w-32 h-32 text-foreground stroke-[1.5] transition-transform duration-700 group-hover:scale-110" />
                     })()
                   )}
                 </div>

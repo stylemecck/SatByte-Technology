@@ -31,17 +31,17 @@ export default function TestimonialsPage() {
         >
           {TESTIMONIALS.map((t) => (
             <motion.div key={t.name} variants={fadeUpItem}>
-              <Card className="h-full border-slate-200/80 bg-white/80 backdrop-blur-md transition-transform duration-300 hover:-translate-y-0.5 hover:shadow-lg dark:border-white/10 dark:bg-white/5">
+              <Card className="h-full border-border bg-card backdrop-blur-md transition-transform duration-300 hover:-translate-y-0.5 hover:shadow-lg">
                 <CardContent className="flex h-full flex-col p-6">
                   <div className="mb-4 flex gap-0.5 text-amber-400">
                     {Array.from({ length: 5 }).map((_, i) => (
                       <Star key={i} className="h-4 w-4 fill-current" />
                     ))}
                   </div>
-                  <p className="flex-1 text-slate-700 dark:text-slate-200">“{t.quote}”</p>
-                  <div className="mt-6 border-t border-slate-200/80 pt-4 dark:border-white/10">
-                    <p className="font-heading font-semibold text-secondary dark:text-white">{t.name}</p>
-                    <p className="text-sm text-slate-500 dark:text-slate-400">{t.role}</p>
+                  <p className="flex-1 text-foreground">“{t.quote}”</p>
+                  <div className="mt-6 border-t border-border pt-4">
+                    <p className="font-heading font-semibold text-foreground">{t.name}</p>
+                    <p className="text-sm text-muted-foreground">{t.role}</p>
                   </div>
                 </CardContent>
               </Card>

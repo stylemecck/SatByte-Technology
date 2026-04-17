@@ -88,6 +88,7 @@ export default function ClientDashboardPage() {
   const { data: profile, refetch: refetchProfile } = useProfileQuery()
 
   const [selectedTicketId, setSelectedTicketId] = useState<string | null>(null)
+  const [isCreatingNewTicket, setIsCreatingNewTicket] = useState(false)
   const selectedTicket = ticketsItems?.find(t => t._id === selectedTicketId)
 
   const [profileForm, setProfileForm] = useState({ name: '', phone: '', company: '' })
@@ -159,6 +160,7 @@ export default function ClientDashboardPage() {
     try {
       await api.post('tickets', activeTicketParams)
       setActiveTicketParams({ subject: '', orderId: '', message: '' })
+      setIsCreatingNewTicket(false)
       refetchTickets()
     } catch (err: any) {
       alert(err.response?.data?.message || 'Failed to create ticket')
@@ -197,7 +199,7 @@ export default function ClientDashboardPage() {
   ] as const
 
   return (
-    <div className="min-h-screen bg-[#050B14] text-slate-300 font-sans selection:bg-primary/30">
+    <div className="min-h-screen bg-background text-foreground font-sans selection:bg-primary/30">
       <SEO title="Client Portal" description="Track your SatByte projects" path="/portal" />
       
       {/* Abstract Background Elements */}
@@ -211,20 +213,20 @@ export default function ClientDashboardPage() {
         {/* Header */}
         <div className="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
           <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.5 }}>
-            <div className="inline-flex items-center gap-2 px-3 py-1 mb-4 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm shadow-xl">
+            <div className="inline-flex items-center gap-2 px-3 py-1 mb-4 rounded-full border border-border bg-card backdrop-blur-sm shadow-sm">
               <span className="flex h-2 w-2 rounded-full bg-green-500 animate-pulse" />
-              <span className="text-xs font-medium text-slate-300">Client Portal</span>
+              <span className="text-xs font-medium text-foreground">Client Portal</span>
             </div>
-            <h1 className="text-4xl md:text-5xl font-heading font-extrabold text-white tracking-tight">Your Dashboard</h1>
-            <p className="mt-2 text-slate-400 text-lg">Manage deliverables, track billing, and get top-tier support.</p>
+            <h1 className="text-4xl md:text-5xl font-heading font-extrabold text-foreground tracking-tight">Your Dashboard</h1>
+            <p className="mt-2 text-muted-foreground text-lg">Manage deliverables, track billing, and get top-tier support.</p>
           </motion.div>
 
           <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.5 }}>
             <button 
               onClick={logout}
-              className="group inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-6 py-2.5 text-sm font-semibold text-white hover:bg-white/10 hover:border-white/20 transition-all shadow-lg"
+              className="group inline-flex items-center gap-2 rounded-full border border-border bg-card px-6 py-2.5 text-sm font-semibold text-foreground hover:bg-muted/80 hover:border-border/80 transition-all shadow-sm"
             >
-              <LogOut className="h-4 w-4 text-slate-400 group-hover:text-white transition-colors" />
+              <LogOut className="h-4 w-4 text-muted-foreground group-hover:text-foreground transition-colors" />
               Sign Out
             </button>
           </motion.div>
@@ -238,11 +240,15 @@ export default function ClientDashboardPage() {
           {NAV_ITEMS.map(({ id, label, icon: Icon }) => (
             <button
               key={id}
-              onClick={() => { setActiveTab(id); setSelectedTicketId(null); }}
+              onClick={() => { 
+                setActiveTab(id); 
+                setSelectedTicketId(null);
+                setIsCreatingNewTicket(false); 
+              }}
               className={`relative px-5 py-3 text-sm font-semibold rounded-t-xl transition-all flex items-center gap-2 whitespace-nowrap ${
                 activeTab === id
-                  ? 'text-white'
-                  : 'text-slate-500 hover:text-slate-300 hover:bg-white/5'
+                  ? 'text-foreground'
+                  : 'text-muted-foreground hover:text-foreground hover:bg-muted'
               }`}
             >
               <Icon className={`h-4 w-4 ${activeTab === id ? 'text-primary' : ''}`} />
@@ -297,7 +303,7 @@ export default function ClientDashboardPage() {
                 ) : (
                   <motion.div variants={staggerContainer} initial="initial" animate="animate" className="grid gap-8 lg:grid-cols-2">
                     {data?.map((order) => (
-                      <motion.div key={order._id} variants={fadeAnim} className="group relative rounded-[2rem] border border-white/10 bg-[#0A111D]/80 backdrop-blur-xl overflow-hidden hover:border-white/20 transition-colors duration-500 shadow-2xl">
+                      <motion.div key={order._id} variants={fadeAnim} className="group relative rounded-[2rem] border border-border bg-card/80 backdrop-blur-xl overflow-hidden hover:border-border transition-colors duration-500 shadow-xl">
                         
                         <div className="p-8 pb-6 bg-gradient-to-b from-white/[0.02] to-transparent">
                           <div className="flex justify-between items-start mb-6">
@@ -405,10 +411,10 @@ export default function ClientDashboardPage() {
 
               {/* TAB: BILLING */}
               {activeTab === 'billing' && (
-                <div className="bg-[#0A111D]/80 backdrop-blur-xl border border-white/10 rounded-[2rem] p-6 md:p-10 shadow-2xl">
+                <div className="bg-card/80 backdrop-blur-xl border border-border rounded-[2rem] p-6 md:p-10 shadow-xl">
                   <div className="mb-8">
-                    <h3 className="text-2xl font-bold text-white font-heading">Billing History</h3>
-                    <p className="text-slate-400">View your past transactions and invoices.</p>
+                    <h3 className="text-2xl font-bold text-foreground font-heading">Billing History</h3>
+                    <p className="text-muted-foreground">View your past transactions and invoices.</p>
                   </div>
                   
                   {data?.length === 0 ? (
@@ -450,16 +456,19 @@ export default function ClientDashboardPage() {
 
               {/* TAB: SUPPORT */}
               {activeTab === 'support' && (
-                <div className="h-[75vh] min-h-[600px] max-h-[800px] bg-[#0A111D]/80 backdrop-blur-xl border border-white/10 rounded-[2rem] overflow-hidden shadow-2xl flex flex-col md:flex-row">
+                <div className="h-[75vh] min-h-[600px] max-h-[800px] bg-card/80 backdrop-blur-xl border border-border rounded-[2rem] overflow-hidden shadow-xl flex flex-col md:flex-row">
                   
                   {/* Sidebar: Ticket List */}
-                  <div className={`md:w-1/3 border-r border-white/10 flex flex-col ${selectedTicketId ? 'hidden md:flex' : 'flex w-full'}`}>
-                    <div className="p-6 border-b border-white/10 bg-white/[0.02]">
-                      <h3 className="text-xl font-bold text-white font-heading">Support Inbox</h3>
-                      <p className="text-sm text-slate-400">We usually reply within hours.</p>
+                  <div className={`md:w-1/3 border-r border-border flex flex-col ${(selectedTicketId || isCreatingNewTicket) ? 'hidden md:flex' : 'flex w-full'}`}>
+                    <div className="p-6 border-b border-border bg-card">
+                      <h3 className="text-xl font-bold text-foreground font-heading">Support Inbox</h3>
+                      <p className="text-sm text-muted-foreground">We usually reply within hours.</p>
                       <button 
-                        onClick={() => setSelectedTicketId(null)}
-                        className={`mt-4 w-full py-2.5 rounded-xl border-2 border-dashed border-primary/30 text-primary font-semibold hover:border-primary/60 hover:bg-primary/5 transition-colors ${!selectedTicketId ? 'bg-primary/5 border-primary/50' : ''}`}
+                        onClick={() => {
+                          setSelectedTicketId(null);
+                          setIsCreatingNewTicket(true);
+                        }}
+                        className={`mt-4 w-full py-2.5 rounded-xl border-2 border-dashed border-primary/30 text-primary font-semibold hover:border-primary/60 hover:bg-primary/5 transition-colors ${isCreatingNewTicket ? 'bg-primary/5 border-primary/50' : ''}`}
                       >
                         + New Ticket
                       </button>
@@ -472,23 +481,26 @@ export default function ClientDashboardPage() {
                       {ticketsItems?.map((ticket: any) => (
                         <button 
                           key={ticket._id}
-                          onClick={() => setSelectedTicketId(ticket._id)}
+                          onClick={() => {
+                            setSelectedTicketId(ticket._id);
+                            setIsCreatingNewTicket(false);
+                          }}
                           className={`w-full text-left p-4 rounded-xl border transition-all ${
                             selectedTicketId === ticket._id 
-                              ? 'bg-primary/10 border-primary/30 shadow-[inset_0_0_20px_rgba(37,99,235,0.1)]' 
-                              : 'bg-transparent border-transparent hover:bg-white/5'
+                              ? 'bg-primary/10 border-primary/30' 
+                              : 'bg-transparent border-transparent hover:bg-muted'
                           }`}
                         >
                           <div className="flex justify-between items-start mb-1">
-                            <h4 className="font-semibold text-white truncate pr-4 text-[15px]">{ticket.subject}</h4>
+                            <h4 className="font-semibold text-foreground truncate pr-4 text-[15px]">{ticket.subject}</h4>
                             <span className={`shrink-0 h-2 w-2 rounded-full mt-1.5 ${
                               ticket.status === 'Open' ? 'bg-green-400' 
                               : ticket.status === 'Closed' ? 'bg-slate-600' 
                               : 'bg-yellow-400 animate-pulse'
                             }`} />
                           </div>
-                          <p className="text-xs text-slate-500 truncate mb-2">{ticket.messages?.[ticket.messages.length - 1]?.content || 'Started ticket...'}</p>
-                          <div className="flex items-center text-[11px] text-slate-600 font-mono">
+                          <p className="text-xs text-muted-foreground truncate mb-2">{ticket.messages?.[ticket.messages.length - 1]?.content || 'Started ticket...'}</p>
+                          <div className="flex items-center text-[11px] text-muted-foreground/80 font-mono">
                             <Clock className="h-3 w-3 mr-1" />
                             {new Date(ticket.updatedAt).toLocaleDateString()}
                           </div>
@@ -498,18 +510,18 @@ export default function ClientDashboardPage() {
                   </div>
 
                   {/* Main Chat / Create Area */}
-                  <div className={`flex-1 flex flex-col bg-[#050B14] ${!selectedTicketId ? 'hidden md:flex' : 'flex'}`}>
+                  <div className={`flex-1 flex flex-col bg-background ${(!selectedTicketId && !isCreatingNewTicket) ? 'hidden md:flex' : 'flex'}`}>
                     {selectedTicket ? (
                       /* Chat View */
                       <>
-                        <div className="p-6 border-b border-white/10 flex items-center justify-between bg-white/[0.02]">
+                        <div className="p-6 border-b border-border flex items-center justify-between bg-card">
                           <div className="flex items-center gap-3">
-                            <button className="md:hidden text-slate-400 hover:text-white" onClick={() => setSelectedTicketId(null)}>
+                            <button className="md:hidden text-muted-foreground hover:text-foreground" onClick={() => setSelectedTicketId(null)}>
                               Back
                             </button>
                             <div>
-                              <h3 className="font-bold text-lg text-white">{selectedTicket.subject}</h3>
-                              <p className="text-xs text-slate-400 font-mono">ID: {selectedTicket._id.slice(-8).toUpperCase()}</p>
+                              <h3 className="font-bold text-lg text-foreground">{selectedTicket.subject}</h3>
+                              <p className="text-xs text-muted-foreground font-mono">ID: {selectedTicket._id.slice(-8).toUpperCase()}</p>
                             </div>
                           </div>
                           <div className="flex items-center gap-3">
@@ -531,13 +543,13 @@ export default function ClientDashboardPage() {
                         <div className="flex-1 overflow-y-auto p-6 space-y-6 hide-scrollbar">
                           {selectedTicket.messages.map((msg: any, idx: number) => (
                             <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} key={idx} className={`flex flex-col ${msg.sender === 'client' ? 'items-end' : 'items-start'}`}>
-                              <span className="text-[11px] font-bold text-slate-500 mb-1.5 px-1 tracking-wider uppercase">
+                              <span className="text-[11px] font-bold text-muted-foreground mb-1.5 px-1 tracking-wider uppercase">
                                 {msg.sender === 'client' ? 'You' : 'SatByte Team'} <span className="opacity-50 font-normal lowercase tracking-normal mx-1">at</span> {new Date(msg.createdAt).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
                               </span>
-                              <div className={`max-w-[85%] sm:max-w-[75%] rounded-2xl px-5 py-3.5 shadow-lg ${
+                              <div className={`max-w-[85%] sm:max-w-[75%] rounded-2xl px-5 py-3.5 shadow-md ${
                                 msg.sender === 'client' 
-                                  ? 'bg-primary text-white rounded-tr-sm shadow-primary/20' 
-                                  : 'bg-[#121A2F] border border-white/5 text-slate-200 rounded-tl-sm'
+                                  ? 'bg-primary text-primary-foreground rounded-tr-sm shadow-primary/10' 
+                                  : 'bg-muted border border-border text-foreground rounded-tl-sm'
                               }`}>
                                 <p className="whitespace-pre-wrap text-[15px] leading-relaxed">{msg.content}</p>
                               </div>
@@ -546,19 +558,19 @@ export default function ClientDashboardPage() {
                         </div>
 
                         {selectedTicket.status !== 'Closed' && (
-                          <div className="p-4 border-t border-white/10 bg-white/[0.02]">
+                          <div className="p-4 border-t border-border bg-muted/30">
                             <form onSubmit={handleReplyTicket} className="relative flex items-end gap-2">
                               <textarea 
                                 placeholder="Write a response..." 
                                 value={replyMessage}
                                 onChange={(e) => setReplyMessage(e.target.value)}
-                                className="w-full bg-[#121A2F] border border-white/10 text-white rounded-2xl pl-5 pr-14 py-4 min-h-[60px] max-h-[150px] focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/50 resize-none hide-scrollbar placeholder-slate-500"
+                                className="w-full bg-muted border border-border text-foreground rounded-2xl pl-5 pr-14 py-4 min-h-[60px] max-h-[150px] focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/50 resize-none hide-scrollbar placeholder-muted-foreground"
                                 onKeyDown={(e) => { if(e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleReplyTicket(e); }}}
                               />
                               <button 
                                 type="submit" 
                                 disabled={!replyMessage.trim()} 
-                                className="absolute right-3 bottom-3 h-10 w-10 rounded-full bg-primary flex items-center justify-center text-white disabled:opacity-50 transition-transform active:scale-95"
+                                className="absolute right-3 bottom-3 h-10 w-10 rounded-full bg-primary flex items-center justify-center text-primary-foreground disabled:opacity-50 transition-transform active:scale-95"
                               >
                                 <Send className="h-4 w-4 ml-0.5" />
                               </button>
@@ -571,41 +583,43 @@ export default function ClientDashboardPage() {
                       <div className="p-8 md:p-12 flex-1 flex items-center justify-center overflow-y-auto">
                         <div className="w-full max-w-lg">
                           <div className="mb-8">
-                            <h2 className="text-2xl font-bold font-heading text-white">Create a Support Ticket</h2>
-                            <p className="text-slate-400 mt-2">Describe the bug, feature request, or assistance you need.</p>
+                            <button className="md:hidden text-muted-foreground hover:text-foreground mb-4 flex items-center gap-2" onClick={() => setIsCreatingNewTicket(false)}>
+                              <ChevronRight className="h-4 w-4 rotate-180" /> Back to Inbox
+                            </button>
+                            <h2 className="text-2xl font-bold font-heading text-foreground">Create a Support Ticket</h2>
+                            <p className="text-muted-foreground mt-2">Describe the bug, feature request, or assistance you need.</p>
                           </div>
                           
                           <form onSubmit={handleCreateTicket} className="space-y-5">
                             <div className="space-y-2">
-                              <label className="text-xs font-bold uppercase tracking-wider text-slate-500">Related Project</label>
+                              <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Related Project</label>
                               <div className="relative">
                                 <select 
-                                  className="w-full appearance-none bg-[#121A2F] border border-white/10 rounded-xl px-4 py-3.5 text-white focus:border-primary/50 focus:outline-none font-medium"
+                                  className="w-full appearance-none bg-muted border border-border rounded-xl px-4 py-3.5 text-foreground focus:border-primary/50 focus:outline-none font-medium"
                                   value={activeTicketParams.orderId}
                                   onChange={(e) => setActiveTicketParams(p => ({...p, orderId: e.target.value}))}
                                 >
                                   <option value="">General Support / Billing</option>
                                   {data?.map(o => <option key={o._id} value={o._id}>{o.planName}</option>)}
                                 </select>
-                                <ChevronRight className="absolute right-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500 rotate-90 pointer-events-none" />
+                                <ChevronRight className="absolute right-4 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground rotate-90 pointer-events-none" />
                               </div>
                             </div>
 
                             <div className="space-y-2">
-                              <label className="text-xs font-bold uppercase tracking-wider text-slate-500">Short Subject</label>
+                              <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Short Subject</label>
                               <input 
-                                className="w-full bg-[#121A2F] border border-white/10 rounded-xl px-4 py-3.5 text-white placeholder-slate-600 focus:border-primary/50 focus:outline-none"
+                                className="w-full bg-muted border border-border rounded-xl px-4 py-3.5 text-foreground placeholder-muted-foreground focus:border-primary/50 focus:outline-none"
                                 placeholder="E.g., Domain configuration issue"
                                 value={activeTicketParams.subject}
                                 onChange={(e) => setActiveTicketParams(p => ({...p, subject: e.target.value}))}
                                 required
                               />
                             </div>
-
                             <div className="space-y-2">
-                              <label className="text-xs font-bold uppercase tracking-wider text-slate-500">Detailed Message</label>
+                              <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Detailed Message</label>
                               <textarea 
-                                className="w-full bg-[#121A2F] border border-white/10 rounded-xl px-4 py-3.5 text-white placeholder-slate-600 focus:border-primary/50 focus:outline-none min-h-[160px] resize-none"
+                                className="w-full bg-muted border border-border rounded-xl px-4 py-3.5 text-foreground placeholder-muted-foreground focus:border-primary/50 focus:outline-none min-h-[160px] resize-none"
                                 placeholder="Provide as much context as possible..."
                                 value={activeTicketParams.message}
                                 onChange={(e) => setActiveTicketParams(p => ({...p, message: e.target.value}))}
@@ -629,12 +643,12 @@ export default function ClientDashboardPage() {
                 <div className="grid lg:grid-cols-3 gap-8 items-start">
                   
                   {/* General Profile Section */}
-                  <motion.div variants={fadeAnim} className="lg:col-span-2 bg-[#0A111D]/80 backdrop-blur-xl border border-white/10 rounded-[2rem] p-8 md:p-10 shadow-2xl relative overflow-hidden">
+                  <motion.div variants={fadeAnim} className="lg:col-span-2 bg-card/80 backdrop-blur-xl border border-border rounded-[2rem] p-8 md:p-10 shadow-lg relative overflow-hidden">
                     
                     <div className="flex items-center justify-between mb-8">
                        <div>
-                         <h3 className="text-2xl font-bold font-heading text-white mb-2">Personal Details</h3>
-                         <p className="text-slate-400">Your professional contact information.</p>
+                         <h3 className="text-2xl font-bold font-heading text-foreground mb-2">Personal Details</h3>
+                         <p className="text-muted-foreground">Your professional contact information.</p>
                        </div>
                        {!isEditingProfile ? (
                          <button 
@@ -668,7 +682,7 @@ export default function ClientDashboardPage() {
                         <label className="text-xs font-bold uppercase tracking-wider text-slate-500">Full Name</label>
                         {isEditingProfile ? (
                           <input
-                            className="w-full bg-[#121A2F] border border-white/10 rounded-xl px-4 py-3.5 text-white placeholder-slate-600 focus:border-primary/50 focus:outline-none"
+                            className="w-full bg-muted border border-border rounded-xl px-4 py-3.5 text-foreground placeholder-slate-600 focus:border-primary/50 focus:outline-none"
                             placeholder="John Doe"
                             value={profileForm.name}
                             onChange={(e) => setProfileForm(p => ({...p, name: e.target.value}))}
@@ -684,7 +698,7 @@ export default function ClientDashboardPage() {
                         <label className="text-xs font-bold uppercase tracking-wider text-slate-500">Phone Number</label>
                         {isEditingProfile ? (
                           <input
-                            className="w-full bg-[#121A2F] border border-white/10 rounded-xl px-4 py-3.5 text-white placeholder-slate-600 focus:border-primary/50 focus:outline-none"
+                            className="w-full bg-muted border border-border rounded-xl px-4 py-3.5 text-foreground placeholder-slate-600 focus:border-primary/50 focus:outline-none"
                             placeholder="+91 98765 43210"
                             value={profileForm.phone}
                             onChange={(e) => setProfileForm(p => ({...p, phone: e.target.value}))}
@@ -700,7 +714,7 @@ export default function ClientDashboardPage() {
                         <label className="text-xs font-bold uppercase tracking-wider text-slate-500">Company / Organization</label>
                         {isEditingProfile ? (
                           <input
-                            className="w-full bg-[#121A2F] border border-white/10 rounded-xl px-4 py-3.5 text-white placeholder-slate-600 focus:border-primary/50 focus:outline-none"
+                            className="w-full bg-muted border border-border rounded-xl px-4 py-3.5 text-foreground placeholder-slate-600 focus:border-primary/50 focus:outline-none"
                             placeholder="SatByte Technology Inc."
                             value={profileForm.company}
                             onChange={(e) => setProfileForm(p => ({...p, company: e.target.value}))}
@@ -743,8 +757,8 @@ export default function ClientDashboardPage() {
                   </motion.div>
 
                   <div className="space-y-8">
-                    <motion.div variants={fadeAnim} className="h-fit bg-[#0A111D]/40 backdrop-blur-xl border border-white/5 rounded-[2rem] p-8 md:p-10 shadow-xl">
-                      <h3 className="text-xl font-bold font-heading text-white mb-6">Account Overview</h3>
+                    <motion.div variants={fadeAnim} className="h-fit bg-card/40 backdrop-blur-xl border border-border rounded-[2rem] p-8 md:p-10 shadow-lg">
+                      <h3 className="text-xl font-bold font-heading text-foreground mb-6">Account Overview</h3>
                       <div className="space-y-6">
                         <div className="pb-6 border-b border-white/5">
                           <label className="text-xs font-bold uppercase tracking-wider text-slate-500 block mb-2">Registered Email</label>

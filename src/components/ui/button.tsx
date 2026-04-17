@@ -5,25 +5,27 @@ import * as React from 'react'
 import { cn } from '@/lib/utils'
 
 const buttonVariants = cva(
-  'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-xl text-sm font-medium transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-[#020617] disabled:pointer-events-none disabled:opacity-50 disabled:hover:scale-100 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0',
+  'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg text-sm font-medium transition-all duration-200 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0',
   {
     variants: {
       variant: {
         default:
-          'bg-primary text-white shadow-lg shadow-primary/25 hover:bg-primary/90 dark:shadow-primary/20',
+          'bg-primary text-primary-foreground hover:bg-primary/90 shadow-sm shadow-primary/20 hover:shadow-md hover:shadow-primary/30',
         secondary:
-          'bg-secondary text-white hover:bg-secondary/90 dark:bg-slate-800 dark:hover:bg-slate-700',
+          'bg-secondary text-secondary-foreground hover:bg-secondary/80 border border-border/50',
+        destructive:
+          'bg-red-500 text-white hover:bg-red-600 shadow-sm shadow-red-500/20',
         outline:
-          'border border-slate-300 bg-white/50 backdrop-blur-sm hover:bg-slate-100 dark:border-white/10 dark:bg-white/5 dark:hover:bg-white/10',
-        ghost: 'hover:bg-slate-100 dark:hover:bg-white/10',
+          'border border-input bg-transparent hover:bg-accent hover:text-accent-foreground',
+        ghost: 'hover:bg-accent hover:text-accent-foreground',
         accent:
-          'bg-accent text-secondary font-semibold hover:brightness-110 shadow-md shadow-accent/20',
+          'bg-primary text-primary-foreground font-semibold hover:bg-primary/90 shadow-md shadow-primary/20',
         link: 'text-primary underline-offset-4 hover:underline',
       },
       size: {
-        default: 'h-11 px-5 py-2',
-        sm: 'h-9 rounded-lg px-3',
-        lg: 'h-12 rounded-xl px-8 text-base',
+        default: 'h-10 px-4 py-2',
+        sm: 'h-8 px-3 text-xs',
+        lg: 'h-11 px-8 text-base',
         icon: 'h-10 w-10',
       },
     },

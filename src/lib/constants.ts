@@ -21,6 +21,7 @@ export const NAV_LINKS = [
   { href: '/blog', label: 'Blog' },
   { href: '/quote', label: 'Estimator' },
   { href: '/client-login', label: 'Client Login' },
+  { href: 'https://career.satbyte.in', label: 'Careers' },
   { href: '/contact', label: 'Contact' },
 ] as const
 

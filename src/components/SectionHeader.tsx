@@ -32,11 +32,11 @@ export function SectionHeader({
           {eyebrow}
         </p>
       ) : null}
-      <h2 className="font-heading text-3xl font-bold tracking-tight text-secondary dark:text-white sm:text-4xl">
+      <h2 className="font-heading text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
         {title}
       </h2>
       {subtitle ? (
-        <p className="mt-3 text-slate-600 dark:text-slate-400">{subtitle}</p>
+        <p className="mt-3 text-muted-foreground">{subtitle}</p>
       ) : null}
     </motion.div>
   )

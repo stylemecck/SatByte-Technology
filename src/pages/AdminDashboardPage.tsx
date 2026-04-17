@@ -103,17 +103,17 @@ export default function AdminDashboardPage() {
   ] as const
 
   return (
-    <div className="flex min-h-screen bg-[#020617] text-slate-300 transition-colors duration-500 selection:bg-primary/30">
+    <div className="flex min-h-screen bg-background text-foreground transition-colors duration-500 selection:bg-primary/30">
       
       {/* ── Sidebar ── */}
-      <aside className={`fixed inset-y-0 left-0 z-50 w-72 bg-[#050B14]/80 backdrop-blur-2xl border-r border-white/10 transition-transform duration-500 lg:translate-x-0 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+      <aside className={`fixed inset-y-0 left-0 z-50 w-72 bg-card/80 backdrop-blur-2xl border-r border-border transition-transform duration-500 lg:translate-x-0 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
         <div className="flex flex-col h-full">
           <div className="p-8">
             <div className="flex items-center gap-3 mb-8">
-              <div className="h-10 w-10 bg-gradient-to-br from-primary to-accent rounded-xl flex items-center justify-center font-bold text-white text-xl shadow-lg shadow-primary/20">
+              <div className="h-10 w-10 bg-gradient-to-br from-primary to-accent rounded-xl flex items-center justify-center font-bold text-primary-foreground text-xl shadow-lg shadow-primary/20">
                 S
               </div>
-              <h1 className="font-heading text-xl font-extrabold text-white tracking-tight">SatByte RMS</h1>
+              <h1 className="font-heading text-xl font-extrabold text-foreground tracking-tight">SatByte RMS</h1>
             </div>
             
             <nav className="space-y-1.5">
@@ -123,21 +123,21 @@ export default function AdminDashboardPage() {
                   onClick={() => setActiveTab(id)}
                   className={`w-full group flex items-center gap-3.5 px-4 py-3 rounded-xl transition-all duration-200 font-semibold text-[15px] ${
                     activeTab === id 
-                      ? 'bg-primary text-white shadow-xl shadow-primary/20' 
-                      : 'text-slate-500 hover:text-slate-300 hover:bg-white/5'
+                      ? 'bg-primary text-primary-foreground shadow-xl shadow-primary/20' 
+                      : 'text-muted-foreground hover:text-foreground hover:bg-muted'
                   }`}
                 >
-                  <Icon className={`h-5 w-5 ${activeTab === id ? 'text-white' : 'text-slate-600 group-hover:text-slate-400'}`} />
+                  <Icon className={`h-5 w-5 ${activeTab === id ? 'text-primary-foreground' : 'text-muted-foreground group-hover:text-foreground'}`} />
                   {label}
                   {activeTab === id && (
-                    <motion.div layoutId="sidebarActive" className="ml-auto w-1 h-4 bg-white/50 rounded-full" />
+                    <motion.div layoutId="sidebarActive" className="ml-auto w-1 h-4 bg-primary-foreground/50 rounded-full" />
                   )}
                 </button>
               ))}
             </nav>
           </div>
 
-          <div className="mt-auto p-8 border-t border-white/5">
+          <div className="mt-auto p-8 border-t border-border">
             <button 
               onClick={logout}
               className="flex items-center gap-3 w-full px-4 py-3 rounded-xl text-slate-500 font-semibold hover:text-red-400 hover:bg-red-400/5 transition-all"
@@ -153,9 +153,9 @@ export default function AdminDashboardPage() {
       <main className={`flex-1 transition-all duration-500 ${sidebarOpen ? 'lg:ml-72' : ''}`}>
         
         {/* Top Header */}
-        <header className="sticky top-0 z-40 h-20 bg-[#020617]/50 backdrop-blur-md border-b border-white/5 px-8 flex items-center justify-between">
+        <header className="sticky top-0 z-40 h-20 bg-background/80 backdrop-blur-md border-b border-border px-8 flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <h2 className="text-sm font-bold uppercase tracking-widest text-slate-500">{activeTab}</h2>
+            <h2 className="text-sm font-bold uppercase tracking-widest text-muted-foreground">{activeTab}</h2>
           </div>
           <div className="flex items-center gap-6">
             <div className="relative hidden md:block">
@@ -167,10 +167,10 @@ export default function AdminDashboardPage() {
             </div>
             <div className="flex items-center gap-3">
               <div className="text-right mr-3 hidden lg:block">
-                <p className="text-xs font-bold text-white">Administrator</p>
-                <p className="text-[10px] text-slate-500">Root Access</p>
+                <p className="text-xs font-bold text-foreground">Administrator</p>
+                <p className="text-[10px] text-muted-foreground">Root Access</p>
               </div>
-              <div className="h-10 w-10 rounded-full bg-slate-800 border border-white/10" />
+              <div className="h-10 w-10 rounded-full bg-slate-800 border border-border" />
             </div>
           </div>
         </header>
@@ -798,15 +798,15 @@ function TicketsPanel() {
               <button 
                 key={ticket._id} 
                 onClick={() => setSelectedTicketId(ticket._id)}
-                className={`w-full text-left p-5 rounded-[1.5rem] transition-all border ${selectedTicketId === ticket._id ? 'bg-primary/10 border-primary/20 shadow-inner' : 'border-transparent hover:bg-white/5'}`}
+                className={`w-full text-left p-5 rounded-[1.5rem] transition-all border ${selectedTicketId === ticket._id ? 'bg-primary/10 border-primary/20' : 'border-transparent hover:bg-muted'}`}
               >
                 <div className="flex justify-between items-start mb-2">
-                  <h4 className="font-bold text-white text-[15px] truncate pr-4">{ticket.subject}</h4>
-                  <span className={`h-2 w-2 rounded-full mt-1.5 ${ticket.status === 'Open' ? 'bg-green-500' : 'bg-slate-600'}`} />
+                  <h4 className="font-bold text-foreground text-[15px] truncate pr-4">{ticket.subject}</h4>
+                  <span className={`h-2 w-2 rounded-full mt-1.5 ${ticket.status === 'Open' ? 'bg-green-500' : 'bg-muted-foreground'}`} />
                 </div>
-                <p className="text-xs text-slate-500 truncate mb-3">{ticket.email}</p>
-                <div className="flex items-center justify-between text-[10px] font-bold uppercase tracking-widest text-slate-600">
-                  <span className={`px-2 py-0.5 rounded-full ${ticket.status === 'Open' ? 'text-green-500 bg-green-500/5' : 'text-slate-500 bg-slate-500/5'}`}>{ticket.status}</span>
+                <p className="text-xs text-muted-foreground truncate mb-3">{ticket.email}</p>
+                <div className="flex items-center justify-between text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
+                  <span className={`px-2 py-0.5 rounded-full ${ticket.status === 'Open' ? 'text-green-500 bg-green-500/5' : 'text-muted-foreground bg-muted'}`}>{ticket.status}</span>
                   <span>{new Date(ticket.updatedAt).toLocaleDateString()}</span>
                 </div>
               </button>
@@ -815,15 +815,15 @@ function TicketsPanel() {
         </div>
       </div>
 
-      <div className={`flex-1 flex flex-col bg-[#050B14] ${!selectedTicketId ? 'hidden md:flex' : 'flex'}`}>
+      <div className={`flex-1 flex flex-col bg-background ${!selectedTicketId ? 'hidden md:flex' : 'flex'}`}>
         {selectedTicket ? (
           <>
-            <div className="p-8 border-b border-white/5 flex items-center justify-between bg-white/[0.02]">
+            <div className="p-8 border-b border-border flex items-center justify-between bg-card/50">
               <div className="flex items-center gap-4">
-                <button className="md:hidden p-2 rounded-lg bg-white/5" onClick={() => setSelectedTicketId(null)}><ChevronRight className="h-4 w-4 rotate-180" /></button>
+                <button className="md:hidden p-2 rounded-lg bg-muted" onClick={() => setSelectedTicketId(null)}><ChevronRight className="h-4 w-4 rotate-180" /></button>
                 <div>
-                  <h3 className="font-extrabold text-xl text-white tracking-tight">{selectedTicket.subject}</h3>
-                  <p className="text-[11px] font-mono text-slate-500 mt-0.5">{selectedTicket.email}</p>
+                  <h3 className="font-extrabold text-xl text-foreground tracking-tight">{selectedTicket.subject}</h3>
+                  <p className="text-[11px] font-mono text-muted-foreground mt-0.5">{selectedTicket.email}</p>
                 </div>
               </div>
               <div className="flex items-center gap-4">
@@ -834,19 +834,19 @@ function TicketsPanel() {
             <div className="flex-1 overflow-y-auto p-8 space-y-6 hide-scrollbar">
               {selectedTicket.messages.map((msg: any, i: number) => (
                 <div key={i} className={`flex flex-col ${msg.sender === 'admin' ? 'items-end' : 'items-start'}`}>
-                  <p className="text-[10px] font-bold text-slate-600 uppercase tracking-widest mb-1.5 px-1">{msg.sender === 'admin' ? 'Support Desk' : 'Client'}</p>
-                  <div className={`max-w-[80%] p-4 px-6 rounded-[1.5rem] shadow-xl ${msg.sender === 'admin' ? 'bg-primary text-white rounded-tr-sm' : 'bg-[#121A2F] text-slate-200 border border-white/5 rounded-tl-sm'}`}>
+                  <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mb-1.5 px-1">{msg.sender === 'admin' ? 'Support Desk' : 'Client'}</p>
+                  <div className={`max-w-[80%] p-4 px-6 rounded-[1.5rem] shadow-xl ${msg.sender === 'admin' ? 'bg-primary text-primary-foreground rounded-tr-sm shadow-primary/10' : 'bg-muted text-foreground border border-border rounded-tl-sm'}`}>
                     <p className="text-[15px] leading-relaxed">{msg.content}</p>
                   </div>
                 </div>
               ))}
             </div>
 
-            <div className="p-4 bg-white/[0.02] border-t border-white/5">
+            <div className="p-4 bg-card/30 border-t border-border">
               <form onSubmit={handleReplyTicket} className="flex gap-4">
                 <Input 
                   placeholder="Type a professional response..." 
-                  className="rounded-full h-12 bg-[#121A2F] border-white/10" 
+                  className="rounded-full h-12 bg-muted border-border" 
                   value={replyMessage}
                   onChange={e => setReplyMessage(e.target.value)}
                 />

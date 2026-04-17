@@ -10,9 +10,9 @@ const staggerContainer = {
   animate: { transition: { staggerChildren: 0.12, delayChildren: 0.2 } },
 }
 
-const letterAnimation = {
+const letterAnimation: any = {
   initial: { y: 100, opacity: 0 },
-  animate: { y: 0, opacity: 1, transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] } },
+  animate: { y: 0, opacity: 1, transition: { duration: 0.8, ease: "easeOut" } },
 }
 
 /** Ultra-Premium Hero with mesh gradients, dynamic typography, and 3D glass cards. */
@@ -26,7 +26,7 @@ export function HeroSection() {
   const opacityStats = useTransform(scrollYProgress, [0, 0.6], [1, 0])
 
   return (
-    <section ref={containerRef} className="relative overflow-hidden bg-[#020617] min-h-screen flex flex-col justify-center pt-20 sm:pt-32 pb-32">
+    <section ref={containerRef} className="relative overflow-hidden bg-background min-h-screen flex flex-col justify-center pt-20 sm:pt-32 pb-32">
       
       {/* Dynamic Fluid Mesh Background */}
       <motion.div style={{ y: yBg, opacity: opacityBg }} className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
@@ -56,14 +56,14 @@ export function HeroSection() {
                initial: { opacity: 0, scale: 0.8, y: 20 },
                animate: { opacity: 1, scale: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } }
             }}
-            className="mb-10 inline-flex items-center gap-2.5 rounded-full border border-primary/20 bg-primary/5 px-6 py-2.5 text-sm font-bold text-blue-300 backdrop-blur-2xl shadow-[0_0_30px_rgba(37,99,235,0.15)] ring-1 ring-white/10"
+            className="mb-10 inline-flex items-center gap-2.5 rounded-full border border-border bg-secondary/50 px-6 py-2.5 text-sm font-bold text-foreground backdrop-blur-2xl shadow-sm ring-1 ring-ring/10"
           >
             <Sparkles className="h-4 w-4 text-primary animate-pulse" />
-            <span className="bg-gradient-to-r from-blue-200 to-indigo-300 bg-clip-text text-transparent">Pioneering Digital Architectures</span>
+            <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">Pioneering Digital Architectures</span>
           </motion.div>
 
           {/* Cinematic Headline */}
-          <h1 className="font-heading text-5xl font-black leading-[1.05] tracking-tight text-white sm:text-7xl lg:text-[7.5rem] flex flex-wrap justify-center w-full max-w-[1400px]">
+          <h1 className="font-heading text-5xl font-black leading-[1.05] tracking-tight text-foreground sm:text-7xl lg:text-[7.5rem] flex flex-wrap justify-center w-full max-w-[1400px]">
             {["Engineering", "scale"].map((word, i) => (
               <span key={i} className="inline-block mr-3 sm:mr-5 lg:mr-8 mb-2 sm:mb-0">
                 <motion.span variants={letterAnimation} className="inline-block pb-4">{word}</motion.span>
@@ -74,7 +74,7 @@ export function HeroSection() {
                   <span key={i} className={`inline-block mr-3 sm:mr-5 lg:mr-8 ${i >= 1 ? '-mt-2 sm:-mt-4' : ''}`}>
                      <motion.span 
                         variants={letterAnimation} 
-                        className={`inline-block pb-4 ${i >= 1 ? 'bg-gradient-to-r from-white via-blue-200 to-slate-400 bg-clip-text text-transparent' : ''}`}
+                        className={`inline-block pb-4 ${i >= 1 ? 'bg-gradient-to-r from-foreground via-muted-foreground to-foreground bg-clip-text text-transparent' : ''}`}
                      >
                         {word}
                      </motion.span>
@@ -88,7 +88,7 @@ export function HeroSection() {
                initial: { opacity: 0 },
                animate: { opacity: 1, transition: { duration: 1, delay: 0.6 } }
             }}
-            className="mt-6 sm:mt-10 max-w-3xl text-lg text-slate-400 sm:text-2xl font-medium leading-[1.6]"
+            className="mt-6 sm:mt-10 max-w-3xl text-lg text-muted-foreground sm:text-2xl font-medium leading-[1.6]"
           >
             Deploying high-fidelity, data-driven web solutions and software ecosystems designed for modern high-growth agencies and brands.
           </motion.p>
@@ -100,16 +100,16 @@ export function HeroSection() {
             }}
             className="mt-14 flex flex-col items-center justify-center gap-6 sm:flex-row w-full sm:w-auto"
           >
-            <Button asChild size="lg" className="group relative w-full sm:w-auto min-w-[220px] h-16 rounded-[2rem] text-[17px] font-extrabold bg-white text-primary hover:bg-slate-100 hover:text-primary transition-all duration-300 overflow-hidden shadow-[0_0_40px_rgba(255,255,255,0.15)] hover:shadow-[0_0_60px_rgba(255,255,255,0.25)] hover:-translate-y-1">
+            <Button asChild size="lg" className="group relative w-full sm:w-auto min-w-[220px] h-14 rounded-xl text-[17px] font-extrabold transition-all duration-300 overflow-hidden shadow-lg hover:-translate-y-1">
               <Link to="/contact">
                 <span className="relative z-10 flex items-center justify-center">
                   Start a Project
                   <ArrowRight className="ml-3 h-5 w-5 stroke-[3] group-hover:translate-x-1.5 transition-transform" />
                 </span>
-                <div className="absolute inset-0 h-full w-full bg-gradient-to-r from-transparent via-white/50 to-transparent -translate-x-[150%] skew-x-[-20deg] group-hover:animate-shine" />
+                <div className="absolute inset-0 h-full w-full bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-[150%] skew-x-[-20deg] group-hover:animate-shine" />
               </Link>
             </Button>
-            <Button asChild size="lg" variant="outline" className="w-full sm:w-auto min-w-[220px] h-16 rounded-[2rem] text-[17px] font-extrabold border-white/10 bg-white/5 text-white hover:bg-white/10 hover:border-white/20 transition-all duration-300 backdrop-blur-xl">
+            <Button asChild size="lg" variant="outline" className="w-full sm:w-auto min-w-[220px] h-14 rounded-xl text-[17px] font-extrabold backdrop-blur-xl transition-all duration-300 hover:bg-secondary">
               <Link to="/portfolio">
                 View Showcase
               </Link>
@@ -130,25 +130,25 @@ export function HeroSection() {
         ].map((stat, i) => {
           const Icon = stat.icon
           return (
-            <motion.div
+              <motion.div
               key={stat.label}
               initial={{ opacity: 0, y: 40 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 1 + (i * 0.15), duration: 0.8, type: 'spring', bounce: 0.4 }}
               whileHover={{ y: -12, scale: 1.03 }}
-              className={`group relative overflow-hidden rounded-[2.5rem] border border-white/10 bg-[#0A111D]/80 p-10 text-center backdrop-blur-2xl transition-all duration-500 hover:border-white/20 hover:bg-white/5 shadow-2xl hover:${stat.glow}`}
+              className="group relative overflow-hidden rounded-3xl border border-border bg-card p-10 text-center backdrop-blur-2xl transition-all duration-500 hover:border-foreground/20 hover:bg-muted shadow-2xl"
             >
                {/* Internal ambient glow */}
-              <div className="absolute inset-0 bg-gradient-to-br from-white/[0.02] to-transparent z-0" />
+              <div className="absolute inset-0 bg-gradient-to-br from-foreground/[0.02] to-transparent z-0" />
               
-              <div className="absolute -right-8 -top-8 opacity-[0.07] transition-transform duration-700 group-hover:scale-150 group-hover:-rotate-12 group-hover:opacity-20 z-0">
-                <Icon className={`h-40 w-40 ${stat.color}`} />
+              <div className="absolute -right-8 -top-8 opacity-[0.05] transition-transform duration-700 group-hover:scale-150 group-hover:-rotate-12 group-hover:opacity-10 z-0">
+                <Icon className={`h-40 w-40 text-foreground`} />
               </div>
               
               <div className="relative z-10">
-                 <p className="font-heading text-6xl font-black text-white drop-shadow-lg tracking-tighter">{stat.value}</p>
-                 <div className="h-1 w-12 bg-white/20 mx-auto rounded-full my-4 group-hover:bg-primary transition-colors duration-500" />
-                 <p className="text-sm font-black text-slate-400 uppercase tracking-[0.2em]">{stat.label}</p>
+                 <p className="font-heading text-6xl font-black text-foreground drop-shadow-sm tracking-tighter">{stat.value}</p>
+                 <div className="h-1 w-12 bg-border mx-auto rounded-full my-4 group-hover:bg-foreground transition-colors duration-500" />
+                 <p className="text-sm font-black text-muted-foreground uppercase tracking-[0.2em]">{stat.label}</p>
               </div>
             </motion.div>
           )

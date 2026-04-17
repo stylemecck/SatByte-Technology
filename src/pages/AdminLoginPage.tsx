@@ -39,41 +39,41 @@ export default function AdminLoginPage() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-[#020617] px-4">
+    <div className="flex min-h-screen flex-col items-center justify-center bg-background px-4">
       <motion.div
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         className="w-full max-w-md"
       >
-        <p className="mb-6 text-center font-heading text-xl font-semibold text-white">{SITE.name}</p>
-        <Card className="border-white/10 bg-white/5 backdrop-blur-md">
+        <p className="mb-6 text-center font-heading text-xl font-semibold text-foreground">{SITE.name}</p>
+        <Card className="border-border bg-card backdrop-blur-md">
           <CardHeader>
-            <CardTitle className="text-white">Admin sign in</CardTitle>
+            <CardTitle className="text-foreground">Admin sign in</CardTitle>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="email" className="text-slate-200">
+                <Label htmlFor="email" className="text-muted-foreground">
                   Email
                 </Label>
                 <Input
                   id="email"
                   type="email"
                   autoComplete="username"
-                  className="border-white/10 bg-white/5 text-white"
+                  className="border-border bg-muted text-foreground"
                   {...register('email', { required: 'Required' })}
                 />
                 {errors.email ? <p className="text-xs text-red-400">{errors.email.message}</p> : null}
               </div>
               <div className="space-y-2">
-                <Label htmlFor="password" className="text-slate-200">
+                <Label htmlFor="password" className="text-muted-foreground">
                   Password
                 </Label>
                 <Input
                   id="password"
                   type="password"
                   autoComplete="current-password"
-                  className="border-white/10 bg-white/5 text-white"
+                  className="border-border bg-muted text-foreground"
                   {...register('password', { required: 'Required' })}
                 />
                 {errors.password ? (
@@ -85,7 +85,7 @@ export default function AdminLoginPage() {
                 {isSubmitting ? 'Signing in…' : 'Sign in'}
               </Button>
             </form>
-            <p className="mt-6 text-center text-sm text-slate-400">
+            <p className="mt-6 text-center text-sm text-muted-foreground">
               <Link to="/" className="text-accent hover:underline">
                 ← Back to site
               </Link>

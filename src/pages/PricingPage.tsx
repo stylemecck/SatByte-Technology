@@ -23,23 +23,23 @@ const PLAN_STYLES = {
   basic: {
     badge: 'bg-blue-500/15 text-blue-400 border-blue-500/30',
     icon: 'text-blue-400',
-    button: 'border border-white/15 bg-white/5 text-white hover:bg-white/10',
+    button: 'border border-border bg-card text-foreground hover:bg-muted',
     glow: '',
-    border: 'border-white/10',
+    border: 'border-border',
   },
   standard: {
     badge: 'bg-primary/20 text-primary dark:text-accent border-primary/30',
     icon: 'text-primary dark:text-accent',
-    button: 'bg-gradient-to-r from-primary to-accent text-white shadow-xl shadow-primary/30 hover:shadow-primary/50',
+    button: 'bg-gradient-to-r from-primary to-accent text-primary-foreground shadow-xl shadow-primary/30 hover:shadow-primary/50',
     glow: 'shadow-[0_0_50px_rgba(37,99,235,0.2)]',
     border: 'border-primary/40 dark:border-accent/40',
   },
   premium: {
     badge: 'bg-violet-500/15 text-violet-400 border-violet-500/30',
     icon: 'text-violet-400',
-    button: 'border border-white/15 bg-white/5 text-white hover:bg-white/10',
+    button: 'border border-border bg-card text-foreground hover:bg-muted',
     glow: '',
-    border: 'border-white/10',
+    border: 'border-border',
   },
 }
 
@@ -63,13 +63,13 @@ function FaqItem({ q, a }: { q: string; a: string }) {
   return (
     <div className="border-b border-white/10 last:border-0">
       <button onClick={() => setOpen(v => !v)} className="flex w-full items-center justify-between py-5 text-left gap-4">
-        <span className="font-heading text-[17px] font-semibold text-white">{q}</span>
-        <ChevronDown className={cn('h-5 w-5 shrink-0 text-slate-400 transition-transform duration-300', open && 'rotate-180')} />
+        <span className="font-heading text-[17px] font-semibold text-foreground">{q}</span>
+        <ChevronDown className={cn('h-5 w-5 shrink-0 text-muted-foreground transition-transform duration-300', open && 'rotate-180')} />
       </button>
       <AnimatePresence initial={false}>
         {open && (
           <motion.div key="c" initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.3 }} className="overflow-hidden">
-            <p className="pb-5 text-slate-400 leading-relaxed">{a}</p>
+            <p className="pb-5 text-muted-foreground leading-relaxed">{a}</p>
           </motion.div>
         )}
       </AnimatePresence>
@@ -223,37 +223,37 @@ export default function PricingPage() {
           >
             <motion.div
               initial={{ scale: 0.9, y: 20 }} animate={{ scale: 1, y: 0 }} exit={{ scale: 0.9, y: 20 }}
-              className="w-full max-w-md rounded-[2rem] border border-white/10 bg-[#0F172A] p-8 shadow-2xl"
+              className="w-full max-w-md rounded-[2rem] border border-border bg-card p-8 shadow-2xl"
             >
               {showRzpModal ? (
                 <>
-                  <h3 className="font-heading text-2xl font-bold text-white mb-2">Pay with Razorpay</h3>
-                  <p className="text-slate-400 text-sm mb-6">Enter your details — the Razorpay checkout popup will open next.</p>
+                  <h3 className="font-heading text-2xl font-bold text-foreground mb-2">Pay with Razorpay</h3>
+                  <p className="text-muted-foreground text-sm mb-6">Enter your details — the Razorpay checkout popup will open next.</p>
                 </>
               ) : (
                 <>
-                  <h3 className="font-heading text-2xl font-bold text-white mb-2">Pay with PayUMoney</h3>
-                  <p className="text-slate-400 text-sm mb-6">Enter your details to proceed to PayU's secure payment page.</p>
+                  <h3 className="font-heading text-2xl font-bold text-foreground mb-2">Pay with PayUMoney</h3>
+                  <p className="text-muted-foreground text-sm mb-6">Enter your details to proceed to PayU's secure payment page.</p>
                 </>
               )}
               <div className="space-y-4">
                 <input placeholder="Full Name *" value={userInfo.name} onChange={e => setUserInfo(u => ({ ...u, name: e.target.value }))}
-                  className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-primary/50" />
+                  className="w-full rounded-xl border border-border bg-muted px-4 py-3 text-foreground placeholder-muted-foreground focus:outline-none focus:border-primary/50" />
                 <input type="email" placeholder="Email Address *" value={userInfo.email} onChange={e => setUserInfo(u => ({ ...u, email: e.target.value }))}
-                  className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-primary/50" />
+                  className="w-full rounded-xl border border-border bg-muted px-4 py-3 text-foreground placeholder-muted-foreground focus:outline-none focus:border-primary/50" />
                 <input placeholder="Phone (optional)" value={userInfo.phone} onChange={e => setUserInfo(u => ({ ...u, phone: e.target.value }))}
-                  className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-primary/50" />
+                  className="w-full rounded-xl border border-border bg-muted px-4 py-3 text-foreground placeholder-muted-foreground focus:outline-none focus:border-primary/50" />
               </div>
               <div className="mt-6 flex gap-3">
                 <button onClick={closeModal}
-                  className="flex-1 rounded-full border border-white/10 py-3 text-slate-400 hover:text-white hover:border-white/25 transition-all font-semibold">
+                  className="flex-1 rounded-full border border-border py-3 text-muted-foreground hover:text-foreground hover:border-border transition-all font-semibold">
                   Cancel
                 </button>
                 {showRzpModal ? (
                   <button
                     disabled={!userInfo.email || !userInfo.name}
                     onClick={() => openRazorpay(showRzpModal)}
-                    className="flex-1 rounded-full bg-gradient-to-r from-blue-600 to-primary py-3 text-white font-bold shadow-lg disabled:opacity-50 hover:-translate-y-0.5 transition-all"
+                    className="flex-1 rounded-full bg-gradient-to-r from-blue-600 to-primary py-3 text-primary-foreground font-bold shadow-lg disabled:opacity-50 hover:-translate-y-0.5 transition-all"
                   >
                     Continue to Razorpay →
                   </button>
@@ -273,31 +273,31 @@ export default function PricingPage() {
       </AnimatePresence>
 
       {/* ── Hero ── */}
-      <section className="relative overflow-hidden bg-[#050B14] pt-28 pb-20">
+      <section className="relative overflow-hidden bg-background pt-28 pb-20">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-primary/10 rounded-full blur-[140px] pointer-events-none" />
         <div className="relative z-10 mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 text-center">
           <motion.div variants={staggerContainer} initial="initial" animate="animate">
             <motion.span variants={fadeUpItem} className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-4 py-1.5 text-sm font-bold text-primary dark:text-accent mb-6">
               <Zap className="h-3.5 w-3.5" /> Transparent Pricing
             </motion.span>
-            <motion.h1 variants={fadeUpItem} className="font-heading text-5xl sm:text-6xl font-extrabold text-white leading-[1.1] tracking-tight">
+            <motion.h1 variants={fadeUpItem} className="font-heading text-5xl sm:text-6xl font-extrabold text-foreground leading-[1.1] tracking-tight">
               Simple pricing,{' '}
-              <span className="bg-gradient-to-r from-accent via-white to-primary bg-clip-text text-transparent">zero surprises</span>
+              <span className="bg-gradient-to-r from-accent via-foreground to-primary bg-clip-text text-transparent">zero surprises</span>
             </motion.h1>
-            <motion.p variants={fadeUpItem} className="mt-6 text-lg text-slate-400 max-w-xl mx-auto leading-relaxed">
-              Pay securely via <strong className="text-white">Stripe</strong>, <strong className="text-white">Razorpay</strong>, or <strong className="text-white">PayUMoney</strong> — choose the gateway that suits you best.
+            <motion.p variants={fadeUpItem} className="mt-6 text-lg text-muted-foreground max-w-xl mx-auto leading-relaxed">
+              Pay securely via <strong className="text-foreground">Stripe</strong>, <strong className="text-foreground">Razorpay</strong>, or <strong className="text-foreground">PayUMoney</strong> — choose the gateway that suits you best.
             </motion.p>
           </motion.div>
         </div>
       </section>
 
       {/* ── Trust Badges ── */}
-      <section className="bg-[#080E1A] py-8 border-y border-white/5">
+      <section className="bg-muted py-8 border-y border-border">
         <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
             {TRUST.map(({ icon: Icon, label }) => (
-              <div key={label} className="flex items-center justify-center gap-3 text-slate-400">
-                <Icon className="h-5 w-5 shrink-0 text-primary dark:text-accent" />
+              <div key={label} className="flex items-center justify-center gap-3 text-muted-foreground">
+                <Icon className="h-5 w-5 shrink-0 text-primary" />
                 <span className="text-sm font-semibold">{label}</span>
               </div>
             ))}
@@ -306,25 +306,25 @@ export default function PricingPage() {
       </section>
 
       {/* ── Pricing Cards ── */}
-      <section className="bg-[#050B14] py-24">
+      <section className="bg-background py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           
           <div className="flex justify-center mb-16">
-            <div className="bg-white/5 border border-white/10 rounded-full p-1.5 flex items-center">
+            <div className="bg-card border border-border rounded-full p-1.5 flex items-center shadow-sm">
               <button
-                className={cn("px-6 py-2.5 rounded-full text-sm font-semibold transition-all duration-300", !isMonthly ? "bg-primary text-white shadow-lg" : "text-slate-400 hover:text-white")}
+                className={cn("px-6 py-2.5 rounded-full text-sm font-semibold transition-all duration-300", !isMonthly ? "bg-primary text-primary-foreground shadow-lg" : "text-muted-foreground hover:text-foreground")}
                 onClick={() => setIsMonthly(false)}
               >
                 One-Time Payment
               </button>
               <button
-                className={cn("px-6 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 flex items-center gap-2", isMonthly ? "bg-primary text-white shadow-lg" : "text-slate-400 hover:text-white")}
+                className={cn("px-6 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 flex items-center gap-2", isMonthly ? "bg-primary text-primary-foreground shadow-md" : "text-muted-foreground hover:text-foreground")}
                 onClick={() => {
                   setIsMonthly(true)
                   setGateways({ basic: 'stripe', standard: 'stripe', premium: 'stripe' }) // Retainers are Stripe-only for subscriptions
                 }}
               >
-                Monthly Retainer <span className="bg-accent/20 text-accent text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full border border-accent/20">Stripe Only</span>
+                Monthly Retainer <span className="bg-primary-foreground shadow-sm text-primary text-[10px] uppercase font-black tracking-wider px-2 py-0.5 rounded-full border border-primary/20">Stripe Only</span>
               </button>
             </div>
           </div>
@@ -370,31 +370,31 @@ export default function PricingPage() {
                   )}
 
                   <div className={cn(
-                    'relative flex flex-col rounded-[2rem] border bg-white/5 backdrop-blur-sm overflow-hidden transition-all duration-500 hover:-translate-y-2',
+                    'relative flex flex-col rounded-[2rem] border bg-card backdrop-blur-sm overflow-hidden transition-all duration-500 hover:-translate-y-2',
                     styles.border, styles.glow,
-                    isRecommended ? 'hover:shadow-[0_0_70px_rgba(37,99,235,0.25)]' : 'hover:shadow-2xl hover:border-white/20',
+                    isRecommended ? 'hover:shadow-[0_0_70px_rgba(37,99,235,0.25)]' : 'hover:shadow-2xl hover:border-border/80',
                   )}>
                     {isRecommended && <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-primary via-accent to-primary" />}
 
                     {/* Header */}
                     <div className="p-8 pb-0">
                       <span className={cn('inline-block rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-wider', styles.badge)}>{plan.name}</span>
-                      <p className="mt-4 text-slate-400 text-sm leading-relaxed">{plan.description}</p>
-                      <div className="mt-6 flex items-end gap-1">
+                      <p className="mt-4 text-muted-foreground text-sm leading-relaxed">{plan.description}</p>
+                      <div className="mt-6 flex items-end gap-1 text-foreground">
                         <span className={cn('font-heading text-5xl font-extrabold tracking-tight', styles.icon)}>{displayPrice}</span>
-                        {isMonthly && <span className="text-slate-500 font-medium pb-2 text-lg">/mo</span>}
+                        {isMonthly && <span className="text-muted-foreground font-medium pb-2 text-lg">/mo</span>}
                       </div>
-                      <p className="mt-1 text-xs text-slate-500 uppercase tracking-wider">{isMonthly ? 'Cancel anytime' : 'One-time · No recurring fees'}</p>
+                      <p className="mt-1 text-xs text-muted-foreground uppercase tracking-wider">{isMonthly ? 'Cancel anytime' : 'One-time · No recurring fees'}</p>
                     </div>
 
-                    <div className="mx-8 mt-8 h-px bg-white/5" />
+                    <div className="mx-8 mt-8 h-px bg-border" />
 
                     {/* Features */}
                     <div className="p-8 flex-1">
-                      <p className="text-xs font-bold uppercase tracking-widest text-slate-500 mb-4">What's included</p>
+                      <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-4">What's included</p>
                       <ul className="space-y-3.5">
                         {plan.features.map(f => (
-                          <li key={f} className="flex items-center gap-3 text-[15px] text-slate-300">
+                          <li key={f} className="flex items-center gap-3 text-[15px] text-foreground/80">
                             <Check className={cn('h-4 w-4 shrink-0', styles.icon)} />{f}
                           </li>
                         ))}
@@ -422,9 +422,9 @@ export default function PricingPage() {
                             className={cn(
                               'flex flex-col items-center gap-1.5 rounded-xl border py-3 px-2 text-center transition-all duration-200 text-xs font-bold',
                               selectedGw === gw.id
-                                ? 'border-primary/60 bg-primary/15 text-white shadow-inner'
-                                : 'border-white/10 bg-white/5 text-slate-400 hover:border-white/25 hover:text-white',
-                              isMonthly && gw.id !== 'stripe' && 'opacity-20 cursor-not-allowed hover:border-white/10 hover:text-slate-400'
+                                ? 'border-primary/60 bg-primary/15 text-foreground shadow-inner'
+                                : 'border-border bg-card text-muted-foreground hover:border-primary/30 hover:text-foreground',
+                              isMonthly && gw.id !== 'stripe' && 'opacity-20 cursor-not-allowed hover:border-border hover:text-muted-foreground'
                             )}
                           >
                             <span className="text-xl">{gw.logo}</span>
@@ -467,13 +467,13 @@ export default function PricingPage() {
           {/* Custom Quote Strip */}
           <motion.div
             initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.3 }}
-            className="mt-12 rounded-[2rem] border border-white/10 bg-white/5 p-8 sm:p-10 flex flex-col sm:flex-row items-center justify-between gap-6 backdrop-blur-sm"
+            className="mt-12 rounded-[2rem] border border-border bg-card p-8 sm:p-10 flex flex-col sm:flex-row items-center justify-between gap-6 backdrop-blur-sm shadow-md"
           >
             <div>
-              <h3 className="font-heading text-2xl font-bold text-white">Need a custom quote?</h3>
-              <p className="mt-2 text-slate-400">E-commerce stores, portals, SaaS apps, and enterprise builds are scoped individually.</p>
+              <h3 className="font-heading text-2xl font-bold text-foreground">Need a custom quote?</h3>
+              <p className="mt-2 text-muted-foreground">E-commerce stores, portals, SaaS apps, and enterprise builds are scoped individually.</p>
             </div>
-            <Link to="/contact" className="inline-flex shrink-0 items-center gap-2 rounded-full border border-white/15 bg-white/5 px-6 py-3.5 text-[15px] font-bold text-white hover:bg-white/10 transition-all hover:-translate-y-1 whitespace-nowrap">
+            <Link to="/contact" className="inline-flex shrink-0 items-center gap-2 rounded-full border border-border bg-muted px-6 py-3.5 text-[15px] font-bold text-foreground hover:bg-muted/80 transition-all hover:-translate-y-1 whitespace-nowrap">
               Request Custom Quote <ArrowRight className="h-4 w-4" />
             </Link>
           </motion.div>
@@ -481,24 +481,24 @@ export default function PricingPage() {
       </section>
 
       {/* ── FAQ ── */}
-      <section className="bg-[#080E1A] py-24 border-t border-white/5">
+      <section className="bg-muted py-24 border-t border-border">
         <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-14">
-            <span className="inline-block rounded-full border border-primary/30 bg-primary/10 px-4 py-1.5 text-sm font-bold text-primary dark:text-accent mb-4">FAQ</span>
-            <h2 className="font-heading text-4xl font-extrabold text-white">Common questions</h2>
+            <span className="inline-block rounded-full border border-primary/30 bg-primary/10 px-4 py-1.5 text-sm font-bold text-primary mb-4">FAQ</span>
+            <h2 className="font-heading text-4xl font-extrabold text-foreground">Common questions</h2>
           </div>
-          <div className="rounded-[2rem] border border-white/10 bg-white/5 backdrop-blur-sm px-8 divide-y divide-white/10">
+          <div className="rounded-[2rem] border border-border bg-card backdrop-blur-sm px-8 divide-y divide-border">
             {FAQS.map(faq => <FaqItem key={faq.q} {...faq} />)}
           </div>
         </div>
       </section>
 
       {/* ── Bottom CTA ── */}
-      <section className="bg-[#050B14] py-24 border-t border-white/5">
+      <section className="bg-background py-24">
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
           <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
-            <h2 className="font-heading text-4xl sm:text-5xl font-extrabold text-white">Still undecided?</h2>
-            <p className="mt-4 text-slate-400 text-lg max-w-lg mx-auto">Book a free 30-minute discovery call — we'll recommend the right plan, no obligation.</p>
+            <h2 className="font-heading text-4xl sm:text-5xl font-extrabold text-foreground">Still undecided?</h2>
+            <p className="mt-4 text-muted-foreground text-lg max-w-lg mx-auto">Book a free 30-minute discovery call — we'll recommend the right plan, no obligation.</p>
             <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
               <Link to="/contact" className="inline-flex items-center justify-center gap-2 h-14 px-8 rounded-full bg-gradient-to-r from-primary to-accent text-white font-bold text-base shadow-xl shadow-primary/30 hover:shadow-primary/50 transition-all duration-300 hover:-translate-y-1">
                 Book Free Consultation <ArrowRight className="h-5 w-5" />

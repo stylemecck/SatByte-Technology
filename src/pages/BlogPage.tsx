@@ -45,7 +45,7 @@ export default function BlogPage() {
         ) : null}
 
         {isError ? (
-          <p className="text-center text-sm text-red-600 dark:text-red-400">
+          <p className="text-center text-sm text-red-500">
             Could not load articles. Please refresh and try again.
           </p>
         ) : null}
@@ -63,7 +63,7 @@ export default function BlogPage() {
                   to={`/blog/${encodeURIComponent(post.slug)}`}
                   className="block h-full focus:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-2xl"
                 >
-                  <Card className="group h-full cursor-pointer overflow-hidden border-slate-200/80 transition-all hover:border-primary/30 hover:shadow-lg dark:border-white/10 dark:hover:border-accent/30">
+                  <Card className="group h-full cursor-pointer overflow-hidden border-border bg-card transition-all hover:border-primary hover:shadow-lg">
                     <LazyImage
                       src={post.imageUrl}
                       alt={post.title}
@@ -71,7 +71,7 @@ export default function BlogPage() {
                       optimizeWidth={600}
                     />
                     <CardContent className="flex h-full flex-col p-6">
-                      <div className="flex flex-wrap items-center gap-3 text-xs text-slate-500 dark:text-slate-400">
+                      <div className="flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
                         <span className="inline-flex items-center gap-1">
                           <Calendar className="h-3.5 w-3.5" />
                           {formatDate(post.createdAt)}
@@ -81,11 +81,11 @@ export default function BlogPage() {
                           {post.readTime}
                         </span>
                       </div>
-                      <h2 className="font-heading mt-4 text-lg font-semibold text-secondary transition-colors group-hover:text-primary dark:text-white dark:group-hover:text-accent">
+                      <h2 className="font-heading mt-4 text-lg font-semibold text-foreground transition-colors group-hover:text-primary">
                         {post.title}
                       </h2>
-                      <p className="mt-2 flex-1 text-sm text-slate-600 dark:text-slate-400">{post.excerpt}</p>
-                      <span className="mt-4 text-sm font-medium text-primary dark:text-accent">Read full article →</span>
+                      <p className="mt-2 flex-1 text-sm text-muted-foreground">{post.excerpt}</p>
+                      <span className="mt-4 text-sm font-medium text-primary">Read full article →</span>
                     </CardContent>
                   </Card>
                 </Link>
@@ -95,7 +95,7 @@ export default function BlogPage() {
         ) : null}
 
         {!isPending && !data?.length ? (
-          <p className="text-center text-slate-600 dark:text-slate-400">
+          <p className="text-center text-muted-foreground">
             No posts yet. Publish from the admin dashboard.
           </p>
         ) : null}

@@ -61,7 +61,7 @@ export default function QuotePage() {
           subtitle="Answer a few quick questions to get an instant rough estimate for your project."
         />
 
-        <Card className="mt-10 overflow-hidden border-slate-200/80 bg-white shadow-xl dark:border-white/10 dark:bg-[#0f172a]">
+        <Card className="mt-10 overflow-hidden border-border bg-card shadow-xl">
           <CardContent className="p-8 sm:p-12">
             {/* Progress indicator */}
             <div className="mb-8 flex items-center justify-between">
@@ -70,8 +70,8 @@ export default function QuotePage() {
                   <div
                     className={`flex h-8 w-8 items-center justify-center rounded-full text-sm font-semibold transition-colors ${
                       step >= s
-                        ? 'bg-primary text-white dark:bg-accent'
-                        : 'bg-slate-100 text-slate-400 dark:bg-white/5 dark:text-slate-600'
+                        ? 'bg-primary text-primary-foreground'
+                        : 'bg-muted text-muted-foreground'
                     }`}
                   >
                     {s}
@@ -79,7 +79,7 @@ export default function QuotePage() {
                   {s !== 4 && (
                     <div
                       className={`h-1 flex-1 ${
-                        step > s ? 'bg-primary dark:bg-accent' : 'bg-slate-100 dark:bg-white/5'
+                        step > s ? 'bg-primary' : 'bg-muted'
                       }`}
                     />
                   )}
@@ -90,7 +90,7 @@ export default function QuotePage() {
             <AnimateStep step={step}>
               {step === 1 && (
                 <div className="space-y-6">
-                  <h3 className="text-xl font-semibold text-secondary dark:text-white">What type of project is this?</h3>
+                  <h3 className="text-xl font-semibold text-foreground">What type of project is this?</h3>
                   <div className="grid gap-4 sm:grid-cols-2">
                     {[
                       { id: 'web', label: 'Company Website' },
@@ -103,11 +103,11 @@ export default function QuotePage() {
                         onClick={() => setProjectType(opt.id as ProjectType)}
                         className={`rounded-xl border p-4 text-left transition-all ${
                           projectType === opt.id
-                            ? 'border-primary bg-primary/5 ring-1 ring-primary dark:border-accent dark:bg-accent/10 dark:ring-accent'
-                            : 'border-slate-200 hover:border-primary/50 dark:border-white/10 dark:hover:border-accent/50'
+                            ? 'border-primary bg-primary/10 ring-1 ring-primary'
+                            : 'border-border bg-card hover:border-primary/50'
                         }`}
                       >
-                        <div className="font-medium text-slate-800 dark:text-slate-200">{opt.label}</div>
+                        <div className="font-medium text-foreground">{opt.label}</div>
                       </button>
                     ))}
                   </div>
@@ -119,7 +119,7 @@ export default function QuotePage() {
 
               {step === 2 && (
                 <div className="space-y-6">
-                  <h3 className="text-xl font-semibold text-secondary dark:text-white">Roughly how many pages/screens do you need?</h3>
+                  <h3 className="text-xl font-semibold text-foreground">Roughly how many pages/screens do you need?</h3>
                   <div className="grid gap-4 sm:grid-cols-3">
                     {[
                       { id: '1-5', label: '1 - 5 Pages' },
@@ -131,11 +131,11 @@ export default function QuotePage() {
                         onClick={() => setPages(opt.id as PagesCount)}
                         className={`rounded-xl border p-4 text-center transition-all ${
                           pages === opt.id
-                            ? 'border-primary bg-primary/5 ring-1 ring-primary dark:border-accent dark:bg-accent/10 dark:ring-accent'
-                            : 'border-slate-200 hover:border-primary/50 dark:border-white/10 dark:hover:border-accent/50'
+                            ? 'border-primary bg-primary/10 ring-1 ring-primary'
+                            : 'border-border bg-card hover:border-primary/50'
                         }`}
                       >
-                        <div className="font-medium text-slate-800 dark:text-slate-200">{opt.label}</div>
+                        <div className="font-medium text-foreground">{opt.label}</div>
                       </button>
                     ))}
                   </div>
@@ -148,7 +148,7 @@ export default function QuotePage() {
 
               {step === 3 && (
                 <div className="space-y-6">
-                  <h3 className="text-xl font-semibold text-secondary dark:text-white">What is your ideal timeline?</h3>
+                  <h3 className="text-xl font-semibold text-foreground">What is your ideal timeline?</h3>
                   <div className="grid gap-4 sm:grid-cols-3">
                     {[
                       { id: 'asap', label: 'ASAP (Urgent)' },
@@ -160,11 +160,11 @@ export default function QuotePage() {
                         onClick={() => setTimeline(opt.id as Timeline)}
                         className={`rounded-xl border p-4 text-center transition-all ${
                           timeline === opt.id
-                            ? 'border-primary bg-primary/5 ring-1 ring-primary dark:border-accent dark:bg-accent/10 dark:ring-accent'
-                            : 'border-slate-200 hover:border-primary/50 dark:border-white/10 dark:hover:border-accent/50'
+                            ? 'border-primary bg-primary/10 ring-1 ring-primary'
+                            : 'border-border bg-card hover:border-primary/50'
                         }`}
                       >
-                        <div className="font-medium text-slate-800 dark:text-slate-200">{opt.label}</div>
+                        <div className="font-medium text-foreground">{opt.label}</div>
                       </button>
                     ))}
                   </div>
@@ -178,23 +178,23 @@ export default function QuotePage() {
               {step === 4 && (
                 <div className="space-y-8 text-center">
                   <div>
-                    <h3 className="text-xl font-semibold text-secondary dark:text-white mb-2">Your Estimated Project Cost</h3>
-                    <div className="text-4xl font-bold text-primary dark:text-accent mb-4">
+                    <h3 className="text-xl font-semibold text-foreground mb-2">Your Estimated Project Cost</h3>
+                    <div className="text-4xl font-bold text-primary mb-4">
                       {getEstimate()}
                     </div>
-                    <p className="text-sm text-slate-500 dark:text-slate-400">
+                    <p className="text-sm text-muted-foreground">
                       *This is a rough estimate based on your selections. Final pricing depends on specific requirements.
                     </p>
                   </div>
 
                   <div className="mx-auto max-w-sm space-y-4">
-                    <p className="font-medium text-slate-700 dark:text-slate-200">Where should we send your detailed proposal?</p>
+                    <p className="font-medium text-foreground">Where should we send your detailed proposal?</p>
                     <input 
                       type="email" 
                       placeholder="Your email address" 
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      className="w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary dark:border-white/10 dark:bg-white/5 dark:focus:border-accent dark:focus:ring-accent"
+                      className="w-full rounded-lg border border-border bg-muted px-4 py-3 text-sm text-foreground focus:border-primary focus:outline-none"
                     />
                     <Button 
                       className="w-full"

@@ -39,15 +39,15 @@ export default function PricingSuccessPage() {
         description="Thank you for your purchase at SatByte Technologies."
         path="/pricing/success"
       />
-      <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-green-500/15 text-green-600 dark:text-green-400">
+      <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-green-500/15 text-green-500">
         <CheckCircle2 className="h-9 w-9" />
       </div>
-      <h1 className="font-heading mt-6 text-2xl font-bold text-secondary dark:text-white">Payment received</h1>
-      <p className="mt-3 text-slate-600 dark:text-slate-400">
+      <h1 className="font-heading mt-6 text-2xl font-bold text-foreground">Payment received</h1>
+      <p className="mt-3 text-muted-foreground">
         Thank you. {emailSent ? 'We have sent an email with your project details.' : 'We’ll follow up by email shortly to confirm your project details.'}
       </p>
       {sessionId ? (
-        <p className="mt-4 break-all text-xs text-slate-500">Reference: {sessionId}</p>
+        <p className="mt-4 break-all text-xs text-muted-foreground">Reference: {sessionId}</p>
       ) : null}
       <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:justify-center">
         <Button asChild>

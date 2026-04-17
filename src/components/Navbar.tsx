@@ -1,236 +1,209 @@
 import * as Dialog from '@radix-ui/react-dialog'
-import { AnimatePresence, motion } from 'framer-motion'
-import { Menu, Moon, Sun, X, Info, Star, FileText, Laptop, Briefcase, Tag, Calculator, Lock, ChevronDown } from 'lucide-react'
-import { useState } from 'react'
-import { Link, NavLink } from 'react-router-dom'
+import { motion } from 'framer-motion'
+import { Moon, Sun, X, Rocket, LayoutDashboard } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { Link, NavLink, useLocation } from 'react-router-dom'
 
-import { Button } from '@/components/ui/button'
+
 import { useTheme } from '@/contexts/ThemeContext'
 import { SITE } from '@/lib/constants'
 import { cn } from '@/lib/utils'
+import { getStoredToken } from '@/lib/apiClient'
+
 const PRIMARY_LINKS = [
   { href: '/services', label: 'Services' },
   { href: '/portfolio', label: 'Portfolio' },
   { href: '/pricing', label: 'Pricing' },
+  { href: '/about', label: 'About' },
+  { href: 'https://career.satbyte.in', label: 'Careers' },
   { href: '/contact', label: 'Contact' },
 ]
-
-const MORE_LINKS = [
-  { href: '/quote', label: 'Estimator', icon: Calculator },
-  { href: '/client-login', label: 'Client Login', icon: Lock },
-  { href: '/about', label: 'About Us', icon: Info },
-  { href: '/testimonials', label: 'Testimonials', icon: Star },
-  { href: '/blog', label: 'Blog', icon: FileText },
-]
-
-const NAV_CATEGORIES = [
-  {
-    name: 'Company',
-    links: [
-      { href: '/about', label: 'About Us', icon: Info },
-      { href: '/testimonials', label: 'Testimonials', icon: Star },
-      { href: '/blog', label: 'Blog', icon: FileText },
-    ],
-  },
-  {
-    name: 'Work',
-    links: PRIMARY_LINKS.map(link => ({ ...link, icon: link.label === 'Services' ? Laptop : link.label === 'Portfolio' ? Briefcase : Tag })),
-  },
-  {
-    name: 'Portal',
-    links: [
-      { href: '/quote', label: 'Estimator', icon: Calculator },
-      { href: '/client-login', label: 'Client Login', icon: Lock },
-    ],
-  },
-]
-
-
 
 export function Navbar() {
   const { theme, toggleTheme } = useTheme()
   const [open, setOpen] = useState(false)
-  const [hoveredLink, setHoveredLink] = useState<string | null>(null)
+  const [scrolled, setScrolled] = useState(false)
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const location = useLocation()
+
+  // Update login status based on stored token
+  useEffect(() => {
+    setIsLoggedIn(!!getStoredToken())
+  }, [location.pathname])
+
+  // Close mobile menu on route change
+  useEffect(() => {
+    setOpen(false)
+  }, [location.pathname])
+
+  // Detect scroll for subtle shadow/border adjustments
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 20)
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
 
   return (
-    <div className="fixed top-4 inset-x-0 z-50 flex justify-center px-4 pointer-events-none">
-      <header className="pointer-events-auto flex h-14 items-center gap-4 rounded-full border border-slate-200/60 bg-white/75 px-4 shadow-lg backdrop-blur-xl transition-all duration-300 hover:shadow-xl dark:border-white/10 dark:bg-[#0f172a]/75 sm:px-6">
+    <div className="fixed top-0 inset-x-0 z-50 flex justify-center pt-4 px-4 pointer-events-none transition-all duration-300">
+      <header className={cn(
+        "pointer-events-auto flex items-center justify-between w-full max-w-5xl h-14 rounded-full border px-4 sm:px-6 transition-all duration-500",
+        scrolled 
+          ? "bg-background/70 backdrop-blur-xl border-border shadow-sm dark:shadow-black/50" 
+          : "bg-background/40 backdrop-blur-md border-transparent shadow-none"
+      )}>
+        
+        {/* Brand */}
         <Link
           to="/"
-          className="group flex items-center gap-2 transition-transform duration-300 hover:scale-[1.02] active:scale-[0.98]"
+          className="flex items-center gap-2.5 transition-opacity hover:opacity-80 outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-md"
         >
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-accent text-[10px] font-bold text-white shadow-lg shadow-primary/30 transition-all duration-300 group-hover:shadow-primary/40">
-            SB
+          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-foreground text-background">
+            <Rocket className="h-4 w-4" />
           </div>
-          <span className="hidden font-heading text-sm font-semibold tracking-tight text-secondary dark:text-white sm:block">
+          <span className="hidden font-heading text-[15px] font-bold tracking-tight text-foreground sm:block">
             {SITE.name}
           </span>
         </Link>
 
-        <div className="h-6 w-px bg-slate-200 dark:bg-white/10 mx-1 hidden lg:block" />
-
-        <nav className="hidden items-center gap-1 lg:flex relative">
+        {/* Desktop Navigation */}
+        <nav className="hidden md:flex items-center h-full">
           {PRIMARY_LINKS.map(({ href, label }) => (
             <NavLink
               key={href}
               to={href}
-              onMouseEnter={() => setHoveredLink(href)}
-              onMouseLeave={() => setHoveredLink(null)}
               className={({ isActive }) =>
                 cn(
-                  'relative rounded-full px-4 py-1.5 text-sm font-medium transition-colors duration-300 focus:outline-none',
-                  isActive ? 'text-primary dark:text-accent' : 'text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white'
+                  'relative h-full flex items-center px-4 text-sm font-medium transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-md',
+                  isActive 
+                    ? 'text-foreground' 
+                    : 'text-muted-foreground hover:text-foreground'
                 )
               }
             >
               {({ isActive }) => (
                 <>
-                  {hoveredLink === href && (
-                    <motion.div
-                      layoutId="nav-hover"
-                      className="absolute inset-0 z-0 rounded-full bg-slate-100 dark:bg-white/5"
-                      transition={{ type: 'spring', bounce: 0.2, duration: 0.6 }}
-                    />
-                  )}
-                  {isActive && (
-                    <motion.div
-                      layoutId="nav-active"
-                      className="absolute inset-0 z-0 rounded-full bg-primary/10 dark:bg-accent/10"
-                      transition={{ type: 'spring', bounce: 0.2, duration: 0.6 }}
-                    />
-                  )}
                   <span className="relative z-10">{label}</span>
+                  {isActive && (
+                    <motion.div 
+                      layoutId="nav-active-desktop" 
+                      className="absolute bottom-[-1px] left-0 right-0 h-[2px] bg-foreground mx-4 rounded-t-full"
+                    />
+                  )}
                 </>
               )}
             </NavLink>
           ))}
-          
-          <div className="relative group">
-            <button 
-              onMouseEnter={() => setHoveredLink('more')}
-              onMouseLeave={() => setHoveredLink(null)}
-              className="flex items-center gap-1.5 px-4 py-1.5 text-sm font-medium text-slate-600 transition-colors hover:text-slate-900 focus:outline-none dark:text-slate-400 dark:hover:text-white"
-            >
-              <span className="relative z-10">More</span>
-              <ChevronDown className="h-3.5 w-3.5 opacity-50 transition-transform duration-300 group-hover:rotate-180" />
-            </button>
-            <div className="pointer-events-none absolute left-1/2 top-full -translate-x-1/2 pt-3 opacity-0 transition-all duration-300 group-hover:pointer-events-auto group-hover:opacity-100">
-              <div className="w-56 overflow-hidden rounded-2xl border border-slate-200 bg-white/95 p-1.5 shadow-2xl backdrop-blur-2xl dark:border-white/10 dark:bg-[#0f172a]/95">
-                {MORE_LINKS.map(({ href, label, icon: Icon }) => (
-                  <NavLink
-                    key={href}
-                    to={href}
-                    className={({ isActive }) =>
-                      cn(
-                        'group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200',
-                        isActive
-                          ? 'bg-primary/10 text-primary dark:bg-accent/10 dark:text-accent'
-                          : 'text-slate-600 hover:bg-slate-50 hover:text-primary dark:text-slate-300 dark:hover:bg-white/5 dark:hover:text-accent'
-                      )
-                    }
-                  >
-                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-slate-100 dark:bg-white/5 transition-colors group-hover:bg-primary/10 dark:group-hover:bg-accent/10">
-                      <Icon className="h-4 w-4 opacity-70 group-hover:opacity-100" />
-                    </div>
-                    {label}
-                  </NavLink>
-                ))}
-              </div>
-            </div>
-          </div>
         </nav>
 
-        <div className="flex items-center gap-1 sm:gap-2">
-          <Button
-            type="button"
-            variant="ghost"
-            size="icon"
-            className="h-9 w-9 rounded-full hover:bg-slate-100 dark:hover:bg-white/5"
-            onClick={toggleTheme}
-            aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
-          >
-            <AnimatePresence mode="wait" initial={false}>
-              <motion.span
-                key={theme}
-                initial={{ rotate: -40, opacity: 0, scale: 0.8 }}
-                animate={{ rotate: 0, opacity: 1, scale: 1 }}
-                exit={{ rotate: 40, opacity: 0, scale: 0.8 }}
-                transition={{ duration: 0.2 }}
-                className="flex"
-              >
-                {theme === 'dark' ? (
-                  <Sun className="h-4 w-4 text-amber-300" />
-                ) : (
-                  <Moon className="h-4 w-4 text-slate-700" />
-                )}
-              </motion.span>
-            </AnimatePresence>
-          </Button>
+        {/* Actions */}
+        <div className="flex items-center gap-2">
+          {/* Dashboard / Login Link (Desktop) */}
+          {isLoggedIn ? (
+            <Link 
+              to="/portal" 
+              className="hidden md:flex items-center gap-2 px-4 py-1.5 rounded-full bg-foreground text-background text-xs font-black uppercase tracking-widest hover:opacity-90 transition-opacity"
+            >
+              <LayoutDashboard className="h-3.5 w-3.5" /> Dashboard
+            </Link>
+          ) : (
+            <Link 
+              to="/client-login" 
+              className="hidden md:flex items-center px-3 py-1.5 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+            >
+              Sign In
+            </Link>
+          )}
 
+          <div className="hidden md:block w-px h-4 bg-border mx-1" />
+
+          {/* Theme Toggle */}
+          <button
+            onClick={toggleTheme}
+            className="flex items-center justify-center h-9 w-9 gap-2 rounded-full text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            aria-label="Toggle theme"
+          >
+            {theme === 'dark' ? <Sun className="h-[18px] w-[18px]" /> : <Moon className="h-[18px] w-[18px]" />}
+          </button>
+
+          {/* Mobile Menu Trigger */}
           <Dialog.Root open={open} onOpenChange={setOpen}>
             <Dialog.Trigger asChild>
-              <Button variant="ghost" size="icon" className="md:hidden h-9 w-9 rounded-full hover:bg-slate-100 dark:hover:bg-white/5" aria-label="Open menu">
-                <Menu className="h-4 w-4" />
-              </Button>
+              <button 
+                className="md:hidden flex flex-col justify-center items-center h-9 w-9 gap-[4px] rounded-full text-foreground hover:bg-secondary transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                aria-label="Open menu"
+              >
+                <motion.span 
+                  animate={{ rotate: open ? 45 : 0, y: open ? 6 : 0 }} 
+                  className="w-4 h-[2px] bg-current rounded-full block origin-center transition-all"
+                />
+                <motion.span 
+                  animate={{ opacity: open ? 0 : 1 }} 
+                  className="w-4 h-[2px] bg-current rounded-full block transition-opacity"
+                />
+                <motion.span 
+                  animate={{ rotate: open ? -45 : 0, y: open ? -6 : 0 }} 
+                  className="w-4 h-[2px] bg-current rounded-full block origin-center transition-all"
+                />
+              </button>
             </Dialog.Trigger>
+            
             <Dialog.Portal>
-              <Dialog.Overlay className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm" />
-              <Dialog.Content className="fixed inset-y-0 right-0 z-50 flex w-[min(100%,320px)] flex-col border-l border-slate-200 bg-white p-6 shadow-2xl dark:border-white/10 dark:bg-[#0f172a]">
-                <Dialog.Title className="sr-only">Main navigation</Dialog.Title>
-                <div className="mb-6 flex items-center justify-between">
-                  <span className="font-heading font-semibold text-secondary dark:text-white">Menu</span>
-                  <Dialog.Close asChild>
-                    <Button variant="ghost" size="icon" className="rounded-full h-9 w-9" aria-label="Close menu">
-                      <X className="h-5 w-5" />
-                    </Button>
-                  </Dialog.Close>
+              <Dialog.Overlay className="fixed inset-0 z-[60] bg-background/80 backdrop-blur-sm transition-opacity" />
+              <Dialog.Content className="fixed top-4 inset-x-4 z-[70] flex flex-col rounded-3xl border border-border bg-background p-6 shadow-2xl outline-none origin-top transition-transform transform">
+                <Dialog.Title className="sr-only">Mobile Menu</Dialog.Title>
+                
+                <div className="flex items-center justify-between mb-8">
+                   <div className="flex items-center gap-2 text-foreground font-bold font-heading">
+                      <Rocket className="h-4 w-4" /> Menu
+                   </div>
+                   <Dialog.Close asChild>
+                     <button className="flex h-8 w-8 items-center justify-center rounded-full bg-secondary text-foreground transition-transform active:scale-90">
+                       <X className="h-4 w-4" />
+                     </button>
+                   </Dialog.Close>
                 </div>
-                <nav className="flex flex-col gap-4 overflow-y-auto pb-6">
-                  {NAV_CATEGORIES.map((category) => (
-                    <div key={category.name} className="space-y-1">
-                      <h4 className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500 px-3 pt-2">
-                        {category.name}
-                      </h4>
-                      <div className="flex flex-col gap-1">
-                        {category.links.map(({ href, label, icon: Icon }) => (
-                          <NavLink
-                            key={href}
-                            to={href}
-                            onClick={() => setOpen(false)}
-                            className={({ isActive }) =>
-                              cn(
-                                'flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200 hover:translate-x-1 active:scale-[0.99]',
-                                isActive
-                                  ? 'bg-primary/10 text-primary dark:bg-accent/10 dark:text-accent'
-                                  : 'text-slate-700 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-white/5',
-                              )
-                            }
-                          >
-                            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-slate-100 dark:bg-white/5">
-                              <Icon className="h-4 w-4 opacity-70" />
-                            </div>
-                            {label}
-                          </NavLink>
-                        ))}
-                      </div>
-                    </div>
+
+                <nav className="flex flex-col gap-2">
+                  {PRIMARY_LINKS.map(({ href, label }) => (
+                    <NavLink
+                      key={href}
+                      to={href}
+                      className={({ isActive }) =>
+                        cn(
+                          'flex items-center px-4 py-3 text-lg font-medium rounded-xl transition-colors',
+                          isActive 
+                            ? 'bg-secondary text-foreground' 
+                            : 'text-muted-foreground hover:text-foreground hover:bg-secondary/50'
+                        )
+                      }
+                    >
+                      {label}
+                    </NavLink>
                   ))}
-                  
-                  <div className="mt-4 pt-4 border-t border-slate-200 dark:border-white/10 flex flex-col gap-3">
-                    <Button asChild className="w-full justify-center rounded-xl h-11">
-                      <Link to="/contact" onClick={() => setOpen(false)}>Contact Us</Link>
-                    </Button>
-                  </div>
+                  <div className="h-px bg-border my-2" />
+                  {isLoggedIn ? (
+                    <Link
+                      to="/portal"
+                      className="flex items-center justify-center w-full px-4 py-4 mt-2 text-sm font-bold bg-foreground text-background rounded-xl hover:opacity-90 transition-opacity"
+                    >
+                      Dashboard
+                    </Link>
+                  ) : (
+                    <Link
+                      to="/client-login"
+                      className="flex items-center justify-center w-full px-4 py-3 mt-2 text-sm font-bold bg-foreground text-background rounded-xl hover:opacity-90 transition-opacity"
+                    >
+                      Client Sign In
+                    </Link>
+                  )}
                 </nav>
               </Dialog.Content>
             </Dialog.Portal>
           </Dialog.Root>
 
-          <Button asChild className="hidden sm:inline-flex rounded-full h-9 px-5 text-xs font-semibold shadow-md shadow-primary/20 hover:shadow-lg hover:shadow-primary/30 transition-all active:scale-95">
-            <Link to="/contact">Get Quote</Link>
-          </Button>
         </div>
       </header>
     </div>
   )
 }
+

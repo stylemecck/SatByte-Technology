@@ -20,8 +20,8 @@ export default function PricingCanceledPage() {
         description="No charge was made. You can try again or contact SatByte Technologies."
         path="/pricing/canceled"
       />
-      <h1 className="font-heading text-2xl font-bold text-secondary dark:text-white">Checkout canceled</h1>
-      <p className="mt-3 text-slate-600 dark:text-slate-400">
+      <h1 className="font-heading text-2xl font-bold text-foreground">Checkout canceled</h1>
+      <p className="mt-3 text-muted-foreground">
         No payment was taken. You can return to pricing to try again or reach out for a custom quote.
       </p>
       <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:justify-center">

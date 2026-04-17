@@ -81,8 +81,8 @@ function TableOfContents() {
   if (headings.length === 0) return null
 
   return (
-    <div className="sticky top-24 mb-12 hidden lg:block border-l border-slate-200 dark:border-white/10 pl-6 space-y-4">
-      <h4 className="font-heading font-bold text-slate-900 dark:text-white uppercase tracking-wider text-sm">Table of Contents</h4>
+    <div className="sticky top-24 mb-12 hidden lg:block border-l border-border pl-6 space-y-4">
+      <h4 className="font-heading font-bold text-foreground uppercase tracking-wider text-sm">Table of Contents</h4>
       <nav className="flex flex-col gap-2.5">
         {headings.map(h => (
           <a
@@ -94,8 +94,8 @@ function TableOfContents() {
             }}
             className={cn(
               "text-[15px] transition-colors block leading-snug",
-              h.level === 3 ? "pl-4 text-slate-500" : "text-slate-600 dark:text-slate-400 font-medium",
-              activeId === h.id ? "text-primary dark:text-accent" : "hover:text-primary dark:hover:text-accent"
+              h.level === 3 ? "pl-4 text-muted-foreground" : "text-foreground font-medium",
+              activeId === h.id ? "text-primary" : "hover:text-primary"
             )}
           >
             {h.text}
@@ -116,18 +116,18 @@ function ShareButtons() {
   }
   return (
     <div className="flex gap-2 items-center">
-      <span className="text-sm font-medium text-slate-500 mr-2">Share:</span>
-      <Button variant="outline" size="icon" className="rounded-full h-9 w-9 text-blue-500 border-slate-200 bg-slate-50 hover:bg-slate-100 dark:border-white/10 dark:bg-white/5 dark:hover:bg-white/10" asChild>
+      <span className="text-sm font-medium text-muted-foreground mr-2">Share:</span>
+      <Button variant="outline" size="icon" className="rounded-full h-9 w-9 text-blue-500 border-border bg-muted hover:bg-accent" asChild>
         <a href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}`} target="_blank" rel="noreferrer">
           <Twitter className="h-4 w-4" />
         </a>
       </Button>
-      <Button variant="outline" size="icon" className="rounded-full h-9 w-9 text-blue-700 border-slate-200 bg-slate-50 hover:bg-slate-100 dark:border-white/10 dark:bg-white/5 dark:hover:bg-white/10" asChild>
+      <Button variant="outline" size="icon" className="rounded-full h-9 w-9 text-blue-700 border-border bg-muted hover:bg-accent" asChild>
         <a href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`} target="_blank" rel="noreferrer">
           <Linkedin className="h-4 w-4" />
         </a>
       </Button>
-      <Button variant="outline" size="icon" className="rounded-full h-9 w-9 text-slate-600 dark:text-slate-300 border-slate-200 bg-slate-50 hover:bg-slate-100 dark:border-white/10 dark:bg-white/5 dark:hover:bg-white/10" onClick={copyLink}>
+      <Button variant="outline" size="icon" className="rounded-full h-9 w-9 text-muted-foreground border-border bg-muted hover:bg-accent" onClick={copyLink}>
         <LinkIcon className="h-4 w-4" />
       </Button>
     </div>
@@ -142,12 +142,12 @@ function RelatedPosts({ currentSlug }: { currentSlug?: string }) {
   if (related.length === 0) return null
 
   return (
-    <div className="mt-16 pt-16 border-t border-slate-200 dark:border-white/10">
-      <h3 className="font-heading text-2xl font-bold text-slate-900 dark:text-white mb-8">Related Articles</h3>
+    <div className="mt-16 pt-16 border-t border-border">
+      <h3 className="font-heading text-2xl font-bold text-foreground mb-8">Related Articles</h3>
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {related.map(post => (
           <Link to={`/blog/${post.slug}`} key={post._id} className="group flex flex-col gap-3">
-            <div className="overflow-hidden rounded-xl border border-slate-200 dark:border-white/10 shadow-sm">
+            <div className="overflow-hidden rounded-xl border border-border shadow-sm">
               <LazyImage 
                 src={post.imageUrl}
                 alt={post.title}
@@ -156,8 +156,8 @@ function RelatedPosts({ currentSlug }: { currentSlug?: string }) {
               />
             </div>
             <div>
-              <span className="text-xs font-bold text-primary dark:text-accent mb-1 inline-block uppercase tracking-wider">{post.category || 'Technology'}</span>
-              <h4 className="font-semibold text-[17px] leading-snug line-clamp-2 dark:text-slate-100 group-hover:text-primary dark:group-hover:text-accent transition-colors">{post.title}</h4>
+              <span className="text-xs font-bold text-primary mb-1 inline-block uppercase tracking-wider">{post.category || 'Technology'}</span>
+              <h4 className="font-semibold text-[17px] leading-snug line-clamp-2 text-foreground group-hover:text-primary transition-colors">{post.title}</h4>
             </div>
           </Link>
         ))}
@@ -190,7 +190,7 @@ export default function BlogPostPage() {
         exit="exit"
         className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8"
       >
-        <Button variant="link" className="mb-8 gap-2 pl-0 text-slate-500 hover:text-primary" asChild>
+        <Button variant="link" className="mb-8 gap-2 pl-0 text-muted-foreground hover:text-primary" asChild>
           <Link to="/blog">
             <ArrowLeft className="h-4 w-4 leading-none" />
             <span className="leading-none pt-0.5">Back to all posts</span>
@@ -205,8 +205,8 @@ export default function BlogPostPage() {
         ) : null}
 
         {isError && (
-          <div className="rounded-2xl border border-slate-200 bg-white/80 p-8 text-center dark:border-white/10 dark:bg-white/5 max-w-2xl mx-auto">
-            <p className="text-slate-700 dark:text-slate-200">
+          <div className="rounded-2xl border border-border bg-card p-8 text-center max-w-2xl mx-auto">
+            <p className="text-muted-foreground">
               This post could not be found.
             </p>
             <Button asChild className="mt-6">
@@ -219,17 +219,17 @@ export default function BlogPostPage() {
           <article className="pb-16 grid grid-cols-1 lg:grid-cols-12 gap-12 max-w-6xl mx-auto">
             
             {/* Sidebar Left: Share anchors (Desktop) */}
-            <div className="hidden lg:flex col-span-2 flex-col items-end pt-32 pr-6 border-r border-slate-100 dark:border-white/5">
+            <div className="hidden lg:flex col-span-2 flex-col items-end pt-32 pr-6 border-r border-border">
               <div className="sticky top-32 flex flex-col gap-4 items-center">
-                <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Share</p>
+                <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Share</p>
                 <div className="flex flex-col gap-3">
-                  <a href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(window.location.href)}`} target="_blank" rel="noreferrer" className="flex items-center justify-center h-10 w-10 rounded-full border border-slate-200 bg-white hover:bg-slate-50 text-slate-500 hover:text-sky-500 transition-colors shadow-sm dark:bg-[#0f172a] dark:border-white/10 dark:text-slate-400 dark:hover:text-blue-400 dark:hover:bg-blue-400/10">
+                  <a href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(window.location.href)}`} target="_blank" rel="noreferrer" className="flex items-center justify-center h-10 w-10 rounded-full border border-border bg-card hover:bg-muted text-muted-foreground hover:text-sky-500 transition-colors shadow-sm">
                     <Twitter className="h-4 w-4" />
                   </a>
-                  <a href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(window.location.href)}`} target="_blank" rel="noreferrer" className="flex items-center justify-center h-10 w-10 rounded-full border border-slate-200 bg-white hover:bg-slate-50 text-slate-500 hover:text-blue-600 transition-colors shadow-sm dark:bg-[#0f172a] dark:border-white/10 dark:text-slate-400 dark:hover:text-blue-500 dark:hover:bg-blue-500/10">
+                  <a href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(window.location.href)}`} target="_blank" rel="noreferrer" className="flex items-center justify-center h-10 w-10 rounded-full border border-border bg-card hover:bg-muted text-muted-foreground hover:text-blue-600 transition-colors shadow-sm">
                     <Linkedin className="h-4 w-4" />
                   </a>
-                  <button onClick={() => { navigator.clipboard.writeText(window.location.href); alert('Copied!'); }} className="flex items-center justify-center h-10 w-10 rounded-full border border-slate-200 bg-white hover:bg-slate-50 text-slate-500 hover:text-slate-700 transition-colors shadow-sm dark:bg-[#0f172a] dark:border-white/10 dark:text-slate-400 dark:hover:text-white dark:hover:bg-white/10">
+                  <button onClick={() => { navigator.clipboard.writeText(window.location.href); alert('Copied!'); }} className="flex items-center justify-center h-10 w-10 rounded-full border border-border bg-card hover:bg-muted text-muted-foreground hover:text-foreground transition-colors shadow-sm">
                     <LinkIcon className="h-4 w-4" />
                   </button>
                 </div>
@@ -246,20 +246,20 @@ export default function BlogPostPage() {
               >
                 <div className="mb-6 flex flex-wrap items-center justify-center lg:justify-start gap-4 text-sm font-medium">
                   {post.category && (
-                    <span className="rounded-full bg-primary/10 px-3 py-1 text-primary dark:bg-accent/10 dark:text-accent ring-1 ring-primary/20 dark:ring-accent/30 font-semibold tracking-wide">
+                    <span className="rounded-full bg-primary/10 px-3 py-1 text-primary ring-1 ring-primary/20 font-semibold tracking-wide">
                       {post.category}
                     </span>
                   )}
-                  <span className="inline-flex items-center gap-1.5 text-slate-500 dark:text-slate-400">
+                  <span className="inline-flex items-center gap-1.5 text-muted-foreground">
                     <Calendar className="h-4 w-4 opacity-70" />
                     {formatDate(post.createdAt)}
                   </span>
-                  <span className="inline-flex items-center gap-1.5 text-slate-500 dark:text-slate-400">
+                  <span className="inline-flex items-center gap-1.5 text-muted-foreground">
                     <Clock className="h-4 w-4 opacity-70" />
                     {post.readTime}
                   </span>
                 </div>
-                <h1 className="font-heading text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white sm:text-5xl leading-[1.15] mb-8">
+                <h1 className="font-heading text-4xl font-extrabold tracking-tight text-foreground sm:text-5xl leading-[1.15] mb-8">
                   {post.title}
                 </h1>
                 
@@ -269,8 +269,8 @@ export default function BlogPostPage() {
                     {(post.author || 'S')[0].toUpperCase()}
                   </div>
                   <div className="text-left">
-                    <p className="text-[15px] font-bold text-slate-900 dark:text-slate-100 leading-tight">{post.author || 'SatByte Team'}</p>
-                    <p className="text-xs font-medium text-slate-500 dark:text-slate-400 mt-0.5">Author</p>
+                    <p className="text-[15px] font-bold text-foreground leading-tight">{post.author || 'SatByte Team'}</p>
+                    <p className="text-xs font-medium text-muted-foreground mt-0.5">Author</p>
                   </div>
                 </div>
               </motion.header>
@@ -280,7 +280,7 @@ export default function BlogPostPage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 }}
-                className="group relative overflow-hidden rounded-2xl shadow-xl shadow-slate-200/50 dark:shadow-black/60 mb-14 border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5"
+                className="group relative overflow-hidden rounded-2xl shadow-xl mb-14 border border-border bg-muted"
               >
                 <LazyImage
                   src={post.imageUrl}
@@ -290,42 +290,41 @@ export default function BlogPostPage() {
                 />
               </motion.div>
 
-              {/* Advanced Typography Blog Content Wrapper */}
               <div 
-                className="blog-content w-full text-lg leading-relaxed text-slate-700 dark:text-slate-300
+                className="blog-content w-full text-lg leading-relaxed text-foreground/90
                 [&_p]:mb-6
-                [&_h2]:text-3xl [&_h2]:font-heading [&_h2]:font-bold [&_h2]:tracking-tight [&_h2]:text-slate-900 dark:[&_h2]:text-white [&_h2]:mt-14 [&_h2]:mb-6 [&_h2]:border-l-4 [&_h2]:border-primary dark:[&_h2]:border-accent [&_h2]:pl-5
-                [&_h3]:text-2xl [&_h3]:font-heading [&_h3]:font-bold [&_h3]:text-slate-800 dark:[&_h3]:text-slate-100 [&_h3]:mt-10 [&_h3]:mb-4
+                [&_h2]:text-3xl [&_h2]:font-heading [&_h2]:font-bold [&_h2]:tracking-tight [&_h2]:text-foreground [&_h2]:mt-14 [&_h2]:mb-6 [&_h2]:border-l-4 [&_h2]:border-primary dark:[&_h2]:border-accent [&_h2]:pl-5
+                [&_h3]:text-2xl [&_h3]:font-heading [&_h3]:font-bold [&_h3]:text-foreground/90 [&_h3]:mt-10 [&_h3]:mb-4
                 [&_ul]:mb-6 [&_ul]:list-disc [&_ul]:pl-6 [&_ul_li]:mb-2 [&_ul_li::marker]:text-primary dark:[&_ul_li::marker]:text-accent
                 [&_ol]:mb-6 [&_ol]:list-decimal [&_ol]:pl-6 [&_ol_li]:mb-2
                 [&_a]:text-primary dark:[&_a]:text-accent [&_a]:underline [&_a]:underline-offset-4 hover:[&_a]:text-blue-600 dark:hover:[&_a]:text-blue-400
-                [&_blockquote]:border-l-primary dark:[&_blockquote]:border-l-accent [&_blockquote]:border-l-4 [&_blockquote]:bg-slate-50 dark:[&_blockquote]:bg-white/5 [&_blockquote]:py-4 [&_blockquote]:px-6 [&_blockquote]:rounded-r-xl [&_blockquote]:italic [&_blockquote]:my-8 [&_blockquote]:text-slate-600 dark:[&_blockquote]:text-slate-400
-                [&_strong]:font-bold [&_strong]:text-slate-900 dark:[&_strong]:text-white
+                [&_blockquote]:border-l-primary dark:[&_blockquote]:border-l-accent [&_blockquote]:border-l-4 [&_blockquote]:bg-muted [&_blockquote]:py-4 [&_blockquote]:px-6 [&_blockquote]:rounded-r-xl [&_blockquote]:italic [&_blockquote]:my-8 [&_blockquote]:text-muted-foreground
+                [&_strong]:font-bold [&_strong]:text-foreground
                 [&_pre]:bg-slate-900 [&_pre]:text-slate-100 [&_pre]:p-4 [&_pre]:rounded-xl [&_pre]:my-6 [&_pre]:overflow-x-auto
-                [&_code]:bg-slate-100 dark:[&_code]:bg-white/10 [&_code]:text-primary dark:[&_code]:text-accent [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:rounded-md [&_code]:text-[15px]
-                [&_img]:max-w-full [&_img]:rounded-xl [&_img]:border [&_img]:border-slate-200 dark:[&_img]:border-white/10 [&_img]:my-8
-                [&_table]:w-full [&_table]:border-collapse [&_table]:my-8 [&_table]:border [&_table]:border-slate-200 dark:[&_table]:border-white/10 [&_th]:border [&_th]:border-slate-200 dark:[&_th]:border-white/10 [&_th]:p-3 [&_th]:bg-slate-50 dark:[&_th]:bg-white/5 [&_th]:font-bold [&_th]:text-left [&_td]:border [&_td]:border-slate-200 dark:[&_td]:border-white/10 [&_td]:p-3
+                [&_code]:bg-muted [&_code]:text-primary dark:[&_code]:text-accent [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:rounded-md [&_code]:text-[15px]
+                [&_img]:max-w-full [&_img]:rounded-xl [&_img]:border [&_img]:border-border [&_img]:my-8
+                [&_table]:w-full [&_table]:border-collapse [&_table]:my-8 [&_table]:border [&_table]:border-border [&_th]:border [&_th]:border-border [&_th]:p-3 [&_th]:bg-muted [&_th]:font-bold [&_th]:text-left [&_td]:border [&_td]:border-border [&_td]:p-3
                 "
                 dangerouslySetInnerHTML={{ __html: post.content }}
               />
 
               {/* Mobile Share (Bottom) */}
-              <div className="mt-12 pt-6 border-t border-slate-200 dark:border-white/10 lg:hidden flex justify-center">
+              <div className="mt-12 pt-6 border-t border-border lg:hidden flex justify-center">
                 <ShareButtons />
               </div>
 
               {/* Author Footer Card */}
-              <div className="mt-16 p-8 rounded-2xl bg-white shadow-xl shadow-slate-200/50 dark:shadow-none dark:bg-[#151e32] border border-slate-200 dark:border-[#1e293b] flex flex-col sm:flex-row gap-6 items-center sm:items-start text-center sm:text-left transition-all hover:shadow-2xl hover:border-primary/30 dark:hover:border-accent/30">
-                <div className="h-20 w-20 rounded-full bg-gradient-to-tr from-primary to-accent flex items-center justify-center text-white font-bold text-3xl shrink-0 shadow-lg ring-4 ring-white dark:ring-[#0f172a]">
+              <div className="mt-16 p-8 rounded-2xl bg-card shadow-xl border border-border flex flex-col sm:flex-row gap-6 items-center sm:items-start text-center sm:text-left transition-all hover:shadow-2xl hover:border-primary/30">
+                <div className="h-20 w-20 rounded-full bg-gradient-to-tr from-primary to-accent flex items-center justify-center text-white font-bold text-3xl shrink-0 shadow-lg ring-4 ring-background">
                   {(post.author || 'S')[0].toUpperCase()}
                 </div>
                 <div className="flex-1">
-                  <h4 className="text-2xl font-bold tracking-tight mb-1 max-w-full dark:text-white break-words">{post.author || 'SatByte Team'}</h4>
-                  <p className="text-[15px] font-medium text-primary dark:text-accent mb-3 uppercase tracking-wider">Lead Editor</p>
-                  <p className="text-[16px] text-slate-600 dark:text-slate-400 mb-5 leading-relaxed">
+                  <h4 className="text-2xl font-bold tracking-tight mb-1 max-w-full text-foreground break-words">{post.author || 'SatByte Team'}</h4>
+                  <p className="text-[15px] font-medium text-primary mb-3 uppercase tracking-wider">Lead Editor</p>
+                  <p className="text-[16px] text-muted-foreground mb-5 leading-relaxed">
                     Passionate experts delivering high-end enterprise web solutions, custom portals, and automated business architectures for fast-scaling agencies worldwide.
                   </p>
-                  <Button variant="outline" size="sm" className="rounded-full gap-2 font-medium bg-transparent hover:bg-slate-100 dark:hover:bg-white/10 dark:text-white dark:border-white/20">
+                  <Button variant="outline" size="sm" className="rounded-full gap-2 font-medium hover:bg-muted text-foreground border-border">
                     Follow on X <ChevronRight className="h-3 w-3" />
                   </Button>
                 </div>
@@ -335,12 +334,12 @@ export default function BlogPostPage() {
               <RelatedPosts currentSlug={post.slug} />
               
               {/* Newsletter Sub */}
-              <div className="mt-16 relative overflow-hidden rounded-3xl bg-[#0f1423] text-center p-8 sm:p-14 shadow-2xl border border-white/10">
+              <div className="mt-16 relative overflow-hidden rounded-3xl bg-card text-center p-8 sm:p-14 shadow-2xl border border-border">
                 <div className="absolute inset-x-0 -top-24 h-64 bg-gradient-to-b from-primary/30 to-transparent blur-3xl rounded-full" />
-                <h3 className="relative font-heading text-3xl font-bold tracking-tight text-white mb-4">Subscribe for Updates</h3>
-                <p className="relative text-slate-300 mb-10 max-w-lg mx-auto text-lg">Get the latest web tech articles, custom portal case studies, and business automation tips directly to your inbox.</p>
+                <h3 className="relative font-heading text-3xl font-bold tracking-tight text-foreground mb-4">Subscribe for Updates</h3>
+                <p className="relative text-muted-foreground mb-10 max-w-lg mx-auto text-lg">Get the latest web tech articles, custom portal case studies, and business automation tips directly to your inbox.</p>
                 <form className="relative flex flex-col sm:flex-row gap-3 max-w-md mx-auto" onSubmit={(e) => { e.preventDefault(); alert('Subscribed!') }}>
-                  <input type="email" placeholder="Enter your email address" required className="flex-1 rounded-xl bg-white/5 border border-white/10 px-5 py-4 text-white placeholder-slate-400 outline-none backdrop-blur-md focus:bg-white/10 focus:ring-2 focus:ring-primary focus:border-transparent transition-all w-full" />
+                  <input type="email" placeholder="Enter your email address" required className="flex-1 rounded-xl bg-muted border border-border px-5 py-4 text-foreground placeholder-slate-400 outline-none backdrop-blur-md focus:bg-muted focus:ring-2 focus:ring-primary focus:border-transparent transition-all w-full" />
                   <Button type="submit" size="lg" className="rounded-xl px-8 shadow-lg shadow-primary/30 py-4 h-auto text-base">Subscribe</Button>
                 </form>
               </div>

@@ -67,7 +67,7 @@ export default function PortfolioPage() {
         ) : null}
 
         {isError ? (
-          <p className="text-center text-sm text-red-600 dark:text-red-400">
+          <p className="text-center text-sm text-red-500">
             Could not load portfolio. Is the API running?
           </p>
         ) : null}
@@ -100,7 +100,7 @@ export default function PortfolioPage() {
                     exit={{ opacity: 0, scale: 0.96 }}
                     transition={{ duration: 0.25 }}
                   >
-                    <Card className="h-full overflow-hidden border-slate-200/80 dark:border-white/10">
+                    <Card className="h-full overflow-hidden border-border bg-card">
                       <LazyImage
                         src={project.imageUrl}
                         alt={project.title}
@@ -111,18 +111,18 @@ export default function PortfolioPage() {
                         <Badge variant="accent" className="mb-2">
                           {project.category}
                         </Badge>
-                        <h3 className="font-heading text-lg font-semibold text-secondary dark:text-white">
+                        <h3 className="font-heading text-lg font-semibold text-foreground">
                           {project.title}
                         </h3>
-                        <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">{project.description}</p>
-                        <p className="mt-4 text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-500">
+                        <p className="mt-2 text-sm text-muted-foreground">{project.description}</p>
+                        <p className="mt-4 text-xs font-medium uppercase tracking-wide text-muted-foreground">
                           Technologies
                         </p>
                         <div className="mt-2 flex flex-wrap gap-2">
                           {project.technologies.map((t) => (
                             <span
                               key={t}
-                              className="rounded-lg bg-slate-100 px-2 py-1 text-xs text-slate-700 dark:bg-white/10 dark:text-slate-200"
+                              className="rounded-lg bg-muted px-2 py-1 text-xs text-secondary-foreground"
                             >
                               {t}
                             </span>
@@ -138,9 +138,9 @@ export default function PortfolioPage() {
         ) : null}
 
         {!isPending && !data?.length ? (
-          <p className="text-center text-slate-600 dark:text-slate-400">
+          <p className="text-center text-muted-foreground">
             No projects yet. Add some from the{' '}
-            <a href="/admin/login" className="text-primary underline dark:text-accent">
+            <a href="/admin/login" className="text-primary underline">
               admin dashboard
             </a>
             .

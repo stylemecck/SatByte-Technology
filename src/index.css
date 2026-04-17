@@ -9,18 +9,121 @@
   --font-heading: "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-body: "Inter", ui-sans-serif, system-ui, sans-serif;
 
-  --color-primary: #3b82f6;
-  --color-secondary: #0f172a;
-  --color-accent: #60a5fa;
-  --color-background: #020617;
+  /* Standard Colors mapping to semantic concepts */
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
 
   --radius-lg: 1rem;
   --radius-xl: 1.25rem;
   --radius-2xl: 1.5rem;
   --radius-3xl: 2rem;
+
+  /* Theme-adaptive Brand colors */
+  --color-brand-blue: var(--brand-blue);
+  --color-brand-violet: var(--brand-violet);
+  --color-brand-amber: var(--brand-amber);
+  --color-brand-emerald: var(--brand-emerald);
+  --color-brand-pink: var(--brand-pink);
+  --color-brand-cyan: var(--brand-cyan);
+  --color-skeleton: var(--skeleton);
 }
 
 @layer base {
+  :root {
+    --background: #FFFFFF;
+    --foreground: #09090B;          /* Dark gray, nearly black text */
+    
+    --card: #FFFFFF;
+    --card-foreground: #09090B;
+    
+    --popover: #FFFFFF;
+    --popover-foreground: #09090B;
+    
+    --primary: #000000;             /* Black primary button */
+    --primary-foreground: #FAFAFA;
+    
+    --secondary: #F4F4F5;           /* Light gray slightly raised */
+    --secondary-foreground: #09090B;
+    
+    --muted: #F4F4F5;
+    --muted-foreground: #52525B;    /* Zinc 600 equivalent (darker for readability) */
+    
+    --accent: #F4F4F5;              /* Hover states */
+    --accent-foreground: #09090B;
+    
+    --border: #D4D4D8;              /* Zinc 300 equivalent (darker for input borders) */
+    --input: #D4D4D8;
+    --ring: #71717A;
+
+    /* Light Mode Brand (Readable saturation) */
+    --brand-blue: #2563EB;          /* Blue 600 */
+    --brand-violet: #7C3AED;        /* Violet 600 */
+    --brand-amber: #D97706;         /* Amber 600 */
+    --brand-emerald: #059669;       /* Emerald 600 */
+    --brand-pink: #DB2777;          /* Pink 600 */
+    --brand-cyan: #0891B2;          /* Cyan 600 */
+    --skeleton: #E4E4E7;            /* Zinc 200 */
+  }
+  
+  .dark {
+    /* Pure Modern SaaS Dark Theme */
+    --background: #09090B;          /* Very deep gray, standard for Linear/Vercel */
+    --foreground: #FAFAFA;          /* Very light gray text */
+    
+    --card: #09090B;
+    --card-foreground: #FAFAFA;
+    
+    --popover: #09090B;
+    --popover-foreground: #FAFAFA;
+    
+    --primary: #FAFAFA;             /* White primary button */
+    --primary-foreground: #09090B;
+    
+    --secondary: #27272A;           /* Elevated dark gray */
+    --secondary-foreground: #FAFAFA;
+    
+    --muted: #27272A;
+    --muted-foreground: #D4D4D8;    /* Brightened disabled text for legibility */
+    
+    --accent: #27272A;
+    --accent-foreground: #FAFAFA;
+    
+    --border: #27272A;              /* Zinc 800 */
+    --input: #27272A;
+    --ring: #52525B;
+
+    /* Dark Mode Brand (Vibrant glow) */
+    --brand-blue: #60A5FA;          /* Blue 400 */
+    --brand-violet: #A78BFA;        /* Violet 400 */
+    --brand-amber: #FBBF24;         /* Amber 400 */
+    --brand-emerald: #34D399;       /* Emerald 400 */
+    --brand-pink: #F472B6;          /* Pink 400 */
+    --brand-cyan: #22D3EE;          /* Cyan 400 */
+    --skeleton: #27272A;            /* Zinc 800 */
+  }
+  
   html {
     scroll-behavior: smooth;
     font-size: 15px; /* Refined base size */
@@ -29,18 +132,15 @@
   body {
     font-family: var(--font-body);
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
-    @apply antialiased bg-slate-50 text-slate-900 transition-colors duration-300;
-  }
-
-  .dark body {
-    @apply bg-[#030712] text-slate-100; /* Deeper, cleaner black */
+    @apply antialiased bg-background text-foreground transition-colors duration-300;
   }
 
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-heading);
-    @apply tracking-tighter;
+    @apply tracking-tight;
   }
 }
+
 
 /* Animated mesh gradient for hero backgrounds */
 @keyframes gradient-shift {

@@ -45,10 +45,10 @@ function Counter({ to, suffix = '' }: { to: number; suffix?: string }) {
 
 /* ── Data ── */
 const stats = [
-  { icon: Rocket, label: 'Projects Delivered', value: 120, suffix: '+', color: 'text-blue-400' },
-  { icon: Calendar, label: 'Years Active', value: 3, suffix: '+', color: 'text-amber-400' },
-  { icon: Users, label: 'Happy Clients', value: 45, suffix: '+', color: 'text-emerald-400' },
-  { icon: Star, label: 'Client Retention', value: 98, suffix: '%', color: 'text-violet-400' },
+  { icon: Rocket, label: 'Projects Delivered', value: 120, suffix: '+', color: 'text-brand-blue' },
+  { icon: Calendar, label: 'Years Active', value: 3, suffix: '+', color: 'text-brand-amber' },
+  { icon: Users, label: 'Happy Clients', value: 45, suffix: '+', color: 'text-brand-emerald' },
+  { icon: Star, label: 'Client Retention', value: 98, suffix: '%', color: 'text-brand-violet' },
 ]
 
 const milestones = [
@@ -56,29 +56,29 @@ const milestones = [
     year: '2024',
     title: 'Foundations',
     text: 'Started delivering high-quality websites and IT support for local businesses in Bihar.',
-    color: 'border-blue-500/40 bg-blue-500/5',
-    badge: 'bg-blue-500/20 text-blue-400',
+    color: 'border-brand-blue/30 bg-brand-blue/5',
+    badge: 'bg-brand-blue/10 text-brand-blue',
   },
   {
     year: '2025',
     title: 'Product Builds',
     text: 'Expanded into custom dashboards, billing tools, school portals, and e-commerce systems.',
-    color: 'border-amber-500/40 bg-amber-500/5',
-    badge: 'bg-amber-500/20 text-amber-400',
+    color: 'border-brand-amber/30 bg-brand-amber/5',
+    badge: 'bg-brand-amber/10 text-brand-amber',
   },
   {
     year: '2025',
     title: 'Full-Stack Engineering',
     text: 'Delivered end-to-end applications with REST APIs, JWT auth, and cloud deployment pipelines.',
-    color: 'border-emerald-500/40 bg-emerald-500/5',
-    badge: 'bg-emerald-500/20 text-emerald-400',
+    color: 'border-brand-emerald/30 bg-brand-emerald/5',
+    badge: 'bg-brand-emerald/10 text-brand-emerald',
   },
   {
     year: '2026',
     title: 'SatByte Today',
     text: 'Now the premium IT partner for agencies, schools, and enterprises across Bihar and India.',
-    color: 'border-violet-500/40 bg-violet-500/5',
-    badge: 'bg-violet-500/20 text-violet-400',
+    color: 'border-brand-violet/30 bg-brand-violet/5',
+    badge: 'bg-brand-violet/10 text-brand-violet',
   },
 ] as const
 
@@ -116,7 +116,7 @@ export default function AboutPage() {
       />
 
       {/* ── Hero ── */}
-      <section className="relative overflow-hidden bg-[#050B14] pt-28 pb-28 flex items-center">
+      <section className="relative overflow-hidden bg-background pt-28 pb-28 flex items-center">
         <div className="absolute top-0 left-0 w-[600px] h-[600px] bg-primary/15 rounded-full blur-[140px] pointer-events-none -translate-x-1/2 -translate-y-1/2" />
         <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-accent/10 rounded-full blur-[120px] pointer-events-none translate-x-1/2 translate-y-1/2" />
         {/* Dot Grid */}
@@ -138,7 +138,7 @@ export default function AboutPage() {
 
             <motion.h1
               variants={fadeUpItem}
-              className="font-heading text-5xl sm:text-6xl lg:text-7xl font-extrabold text-white leading-[1.1] tracking-tight max-w-4xl"
+              className="font-heading text-5xl sm:text-6xl lg:text-7xl font-extrabold text-foreground leading-[1.1] tracking-tight max-w-4xl"
             >
               We turn{' '}
               <span className="bg-gradient-to-r from-accent via-white to-primary bg-clip-text text-transparent">
@@ -149,7 +149,7 @@ export default function AboutPage() {
 
             <motion.p
               variants={fadeUpItem}
-              className="mt-6 text-lg sm:text-xl text-slate-400 max-w-2xl leading-relaxed"
+              className="mt-6 text-lg sm:text-xl text-muted-foreground max-w-2xl leading-relaxed"
             >
               {SITE.name} combines deep technical expertise with human-first communication — so your digital presence works as hard as you do.
             </motion.p>
@@ -158,7 +158,7 @@ export default function AboutPage() {
       </section>
 
       {/* ── Animated Stats Bar ── */}
-      <section className="bg-[#080E1A] py-16 border-y border-white/5">
+      <section className="bg-muted py-16 border-y border-border">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <motion.div
             variants={staggerContainer}
@@ -178,10 +178,10 @@ export default function AboutPage() {
                   <div className={cn('flex h-12 w-12 items-center justify-center rounded-2xl bg-white/5', s.color)}>
                     <Icon className="h-6 w-6" />
                   </div>
-                  <p className="font-heading text-4xl sm:text-5xl font-extrabold text-white">
+                  <p className="font-heading text-4xl sm:text-5xl font-extrabold text-foreground">
                     <Counter to={s.value} suffix={s.suffix} />
                   </p>
-                  <p className="text-sm font-medium text-slate-400 uppercase tracking-wider">{s.label}</p>
+                  <p className="text-sm font-medium text-muted-foreground uppercase tracking-wider">{s.label}</p>
                 </motion.div>
               )
             })}
@@ -190,7 +190,7 @@ export default function AboutPage() {
       </section>
 
       {/* ── Mission / Vision / Values ── */}
-      <section className="bg-[#050B14] py-24">
+      <section className="bg-background py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <motion.div
             variants={staggerContainer}
@@ -204,11 +204,11 @@ export default function AboutPage() {
                 key={v.title}
                 variants={fadeUpItem}
                 custom={i}
-                className="group relative rounded-[2rem] border border-white/10 bg-white/5 p-8 backdrop-blur-sm hover:border-primary/30 hover:bg-white/8 transition-all duration-500 hover:-translate-y-2 hover:shadow-xl hover:shadow-primary/10"
+                className="group relative rounded-[2rem] border border-border bg-card p-8 backdrop-blur-sm hover:border-primary/30 transition-all duration-500 hover:-translate-y-2 hover:shadow-xl hover:shadow-primary/10"
               >
                 <div className="absolute top-0 left-8 h-[2px] w-12 bg-gradient-to-r from-primary to-accent rounded-full" />
-                <h3 className="font-heading text-xl font-bold text-white mt-4">{v.title}</h3>
-                <p className="mt-4 text-slate-400 leading-relaxed">{v.text}</p>
+                <h3 className="font-heading text-xl font-bold text-foreground mt-4">{v.title}</h3>
+                <p className="mt-4 text-muted-foreground leading-relaxed">{v.text}</p>
               </motion.div>
             ))}
           </motion.div>
@@ -216,7 +216,7 @@ export default function AboutPage() {
       </section>
 
       {/* ── Founder Spotlight ── */}
-      <section className="bg-[#080E1A] py-24">
+      <section className="bg-muted py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 24 }}
@@ -238,8 +238,8 @@ export default function AboutPage() {
               </div>
               <div className="text-center lg:text-left">
                 <p className="text-xs font-bold uppercase tracking-widest text-primary dark:text-accent">Founder & CEO</p>
-                <h2 className="font-heading text-4xl font-extrabold text-white mt-2">{SITE.owner}</h2>
-                <p className="text-slate-400 mt-1 flex items-center gap-2 justify-center lg:justify-start">
+                <h2 className="font-heading text-4xl font-extrabold text-foreground mt-2">{SITE.owner}</h2>
+                <p className="text-muted-foreground mt-1 flex items-center gap-2 justify-center lg:justify-start">
                   <MapPin className="h-4 w-4" /> {SITE.location}
                 </p>
                 {/* Social Links */}
@@ -264,14 +264,14 @@ export default function AboutPage() {
             <div>
               <div className="relative">
                 <div className="text-8xl text-primary/10 font-serif absolute -top-8 -left-4 leading-none select-none">"</div>
-                <blockquote className="relative z-10 text-2xl font-medium text-white leading-relaxed italic">
+                <blockquote className="relative z-10 text-2xl font-medium text-foreground leading-relaxed italic">
                   Every business deserves enterprise-grade technology — not just the big ones.
                 </blockquote>
               </div>
-              <p className="mt-8 text-slate-400 text-lg leading-relaxed">
+              <p className="mt-8 text-muted-foreground text-lg leading-relaxed">
                 Satyam Kumar is an IT professional and entrepreneur based in Mahua, Vaishali, Bihar. With a vision to bridge the technology gap between enterprise companies and growing Indian businesses, he founded {SITE.name} to deliver world-class digital solutions at accessible prices.
               </p>
-              <p className="mt-4 text-slate-400 leading-relaxed">
+              <p className="mt-4 text-muted-foreground leading-relaxed">
                 From designing pixel-perfect interfaces to architecting scalable backend APIs, Satyam leads every project with precision, care, and a relentless commitment to measurable results.
               </p>
               <Link
@@ -286,13 +286,13 @@ export default function AboutPage() {
       </section>
 
       {/* ── Alternating Zigzag Timeline ── */}
-      <section className="bg-[#050B14] py-24">
+      <section className="bg-background py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <span className="inline-block rounded-full border border-primary/30 bg-primary/10 px-4 py-1.5 text-sm font-bold text-primary dark:text-accent mb-4">
+            <span className="inline-block rounded-full border border-primary/30 bg-primary/10 px-4 py-1.5 text-sm font-bold text-primary mb-4">
               Our Journey
             </span>
-            <h2 className="font-heading text-4xl font-extrabold text-white">Milestones that shaped us</h2>
+            <h2 className="font-heading text-4xl font-extrabold text-foreground">Milestones that shaped us</h2>
           </div>
 
           <div className="relative">
@@ -329,8 +329,8 @@ export default function AboutPage() {
                         <span className={cn('inline-block rounded-full px-3 py-1 text-xs font-extrabold uppercase tracking-widest mb-3', m.badge)}>
                           {m.year}
                         </span>
-                        <h3 className="font-heading text-2xl font-extrabold text-white">{m.title}</h3>
-                        <p className="mt-3 text-slate-400 leading-relaxed">{m.text}</p>
+                        <h3 className="font-heading text-2xl font-extrabold text-foreground">{m.title}</h3>
+                        <p className="mt-3 text-muted-foreground leading-relaxed">{m.text}</p>
                       </div>
                     </div>
 
@@ -338,7 +338,7 @@ export default function AboutPage() {
                     <div className={cn(
                       'hidden lg:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10',
                     )}>
-                      <div className="h-5 w-5 rounded-full border-2 border-primary bg-[#050B14] shadow-[0_0_12px_rgba(37,99,235,0.5)]" />
+                      <div className="h-5 w-5 rounded-full border-2 border-primary bg-background shadow-[0_0_12px_rgba(37,99,235,0.5)]" />
                     </div>
 
                     {/* Empty opposing side */}
@@ -352,7 +352,7 @@ export default function AboutPage() {
       </section>
 
       {/* ── Bottom CTA ── */}
-      <section className="bg-[#080E1A] py-24 border-t border-white/5">
+      <section className="bg-muted py-24 border-t border-border">
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
           <motion.div
             initial={{ opacity: 0, y: 24 }}
@@ -360,23 +360,23 @@ export default function AboutPage() {
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <h2 className="font-heading text-4xl sm:text-5xl font-extrabold text-white">
+            <h2 className="font-heading text-4xl sm:text-5xl font-extrabold text-foreground">
               Ready to work with us?
             </h2>
-            <p className="mt-4 text-slate-400 text-lg max-w-lg mx-auto">
+            <p className="mt-4 text-muted-foreground text-lg max-w-lg mx-auto">
               Let's discuss your idea or project — we're just one message away and always excited to start something new.
             </p>
             <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
               <Link
                 to="/contact"
-                className="inline-flex items-center justify-center gap-2 h-14 px-8 rounded-full bg-gradient-to-r from-primary to-accent text-white font-bold text-base shadow-xl shadow-primary/30 hover:shadow-primary/50 transition-all duration-300 hover:-translate-y-1"
+                className="inline-flex items-center justify-center gap-2 h-14 px-8 rounded-full bg-primary text-primary-foreground font-bold text-base shadow-xl shadow-primary/20 transition-all duration-300 hover:-translate-y-1"
               >
                 Start a conversation
                 <ArrowRight className="h-5 w-5" />
               </Link>
               <Link
                 to="/portfolio"
-                className="inline-flex items-center justify-center gap-2 h-14 px-8 rounded-full border border-white/15 bg-white/5 text-white font-bold text-base hover:bg-white/10 hover:border-white/25 transition-all duration-300 hover:-translate-y-1"
+                className="inline-flex items-center justify-center gap-2 h-14 px-8 rounded-full border border-border bg-transparent text-foreground font-bold text-base hover:bg-muted transition-all duration-300 hover:-translate-y-1"
               >
                 View our work
               </Link>

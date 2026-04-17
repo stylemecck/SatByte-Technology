@@ -99,17 +99,17 @@ export default function ClientLoginPage() {
       <div className="mx-auto max-w-md px-4 py-20 min-h-[70vh]">
         <SectionHeader eyebrow="Secure Portal" title={authMode === 'login' ? "Client Login" : "Client Registration"} subtitle="Manage your high-end digital projects." />
         
-        <Card className="mt-8 border-slate-200/80 bg-white shadow-2xl dark:border-white/10 dark:bg-[#0f172a] overflow-hidden rounded-3xl">
+        <Card className="mt-8 border-border bg-card shadow-lg overflow-hidden rounded-3xl">
           
-          <div className="flex border-b border-slate-200 dark:border-white/10 bg-slate-50/50 dark:bg-white/5">
+          <div className="flex border-b border-border bg-muted">
             <button 
-              className={`flex-1 py-5 text-sm font-bold transition-all ${authMode === 'login' ? 'bg-white dark:bg-[#0f172a] text-primary dark:text-accent' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200'}`}
+              className={`flex-1 py-5 text-sm font-bold transition-all ${authMode === 'login' ? 'bg-background text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'}`}
               onClick={() => resetForms('login')}
             >
               Log In
             </button>
             <button 
-              className={`flex-1 py-5 text-sm font-bold transition-all ${authMode === 'register' ? 'bg-white dark:bg-[#0f172a] text-primary dark:text-accent' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200'}`}
+              className={`flex-1 py-5 text-sm font-bold transition-all ${authMode === 'register' ? 'bg-background text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'}`}
               onClick={() => resetForms('register')}
             >
               Sign Up
@@ -122,16 +122,16 @@ export default function ClientLoginPage() {
 
             {authMode === 'login' && (
               <div className="space-y-6">
-                <div className="flex p-1 bg-slate-100 dark:bg-white/5 rounded-2xl mb-2">
+                <div className="flex p-1 bg-muted rounded-2xl mb-2">
                   <button 
                     onClick={() => setLoginMethod('password')}
-                    className={`flex-1 py-2 text-xs font-bold rounded-xl transition-all ${loginMethod === 'password' ? 'bg-white dark:bg-slate-800 shadow-sm text-primary dark:text-white' : 'text-slate-500'}`}
+                    className={`flex-1 py-2 text-xs font-bold rounded-xl transition-all ${loginMethod === 'password' ? 'bg-background shadow-sm text-foreground' : 'text-muted-foreground'}`}
                   >
                     Password
                   </button>
                   <button 
                     onClick={() => setLoginMethod('otp')}
-                    className={`flex-1 py-2 text-xs font-bold rounded-xl transition-all ${loginMethod === 'otp' ? 'bg-white dark:bg-slate-800 shadow-sm text-primary dark:text-white' : 'text-slate-500'}`}
+                    className={`flex-1 py-2 text-xs font-bold rounded-xl transition-all ${loginMethod === 'otp' ? 'bg-background shadow-sm text-foreground' : 'text-muted-foreground'}`}
                   >
                     Code
                   </button>
@@ -155,7 +155,7 @@ export default function ClientLoginPage() {
                       required
                       className="rounded-xl h-12"
                     />
-                    <Button type="submit" className="w-full h-12 rounded-xl bg-primary text-white font-bold" disabled={loading}>
+                    <Button type="submit" className="w-full h-12 rounded-xl" disabled={loading}>
                       {loading ? 'Authenticating...' : 'Sign In'}
                     </Button>
                   </form>
@@ -169,13 +169,13 @@ export default function ClientLoginPage() {
                       required
                       className="rounded-xl h-12"
                     />
-                    <Button type="submit" className="w-full h-12 rounded-xl bg-primary text-white font-bold" disabled={loading}>
+                    <Button type="submit" className="w-full h-12 rounded-xl" disabled={loading}>
                       {loading ? 'Sending Code...' : 'Send Login Code'}
                     </Button>
                   </form>
                 ) : (
                   <form onSubmit={handleVerifyOtp} className="space-y-4 text-center">
-                    <p className="text-sm text-slate-500 dark:text-slate-400 mb-2">Code sent to <strong>{email}</strong></p>
+                    <p className="text-sm text-muted-foreground mb-2">Code sent to <strong>{email}</strong></p>
                     <Input
                       type="text"
                       placeholder="••••••"
@@ -185,10 +185,10 @@ export default function ClientLoginPage() {
                       required
                       className="text-center text-2xl tracking-[0.5em] font-mono h-14 rounded-xl"
                     />
-                    <Button type="submit" className="w-full h-12 rounded-xl bg-primary text-white font-bold" disabled={loading || otp.length < 6}>
+                    <Button type="submit" className="w-full h-12 rounded-xl" disabled={loading || otp.length < 6}>
                       {loading ? 'Verifying...' : 'Finish Login'}
                     </Button>
-                    <button type="button" onClick={() => setStep(1)} className="text-xs text-slate-500 hover:text-primary underline">Change Email</button>
+                    <button type="button" onClick={() => setStep(1)} className="text-xs text-muted-foreground hover:text-primary underline">Change Email</button>
                   </form>
                 )}
               </div>
@@ -212,10 +212,10 @@ export default function ClientLoginPage() {
                   required
                   className="rounded-xl h-12"
                 />
-                <Button type="submit" className="w-full h-12 rounded-xl bg-primary text-white font-bold shadow-lg shadow-primary/20" disabled={loading}>
+                <Button type="submit" className="w-full h-12 rounded-xl shadow-md" disabled={loading}>
                   {loading ? 'Creating Account...' : 'Create Account'}
                 </Button>
-                <p className="text-[10px] text-center text-slate-500 px-4 mt-4">
+                <p className="text-[10px] text-center text-muted-foreground px-4 mt-4">
                   By registering, you agree to our terms and will be able to access support and track upcoming orders.
                 </p>
               </form>

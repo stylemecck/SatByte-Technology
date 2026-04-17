@@ -40,32 +40,32 @@ export function Footer() {
   const year = new Date().getFullYear()
 
   return (
-    <footer className="border-t border-slate-200/80 bg-secondary text-slate-300 dark:border-white/10">
+    <footer className="border-t border-border bg-secondary text-muted-foreground transition-colors duration-300">
       <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
         <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-4">
           <div className="space-y-4">
             <div className="flex items-center gap-2">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-accent font-bold text-white">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary font-bold text-primary-foreground">
                 SB
               </div>
-              <span className="font-heading text-lg font-semibold text-white">{SITE.name}</span>
+              <span className="font-heading text-lg font-bold text-foreground">{SITE.name}</span>
             </div>
-            <p className="text-sm leading-relaxed text-slate-400">
+            <p className="text-sm leading-relaxed text-muted-foreground">
               Modern websites, software, and digital solutions for businesses across India — based in{' '}
               {SITE.location}.
             </p>
           </div>
 
           <div>
-            <h3 className="font-heading mb-4 text-sm font-semibold uppercase tracking-wider text-white">
-              Quick Links
+            <h3 className="font-heading mb-4 text-sm font-bold uppercase tracking-[0.15em] text-foreground">
+              Company
             </h3>
             <ul className="space-y-2 text-sm">
-              {NAV_LINKS.slice(0, 6).map(({ href, label }) => (
+              {NAV_LINKS.filter(l => ['Home', 'About', 'Portfolio', 'Careers', 'Testimonials'].includes(l.label)).map(({ href, label }) => (
                 <li key={href}>
                   <Link
                     to={href}
-                    className="text-slate-400 transition-colors hover:text-accent"
+                    className="text-muted-foreground transition-all hover:text-primary hover:translate-x-1 inline-block"
                   >
                     {label}
                   </Link>
@@ -75,26 +75,55 @@ export function Footer() {
           </div>
 
           <div>
-            <h3 className="font-heading mb-4 text-sm font-semibold uppercase tracking-wider text-white">
-              Contact
+            <h3 className="font-heading mb-4 text-sm font-bold uppercase tracking-[0.15em] text-foreground">
+              Services & Tools
             </h3>
-            <ul className="space-y-2 text-sm text-slate-400">
-              <li>
-                <a href={`tel:${SITE.phoneDigits}`} className="hover:text-accent">
-                  {SITE.phone}
-                </a>
-              </li>
-              <li>
-                <a href={`mailto:${SITE.email}`} className="hover:text-accent">
-                  {SITE.email}
-                </a>
-              </li>
-              <li>{SITE.location}</li>
+            <ul className="space-y-2 text-sm">
+              {NAV_LINKS.filter(l => ['Services', 'Pricing', 'Blog', 'Estimator'].includes(l.label)).map(({ href, label }) => (
+                <li key={href}>
+                  <Link
+                    to={href}
+                    className="text-muted-foreground transition-all hover:text-primary hover:translate-x-1 inline-block"
+                  >
+                    {label}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 
           <div>
-            <h3 className="font-heading mb-4 text-sm font-semibold uppercase tracking-wider text-white">
+            <h3 className="font-heading mb-4 text-sm font-bold uppercase tracking-[0.15em] text-foreground">
+              Support
+            </h3>
+            <ul className="space-y-2 text-sm text-muted-foreground mb-6">
+              {NAV_LINKS.filter(l => ['Contact', 'Client Login'].includes(l.label)).map(({ href, label }) => (
+                <li key={href}>
+                  <Link
+                    to={href}
+                    className="text-muted-foreground transition-all hover:text-primary hover:translate-x-1 inline-block"
+                  >
+                    {label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+            <ul className="space-y-2 text-sm text-muted-foreground border-t border-border pt-6">
+              <li>
+                <a href={`tel:${SITE.phoneDigits}`} className="hover:text-primary transition-colors">
+                  {SITE.phone}
+                </a>
+              </li>
+              <li>
+                <a href={`mailto:${SITE.email}`} className="hover:text-primary transition-colors">
+                  {SITE.email}
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <div>
+            <h3 className="font-heading mb-4 text-sm font-bold uppercase tracking-[0.15em] text-foreground">
               Follow Us
             </h3>
             <div className="flex flex-wrap gap-3">
@@ -104,7 +133,7 @@ export function Footer() {
                   href={href}
                   target="_blank"
                   rel="noreferrer noopener"
-                  className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-slate-300 transition-colors hover:border-accent/50 hover:text-accent"
+                  className="flex h-10 w-10 items-center justify-center rounded-xl border border-border bg-card text-muted-foreground transition-all hover:border-primary hover:text-primary hover:-translate-y-1 shadow-sm"
                   aria-label={label}
                 >
                   <SocialGlyph icon={icon} />
@@ -113,7 +142,7 @@ export function Footer() {
             </div>
             
             <div className="mt-8">
-              <h3 className="font-heading mb-4 text-sm font-semibold uppercase tracking-wider text-white">
+              <h3 className="font-heading mb-4 text-sm font-bold uppercase tracking-[0.15em] text-foreground">
                 Subscribe to Newsletter
               </h3>
               <form 
@@ -127,11 +156,11 @@ export function Footer() {
                   type="email" 
                   placeholder="Enter your email" 
                   required 
-                  className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white placeholder-slate-400 focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
+                  className="w-full rounded-lg border border-border bg-card px-4 py-2 text-sm text-foreground placeholder-muted-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary transition-all"
                 />
                 <button 
                   type="submit" 
-                  className="rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-accent/90"
+                  className="rounded-lg bg-primary px-4 py-2 text-sm font-bold text-primary-foreground transition-all hover:bg-primary/90 active:scale-95"
                 >
                   Subscribe
                 </button>
@@ -140,14 +169,14 @@ export function Footer() {
           </div>
         </div>
 
-        <Separator className="my-10 bg-white/10" />
+        <Separator className="my-10 bg-border" />
 
-        <div className="flex flex-col items-center justify-between gap-4 text-center text-xs text-slate-500 sm:flex-row sm:text-left">
+        <div className="flex flex-col items-center justify-between gap-4 text-center text-xs text-muted-foreground sm:flex-row sm:text-left">
           <p>
             © {year} {SITE.name}. All rights reserved.
           </p>
           <p>
-            Founder: <span className="text-slate-400">{SITE.owner}</span>
+            Founder: <span className="text-foreground font-medium">{SITE.owner}</span>
           </p>
         </div>
       </div>

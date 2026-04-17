@@ -5,9 +5,9 @@ import { motion, AnimatePresence } from 'framer-motion'
 
 export function MainLayout() {
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="flex min-h-screen flex-col bg-background text-foreground selection:bg-primary/30">
       <Navbar />
-      <main className="flex-1 pt-24">
+      <main className="flex-1 pt-20">
         <AnimatePresence mode="wait">
           <motion.div
             initial={{ opacity: 0, y: 10 }}

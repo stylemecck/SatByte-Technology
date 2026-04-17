@@ -1,12 +1,15 @@
-import { useState, useEffect } from 'react'
-import { Link, useLocation } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Menu, X, User, LogOut, ChevronRight } from 'lucide-react'
+import { Moon, Sun, X, Rocket, User, LogOut, LayoutDashboard, ChevronRight } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { Link, NavLink, useLocation } from 'react-router-dom'
+
+import { useTheme } from '../contexts/ThemeContext'
 import { NAV_LINKS } from '../lib/constants'
 import { getStoredToken, clearToken } from '../lib/apiClient'
 import { cn } from '../utils/cn'
 
 export function Navbar() {
+  const { theme, toggleTheme } = useTheme()
   const [isOpen, setIsOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const [isLoggedIn, setIsLoggedIn] = useState(false)
@@ -17,8 +20,12 @@ export function Navbar() {
   }, [location])
 
   useEffect(() => {
+    setIsOpen(false)
+  }, [location.pathname])
+
+  useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20)
-    window.addEventListener('scroll', handleScroll)
+    window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
@@ -29,150 +36,171 @@ export function Navbar() {
   }
 
   return (
-    <nav
-      className={cn(
-        'fixed top-0 left-0 right-0 z-50 transition-all duration-300 px-4 sm:px-6 lg:px-8',
-        scrolled ? 'py-4 bg-white/80 backdrop-blur-md shadow-sm border-b border-slate-200' : 'py-6 bg-transparent'
-      )}
-    >
-      <div className="max-w-7xl mx-auto flex items-center justify-between">
-        {/* Logo */}
-        <Link to="/" className="flex items-center gap-2 group">
-          <div className="h-10 w-10 rounded-xl bg-primary flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-primary/25 transition-transform group-hover:scale-105">
-            S
+    <div className="fixed top-0 inset-x-0 z-50 flex justify-center pt-4 px-4 pointer-events-none transition-all duration-300">
+      <header className={cn(
+        "pointer-events-auto flex items-center justify-between w-full max-w-5xl h-14 rounded-full border px-4 sm:px-6 transition-all duration-500",
+        scrolled 
+          ? "bg-background/70 backdrop-blur-xl border-border shadow-sm dark:shadow-black/50" 
+          : "bg-background/40 backdrop-blur-md border-transparent shadow-none"
+      )}>
+        
+        {/* Brand */}
+        <Link
+          to="/"
+          className="flex items-center gap-2.5 transition-opacity hover:opacity-80 outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-md"
+        >
+          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-foreground text-background">
+            <Rocket className="h-4 w-4" />
           </div>
-          <div className="flex flex-col">
-            <span className="font-heading font-extrabold text-secondary tracking-tight leading-none text-xl">
+          <div className="flex flex-col sm:flex-row sm:items-baseline sm:gap-2">
+            <span className="hidden font-heading text-[15px] font-bold tracking-tight text-foreground sm:block">
               SatByte
             </span>
-            <span className="text-[10px] font-bold uppercase tracking-widest text-primary mt-1">
+            <span className="hidden text-[10px] font-bold uppercase tracking-widest text-brand-blue sm:block">
               Careers
             </span>
           </div>
         </Link>
 
         {/* Desktop Navigation */}
-        <div className="hidden lg:flex items-center gap-8">
-          {NAV_LINKS.map((link) => (
-            <Link
-              key={link.href}
-              to={link.href}
-              className={cn(
-                'text-[15px] font-bold transition-colors hover:text-primary',
-                location.pathname === link.href ? 'text-primary' : 'text-slate-600'
-              )}
+        <nav className="hidden lg:flex items-center h-full">
+          {NAV_LINKS.map(({ href, label }) => (
+            <NavLink
+              key={href}
+              to={href}
+              className={({ isActive }) =>
+                cn(
+                  'relative h-full flex items-center px-4 text-[13px] font-bold transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-md uppercase tracking-wider',
+                  isActive 
+                    ? 'text-foreground' 
+                    : 'text-muted-foreground hover:text-foreground'
+                )
+              }
             >
-              {link.label}
-            </Link>
+              {({ isActive }) => (
+                <>
+                  <span className="relative z-10">{label}</span>
+                  {isActive && (
+                    <motion.div 
+                      layoutId="nav-active-career" 
+                      className="absolute bottom-[-1px] left-0 right-0 h-[2px] bg-foreground mx-4 rounded-t-full"
+                    />
+                  )}
+                </>
+              )}
+            </NavLink>
           ))}
-          
-          <div className="h-6 w-px bg-slate-200 mx-2" />
+        </nav>
 
+        {/* Actions */}
+        <div className="flex items-center gap-2">
           {isLoggedIn ? (
-            <div className="flex items-center gap-4">
-              <Link
-                to="/dashboard"
-                className="flex items-center gap-2 px-4 py-2 rounded-full bg-slate-100 text-secondary font-bold text-sm hover:bg-slate-200 transition-colors"
+            <div className="hidden lg:flex items-center gap-2">
+              <Link 
+                to="/dashboard" 
+                className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-secondary text-secondary-foreground text-xs font-bold hover:bg-muted transition-colors"
               >
-                <User size={16} /> Dashboard
+                <LayoutDashboard className="h-3.5 w-3.5" /> Dashboard
               </Link>
-              <button
+              <button 
                 onClick={handleLogout}
-                className="text-slate-400 hover:text-red-500 transition-colors"
-                title="Logout"
+                className="h-9 w-9 flex items-center justify-center rounded-full text-muted-foreground hover:text-red-500 hover:bg-red-500/10 transition-colors"
               >
-                <LogOut size={18} />
+                <LogOut className="h-4 w-4" />
               </button>
             </div>
           ) : (
-            <div className="flex items-center gap-4">
-              <Link
-                to="/login"
-                className="text-secondary font-bold text-sm hover:text-primary transition-colors"
-              >
-                Sign In
-              </Link>
-              <Link
-                to="/register"
-                className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-secondary text-white font-bold text-sm shadow-xl shadow-secondary/20 hover:bg-primary hover:shadow-primary/30 transition-all duration-300 hover:-translate-y-0.5"
-              >
-                Register <ChevronRight size={16} />
-              </Link>
+            <div className="hidden lg:flex items-center gap-4 mr-2">
+              <Link to="/login" className="text-xs font-bold text-muted-foreground hover:text-foreground transition-colors uppercase tracking-widest">Sign In</Link>
+              <Link to="/register" className="px-5 py-2 rounded-full bg-foreground text-background text-xs font-black uppercase tracking-[0.1em] hover:opacity-90 transition-opacity">Apply Now</Link>
             </div>
           )}
-        </div>
 
-        {/* Mobile Toggle */}
-        <button
-          className="lg:hidden p-2 text-secondary hover:bg-slate-100 rounded-lg transition-colors"
-          onClick={() => setIsOpen(!isOpen)}
-        >
-          {isOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
-      </div>
+          <div className="hidden lg:block w-px h-4 bg-border mx-1" />
 
-      {/* Mobile Menu */}
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            className="lg:hidden bg-white border-b border-slate-200 overflow-hidden"
+          {/* Theme Toggle */}
+          <button
+            onClick={toggleTheme}
+            className="flex items-center justify-center h-9 w-9 rounded-full text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            aria-label="Toggle theme"
           >
-            <div className="px-6 py-8 flex flex-col gap-6">
-              {NAV_LINKS.map((link) => (
-                <Link
-                  key={link.href}
-                  to={link.href}
+            {theme === 'dark' ? <Sun className="h-[18px] w-[18px]" /> : <Moon className="h-[18px] w-[18px]" />}
+          </button>
+
+          {/* Mobile Menu Trigger */}
+          <button 
+            onClick={() => setIsOpen(!isOpen)}
+            className="lg:hidden flex flex-col justify-center items-center h-9 w-9 gap-[4px] rounded-full text-foreground hover:bg-secondary transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring relative z-[70]"
+            aria-label="Toggle menu"
+          >
+            <motion.span animate={{ rotate: isOpen ? 45 : 0, y: isOpen ? 6 : 0 }} className="w-4 h-[2px] bg-current rounded-full block origin-center" />
+            <motion.span animate={{ opacity: isOpen ? 0 : 1 }} className="w-4 h-[2px] bg-current rounded-full block" />
+            <motion.span animate={{ rotate: isOpen ? -45 : 0, y: isOpen ? -6 : 0 }} className="w-4 h-[2px] bg-current rounded-full block origin-center" />
+          </button>
+
+          <AnimatePresence>
+            {isOpen && (
+              <>
+                {/* Backdrop */}
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
                   onClick={() => setIsOpen(false)}
-                  className={cn(
-                    'text-lg font-bold transition-colors',
-                    location.pathname === link.href ? 'text-primary' : 'text-slate-600'
-                  )}
+                  className="fixed inset-0 z-[60] bg-background/80 backdrop-blur-sm lg:hidden"
+                />
+                
+                {/* Content */}
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.95, y: -20 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.95, y: -20 }}
+                  className="fixed top-4 inset-x-4 z-[65] flex flex-col rounded-3xl border border-border bg-background p-6 shadow-2xl outline-none origin-top lg:hidden"
                 >
-                  {link.label}
-                </Link>
-              ))}
-              <div className="h-px w-full bg-slate-100 my-2" />
-              {isLoggedIn ? (
-                <>
-                  <Link
-                    to="/dashboard"
-                    onClick={() => setIsOpen(false)}
-                    className="flex items-center gap-2 text-lg font-bold text-secondary"
-                  >
-                    <User size={20} /> My Dashboard
-                  </Link>
-                  <button
-                    onClick={handleLogout}
-                    className="flex items-center gap-2 text-lg font-bold text-red-500"
-                  >
-                    <LogOut size={20} /> Logout
-                  </button>
-                </>
-              ) : (
-                <div className="flex flex-col gap-4">
-                  <Link
-                    to="/login"
-                    onClick={() => setIsOpen(false)}
-                    className="text-lg font-bold text-secondary"
-                  >
-                    Sign In
-                  </Link>
-                  <Link
-                    to="/register"
-                    onClick={() => setIsOpen(false)}
-                    className="flex items-center justify-center gap-2 w-full py-4 rounded-2xl bg-primary text-white font-bold text-lg"
-                  >
-                    Get Started <ChevronRight size={20} />
-                  </Link>
-                </div>
-              )}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </nav>
+                  <div className="flex items-center justify-between mb-8">
+                     <div className="flex items-center gap-2 text-foreground font-bold font-heading">
+                        <Rocket className="h-4 w-4" /> Careers Menu
+                     </div>
+                     <button 
+                        onClick={() => setIsOpen(false)}
+                        className="flex h-8 w-8 items-center justify-center rounded-full bg-secondary text-foreground"
+                     >
+                        <X className="h-4 w-4" />
+                     </button>
+                  </div>
+
+                  <nav className="flex flex-col gap-2">
+                    {NAV_LINKS.map(({ href, label }) => (
+                      <NavLink
+                        key={href}
+                        to={href}
+                        className={({ isActive }) =>
+                          cn(
+                            'flex items-center px-4 py-3 text-lg font-bold rounded-xl transition-colors',
+                            isActive ? 'bg-secondary text-foreground' : 'text-muted-foreground hover:bg-secondary/50'
+                          )
+                        }
+                      >
+                        {label}
+                      </NavLink>
+                    ))}
+                    <div className="h-px bg-border my-2" />
+                    {isLoggedIn ? (
+                      <Link to="/dashboard" className="flex items-center justify-center w-full px-4 py-4 rounded-xl bg-foreground text-background font-black text-sm uppercase tracking-widest">User Dashboard</Link>
+                    ) : (
+                      <div className="flex flex-col gap-3">
+                        <Link to="/login" className="flex items-center justify-center w-full py-4 rounded-xl bg-secondary text-foreground font-bold">Sign In</Link>
+                        <Link to="/register" className="flex items-center justify-center w-full py-4 rounded-xl bg-foreground text-background font-black text-sm uppercase tracking-widest">Apply Now</Link>
+                      </div>
+                    )}
+                  </nav>
+                </motion.div>
+              </>
+            )}
+          </AnimatePresence>
+        </div>
+      </header>
+    </div>
   )
 }
+

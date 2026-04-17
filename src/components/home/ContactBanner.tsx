@@ -8,7 +8,7 @@ import { SITE } from '@/lib/constants'
 /** Bottom CTA strip driving users to contact / quote. */
 export function ContactBanner() {
   return (
-    <section className="bg-[#020617] px-4 pb-32 pt-10 sm:px-6 lg:px-8">
+    <section className="bg-background px-4 pb-32 pt-10 sm:px-6 lg:px-8">
       <motion.div
         initial={{ opacity: 0, y: 24 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -19,20 +19,20 @@ export function ContactBanner() {
       >
         <div className="flex flex-col items-center gap-6 rounded-[calc(1.5rem-1px)] bg-secondary px-8 py-12 text-center md:flex-row md:justify-between md:text-left">
           <div>
-            <h2 className="font-heading text-2xl font-bold text-white sm:text-3xl">
+            <h2 className="font-heading text-2xl font-bold text-foreground sm:text-3xl">
               Ready to start your next project?
             </h2>
-            <p className="mt-2 max-w-xl text-slate-300">
+            <p className="mt-2 max-w-xl text-muted-foreground">
               Tell us your goals — we’ll respond with a clear plan, timeline, and investment outline.
             </p>
           </div>
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-            <Button asChild size="lg" variant="accent" className="min-w-[160px]">
+            <Button asChild size="lg" className="min-w-[160px]">
               <Link to="/contact">Contact us</Link>
             </Button>
             <a
               href={`tel:${SITE.phoneDigits}`}
-              className="inline-flex items-center justify-center gap-2 text-sm font-medium text-accent transition-[gap,opacity] duration-200 hover:gap-3 hover:underline"
+              className="inline-flex items-center justify-center gap-2 text-sm font-medium text-primary transition-[gap,opacity] duration-200 hover:gap-3 hover:underline"
             >
               <Phone className="h-4 w-4" />
               {SITE.phone}
