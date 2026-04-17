@@ -230,10 +230,12 @@ export default function AboutPage() {
               <div className="relative">
                 {/* Glowing ring */}
                 <div className="absolute -inset-1 rounded-full bg-gradient-to-br from-primary to-accent blur-md opacity-50" />
-                <div className="relative h-40 w-40 rounded-full border-2 border-white/20 bg-gradient-to-br from-primary/30 to-accent/30 flex items-center justify-center shadow-2xl overflow-hidden">
-                  <span className="font-heading text-6xl font-extrabold text-white select-none">
-                    {SITE.owner[0]}
-                  </span>
+                <div className="relative h-40 w-40 rounded-full border-2 border-white/20 bg-muted flex items-center justify-center shadow-2xl overflow-hidden">
+                  <img 
+                    src={SITE.ownerImage} 
+                    alt={SITE.owner}
+                    className="h-full w-full object-cover"
+                  />
                 </div>
               </div>
               <div className="text-center lg:text-left">

@@ -9,6 +9,7 @@ export const SITE = {
   phoneDigits: '919199499081',
   email: 'info@satbyte.in',
   whatsappUrl: 'https://wa.me/919199499081',
+  ownerImage: 'https://res.cloudinary.com/dpddfcu8u/image/upload/q_auto/f_auto/v1776454436/IMG_20260410_082411_bafruh.png',
 } as const
 
 export const NAV_LINKS = [

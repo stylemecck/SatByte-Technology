@@ -46,7 +46,12 @@ export function AboutPreview() {
                  <p className="text-2xl sm:text-3xl font-medium leading-[1.6] text-muted-foreground transition-colors duration-300 group-hover:text-foreground">
                    We help ambitious businesses build <span className="text-foreground font-bold">bulletproof digital infrastructures</span>, automate complex operations, and capture markets through hyper-optimized web experiences.
                  </p>
-                 <p className="mt-8 text-lg text-muted-foreground opacity-80 font-medium">
+                 <p className="mt-8 text-lg text-muted-foreground opacity-80 font-medium flex items-center gap-3">
+                   <img 
+                      src={SITE.ownerImage} 
+                      alt={SITE.owner} 
+                      className="h-8 w-8 rounded-full border border-border shadow-sm object-cover" 
+                   />
                    Led by <span className="text-foreground">{SITE.owner}</span>, our methodology emphasizes performance, architectural scalability, and zero-compromise security.
                  </p>
               </div>

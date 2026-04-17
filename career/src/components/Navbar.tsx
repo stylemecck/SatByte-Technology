@@ -53,7 +53,7 @@ export function Navbar() {
             <Rocket className="h-4 w-4" />
           </div>
           <div className="flex flex-col sm:flex-row sm:items-baseline sm:gap-2">
-            <span className="hidden font-heading text-[15px] font-bold tracking-tight text-foreground sm:block">
+            <span className="font-heading text-[15px] font-bold tracking-tight text-foreground">
               SatByte
             </span>
             <span className="hidden text-[10px] font-bold uppercase tracking-widest text-brand-blue sm:block">
@@ -159,8 +159,8 @@ export function Navbar() {
                 >
                   <div className="flex items-center justify-between mb-8">
                      <div className="flex items-center gap-2 text-foreground font-bold font-heading">
-                        <Rocket className="h-4 w-4" /> Careers Menu
-                     </div>
+                      <Rocket className="h-4 w-4" /> SatByte Careers
+                   </div>
                      <button 
                         onClick={() => setIsOpen(false)}
                         className="flex h-8 w-8 items-center justify-center rounded-full bg-secondary text-foreground"

@@ -60,8 +60,8 @@ export function Navbar() {
           <div className="flex h-8 w-8 items-center justify-center rounded-full bg-foreground text-background">
             <Rocket className="h-4 w-4" />
           </div>
-          <span className="hidden font-heading text-[15px] font-bold tracking-tight text-foreground sm:block">
-            {SITE.name}
+          <span className="font-heading text-[15px] font-bold tracking-tighter text-foreground">
+            SatByte Technologies
           </span>
         </Link>
 
@@ -154,7 +154,7 @@ export function Navbar() {
                 
                 <div className="flex items-center justify-between mb-8">
                    <div className="flex items-center gap-2 text-foreground font-bold font-heading">
-                      <Rocket className="h-4 w-4" /> Menu
+                      <Rocket className="h-4 w-4" /> SatByte
                    </div>
                    <Dialog.Close asChild>
                      <button className="flex h-8 w-8 items-center justify-center rounded-full bg-secondary text-foreground transition-transform active:scale-90">
