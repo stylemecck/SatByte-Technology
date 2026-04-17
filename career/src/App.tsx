@@ -1,5 +1,6 @@
 import { Routes, Route, Navigate } from 'react-router-dom'
 import { MainLayout } from './layouts/MainLayout'
+import { ScrollToTopOnNav } from './components/ScrollToTopOnNav'
 import { useAuth } from './contexts/AuthContext'
 
 // Real Pages
@@ -26,8 +27,10 @@ function ProtectedRoute({ children, adminOnly = false }: { children: React.React
 
 function App() {
   return (
-    <Routes>
-      <Route path="/" element={<MainLayout />}>
+    <>
+      <ScrollToTopOnNav />
+      <Routes>
+        <Route path="/" element={<MainLayout />}>
         <Route index element={<HomePage />} />
         <Route path="careers" element={<CareersPage />} />
         <Route path="careers/:id" element={<JobDetailsPage />} />
@@ -48,6 +51,7 @@ function App() {
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
+    </>
   )
 }
 

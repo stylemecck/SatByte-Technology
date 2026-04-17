@@ -2,6 +2,7 @@ import { lazy, Suspense } from 'react'
 import { Route, Routes } from 'react-router-dom'
 
 import { RequireAdmin } from '@/components/admin/RequireAdmin'
+import { ScrollToTopOnNav } from '@/components/ScrollToTopOnNav'
 import { MainLayout } from '@/layouts/MainLayout'
 
 const HomePage = lazy(() => import('@/pages/HomePage'))
@@ -24,8 +25,10 @@ const ClientDashboardPage = lazy(() => import('@/pages/ClientDashboardPage'))
 /** Top-level routes; marketing pages use `MainLayout`; admin is separate. */
 export default function App() {
   return (
-    <Routes>
-      <Route path="/admin/login" element={<AdminLoginPage />} />
+    <>
+      <ScrollToTopOnNav />
+      <Routes>
+        <Route path="/admin/login" element={<AdminLoginPage />} />
       <Route
         path="/admin"
         element={
@@ -73,5 +76,6 @@ export default function App() {
         <Route path="quote" element={<QuotePage />} />
       </Route>
     </Routes>
+    </>
   )
 }
