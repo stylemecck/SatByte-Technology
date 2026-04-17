@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { Mail, MapPin, Globe, ExternalLink, Rocket } from 'lucide-react'
+import { Mail, Globe, ExternalLink, Rocket } from 'lucide-react'
 import { SITE } from '../lib/constants'
 
 export function Footer() {

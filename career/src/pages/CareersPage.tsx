@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Search, MapPin, Briefcase, ExternalLink, Zap, Clock, ShieldCheck, ArrowRight } from 'lucide-react'
+import { Search, MapPin, Briefcase, Zap, Clock, ShieldCheck, ArrowRight } from 'lucide-react'
 import { useQuery } from '@tanstack/react-query'
 import { Link } from 'react-router-dom'
 import { api } from '../lib/apiClient'

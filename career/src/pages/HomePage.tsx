@@ -1,9 +1,8 @@
 import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
-import { Briefcase, GraduationCap, Award, ArrowRight, ShieldCheck, Zap, Laptop, Star, Globe, ExternalLink, Rocket } from 'lucide-react'
+import { Briefcase, GraduationCap, Award, ArrowRight, ShieldCheck, Zap, Laptop, Star, Globe, ExternalLink } from 'lucide-react'
 import { SEO } from '../components/SEO'
 import { SITE } from '../lib/constants'
-import { cn } from '../utils/cn'
 
 export default function HomePage() {
   return (

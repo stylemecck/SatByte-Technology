@@ -54,6 +54,8 @@ export interface Application {
   job?: Job | string
   internship?: Internship | string
   type: 'Job' | 'Internship'
+  college?: string
+  course?: string
   resumeUrl: string
   coverLetter: string
   status: 'Pending' | 'Reviewed' | 'Rejected' | 'Hired'

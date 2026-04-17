@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion'
-import { Moon, Sun, X, Rocket, User, LogOut, LayoutDashboard, ChevronRight } from 'lucide-react'
+import { Moon, Sun, X, Rocket, LogOut, LayoutDashboard } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
 
