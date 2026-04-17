@@ -61,7 +61,8 @@ export function Navbar() {
             <Rocket className="h-4 w-4" />
           </div>
           <span className="font-heading text-[15px] font-bold tracking-tighter text-foreground">
-            SatByte Technologies
+            {/* SatByte Technologies */}
+              {SITE.name}
           </span>
         </Link>
 
