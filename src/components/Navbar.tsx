@@ -154,7 +154,7 @@ export function Navbar() {
                 
                 <div className="flex items-center justify-between mb-8">
                    <div className="flex items-center gap-2 text-foreground font-bold font-heading">
-                      <Rocket className="h-4 w-4" /> SatByte
+                      <Rocket className="h-4 w-4" /> Menu
                    </div>
                    <Dialog.Close asChild>
                      <button className="flex h-8 w-8 items-center justify-center rounded-full bg-secondary text-foreground transition-transform active:scale-90">
