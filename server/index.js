@@ -27,6 +27,7 @@ const allowedOrigins = [
   'https://satbyte.in',
   'https://services.satbyte.in',
   'https://career.satbyte.in',
+  'https://satbyte-technology.onrender.com',
   ...((process.env.CLIENT_URL || '').split(',').map(s => s.trim()))
 ].filter(Boolean)
 

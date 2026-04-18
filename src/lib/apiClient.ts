@@ -9,12 +9,15 @@ if (rawBaseURL.startsWith('http') && !rawBaseURL.endsWith('/api') && !rawBaseURL
 }
 
 const baseURL = rawBaseURL.endsWith('/') ? rawBaseURL : `${rawBaseURL}/`
+const isProduction = import.meta.env.PROD
 
 export const api = axios.create({
   baseURL,
 })
 
-console.log('[SatByte API] Initialized with:', baseURL)
+if (!isProduction || isProduction) {
+  console.log(`[SatByte API] Initialized | Mode: ${isProduction ? 'Production' : 'Development'} | Base: ${baseURL}`)
+}
 
 export function setAuthToken(token: string | null) {
   if (token) {

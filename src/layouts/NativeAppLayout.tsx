@@ -8,11 +8,13 @@ import { PageSkeleton } from '@/components/PageSkeleton'
 import { BottomNav } from '../components/BottomNav'
 import { SITE } from '@/lib/constants'
 import { Logo } from '@/components/Logo'
+import { useTheme } from '@/contexts/ThemeContext'
 
 export function NativeAppLayout() {
   const location = useLocation()
   const outlet = useOutlet()
   const navigate = useNavigate()
+  const { theme } = useTheme()
 
   // Determine page title based on route
   const getPageTitle = (path: string) => {
@@ -30,21 +32,21 @@ export function NativeAppLayout() {
   const isHome = location.pathname === '/'
 
   return (
-    <div className="flex flex-col h-screen w-screen overflow-hidden bg-black text-white font-body selection:bg-primary selection:text-primary-foreground">
+    <div className="flex flex-col h-screen w-screen overflow-hidden bg-background text-foreground font-body selection:bg-primary selection:text-primary-foreground transition-colors duration-300">
       
       {/* Native-style App Header */}
-      <header className="flex-none h-14 px-4 flex items-center justify-between pt-safe bg-black/80 backdrop-blur-xl border-b border-white/5 sticky top-0 z-[100]">
+      <header className="flex-none h-14 px-4 flex items-center justify-between pt-safe bg-background/80 backdrop-blur-xl border-b border-border sticky top-0 z-[100] transition-colors duration-300">
         <div className="flex-1 flex items-center">
           {!isHome ? (
             <button 
               onClick={() => navigate(-1)}
-              className="p-2 -ml-2 rounded-full active:bg-white/10 transition-colors"
+              className="p-2 -ml-2 rounded-full active:bg-secondary transition-colors"
             >
               <ChevronLeft className="h-6 w-6" />
             </button>
           ) : (
             <div className="h-8 w-8 flex items-center justify-center">
-              <Logo variant="icon" theme="dark" className="scale-75" />
+              <Logo variant="icon" theme={theme} className="scale-75" />
             </div>
           )}
         </div>
@@ -56,7 +58,7 @@ export function NativeAppLayout() {
         </div>
 
         <div className="flex-1 flex justify-end">
-          <Link to="/portal" className="p-2 -mr-2 rounded-full active:bg-white/10 transition-colors">
+          <Link to="/portal" className="p-2 -mr-2 rounded-full active:bg-secondary transition-colors">
             <User className="h-5 w-5" />
           </Link>
         </div>
