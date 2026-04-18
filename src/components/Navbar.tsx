@@ -1,12 +1,11 @@
 import * as Dialog from '@radix-ui/react-dialog'
 import { motion } from 'framer-motion'
-import { Moon, Sun, X, Rocket, LayoutDashboard } from 'lucide-react'
+import { Moon, Sun, X, LayoutDashboard } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
 
 
 import { useTheme } from '@/contexts/ThemeContext'
-import { SITE } from '@/lib/constants'
 import { cn } from '@/lib/utils'
 import { getStoredToken } from '@/lib/apiClient'
 import { Logo } from './Logo'

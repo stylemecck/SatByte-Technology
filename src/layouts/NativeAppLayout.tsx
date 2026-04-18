@@ -1,7 +1,7 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import { Suspense } from 'react'
 import { useLocation, useOutlet, Link, useNavigate } from 'react-router-dom'
-import { ChevronLeft, Rocket, User } from 'lucide-react'
+import { ChevronLeft, User } from 'lucide-react'
 
 import { pageVariants } from '@/animations/pageVariants'
 import { PageSkeleton } from '@/components/PageSkeleton'
