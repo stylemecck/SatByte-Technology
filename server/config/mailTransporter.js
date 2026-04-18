@@ -12,8 +12,11 @@ export const mailTransporter = {
       // Use env var or the fallback token provided previously
       const resendApiKey = process.env.RESEND_API_KEY?.trim() || 're_JnYFtcut_BCJXZotm5RCwpKYiSvRvqLDv';
       
+      // USE ONBOARDING ADDRESS FOR NOW
+      // Resend free tier allows sending from onboarding@resend.dev to the account owner.
+      // If the user wants to use info@satbyte.in, they MUST verify it on Resend.com
       const payload = {
-        from: options.from || 'SatByte Technologies <info@satbyte.in>',
+        from: 'SatByte Portal <onboarding@resend.dev>', 
         to: options.to,
         subject: options.subject,
         html: options.html,
@@ -28,6 +31,7 @@ export const mailTransporter = {
       }
 
       console.log(`[mail] Attempting delivery via Resend to ${options.to}...`);
+      console.log(`[mail] Debug Payload:`, JSON.stringify(payload, null, 2));
 
       const response = await axios.post('https://api.resend.com/emails', payload, {
         headers: {

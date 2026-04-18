@@ -1,12 +1,16 @@
 import { useEffect, useState } from 'react';
 import { App } from '@capacitor/app';
 import { api } from '@/lib/apiClient';
+import { isNativeApp } from '@/lib/platform';
 
 export function useUpdateCheck() {
   const [updateAvailable, setUpdateAvailable] = useState(false);
   const [latestVersion, setLatestVersion] = useState<string | null>(null);
 
   useEffect(() => {
+    // Only check for updates in native app environments
+    if (!isNativeApp()) return;
+
     const checkVersion = async () => {
       try {
         // 1. Get current app information
