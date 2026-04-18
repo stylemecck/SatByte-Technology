@@ -19,6 +19,21 @@ if (!isProduction || isProduction) {
   console.log(`[SatByte API] Initialized | Mode: ${isProduction ? 'Production' : 'Development'} | Base: ${baseURL}`)
 }
 
+// Diagnostic interceptor for mobile debugging
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    console.error('[SatByte API] Request Failed:', {
+      url: error.config?.url,
+      method: error.config?.method,
+      status: error.response?.status,
+      message: error.message,
+      data: error.response?.data
+    });
+    return Promise.reject(error);
+  }
+);
+
 export function setAuthToken(token: string | null) {
   if (token) {
     api.defaults.headers.common.Authorization = `Bearer ${token}`

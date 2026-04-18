@@ -34,12 +34,22 @@ const allowedOrigins = [
 app.use(
   cors({
     origin: (origin, callback) => {
-      // Allow requests with no origin (like mobile apps or curl)
-      if (!origin) return callback(null, true)
-      if (allowedOrigins.indexOf(origin) !== -1 || origin === 'https://satbyte.in' || origin.endsWith('.satbyte.in')) {
-        callback(null, true)
+      // Log the origin for debugging on Render
+      if (origin) console.log(`[CORS] Origin: ${origin}`);
+      
+      // Allow requests with no origin (like mobile apps/curl in some cases)
+      if (!origin) return callback(null, true);
+      
+      // Flexible matching for mobile and production
+      const isLocalhost = origin.includes('localhost');
+      const isCapacitor = origin.startsWith('capacitor://');
+      const isProduction = origin === 'https://satbyte.in' || origin === 'https://satbyte-technology.onrender.com' || origin.endsWith('.satbyte.in');
+      
+      if (isLocalhost || isCapacitor || isProduction || allowedOrigins.includes(origin)) {
+        callback(null, true);
       } else {
-        callback(new Error('Not allowed by CORS'))
+        console.warn(`[CORS] Denied: ${origin}`);
+        callback(new Error('Not allowed by CORS'));
       }
     },
     credentials: true,
