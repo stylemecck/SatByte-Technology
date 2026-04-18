@@ -17,6 +17,7 @@ const PRIMARY_LINKS = [
   { href: '/about', label: 'About' },
   { href: 'https://career.satbyte.in', label: 'Careers' },
   { href: '/contact', label: 'Contact' },
+  { href: '/download', label: 'Get App' },
 ]
 
 export function Navbar() {

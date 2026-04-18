@@ -45,9 +45,9 @@ function Counter({ to, suffix = '' }: { to: number; suffix?: string }) {
 
 /* ── Data ── */
 const stats = [
-  { icon: Rocket, label: 'Projects Delivered', value: 120, suffix: '+', color: 'text-brand-blue' },
+  { icon: Rocket, label: 'Projects Delivered', value: 12, suffix: '+', color: 'text-brand-blue' },
   { icon: Calendar, label: 'Years Active', value: 3, suffix: '+', color: 'text-brand-amber' },
-  { icon: Users, label: 'Happy Clients', value: 45, suffix: '+', color: 'text-brand-emerald' },
+  { icon: Users, label: 'Happy Clients', value: 5, suffix: '+', color: 'text-brand-emerald' },
   { icon: Star, label: 'Client Retention', value: 98, suffix: '%', color: 'text-brand-violet' },
 ]
 

@@ -26,7 +26,7 @@ const ClientLoginPage = lazy(() => import('@/pages/ClientLoginPage'))
 const ClientDashboardPage = lazy(() => import('@/pages/ClientDashboardPage'))
 const MobileMenuPage = lazy(() => import('@/pages/MobileMenuPage'))
 const PrivacyPolicyPage = lazy(() => import('@/pages/PrivacyPolicyPage'))
-
+const DownloadAppPage = lazy(() => import('@/pages/DownloadAppPage'))
 
 import { UpdateModal } from '@/components/UpdateModal'
 
@@ -65,6 +65,7 @@ export default function App() {
         <Route path="client-login" element={<ClientLoginPage />} />
         <Route path="portal" element={<ClientDashboardPage />} />
         <Route path="privacy" element={<PrivacyPolicyPage />} />
+        <Route path="download" element={<DownloadAppPage />} />
       </Route>
     </Routes>
     </>

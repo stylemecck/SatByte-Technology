@@ -124,8 +124,8 @@ export function HeroSection() {
         className="relative z-20 mx-auto mt-32 grid max-w-[85rem] w-full gap-8 px-4 sm:grid-cols-3 sm:px-6 lg:px-8"
       >
         {[
-          { label: 'Lines of Code Shipped', value: '1.2M+', icon: Code, color: 'text-blue-400', glow: 'shadow-blue-500/20' },
-          { label: 'Agency Partners', value: '45+', icon: Rocket, color: 'text-amber-400', glow: 'shadow-amber-500/20' },
+          { label: 'Lines of Code Shipped', value: '100k+', icon: Code, color: 'text-blue-400', glow: 'shadow-blue-500/20' },
+          { label: 'Agency Partners', value: '5+', icon: Rocket, color: 'text-amber-400', glow: 'shadow-amber-500/20' },
           { label: 'Client Retention', value: '99%', icon: ShieldCheck, color: 'text-emerald-400', glow: 'shadow-emerald-500/20' },
         ].map((stat, i) => {
           const Icon = stat.icon
