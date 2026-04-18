@@ -1,13 +1,13 @@
 import { motion } from 'framer-motion'
-import { Home, Briefcase, Layers, User } from 'lucide-react'
+import { Home, Briefcase, LayoutDashboard, Menu } from 'lucide-react'
 import { Link, useLocation } from 'react-router-dom'
 import { cn } from '@/lib/utils'
 
 const NAV_ITEMS = [
   { href: '/', label: 'Home', icon: Home },
   { href: '/services', label: 'Services', icon: Briefcase },
-  { href: '/portfolio', label: 'Portfolio', icon: Layers },
-  { href: '/portal', label: 'Account', icon: User },
+  { href: '/portal', label: 'Account', icon: LayoutDashboard },
+  { href: '/menu', label: 'More', icon: Menu },
 ]
 
 export function BottomNav() {

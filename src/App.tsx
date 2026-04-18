@@ -1,4 +1,4 @@
-import { lazy, Suspense } from 'react'
+import { lazy } from 'react'
 import { Route, Routes } from 'react-router-dom'
 
 import { RequireAdmin } from '@/components/admin/RequireAdmin'
@@ -24,6 +24,8 @@ const AdminLoginPage = lazy(() => import('@/pages/AdminLoginPage'))
 const AdminDashboardPage = lazy(() => import('@/pages/AdminDashboardPage'))
 const ClientLoginPage = lazy(() => import('@/pages/ClientLoginPage'))
 const ClientDashboardPage = lazy(() => import('@/pages/ClientDashboardPage'))
+const MobileMenuPage = lazy(() => import('@/pages/MobileMenuPage'))
+
 
 /** Top-level routes; marketing pages use `MainLayout`; admin is separate. */
 export default function App() {
@@ -42,30 +44,6 @@ export default function App() {
           </RequireAdmin>
         }
       />
-      <Route
-        path="/quote"
-        element={
-          <Suspense fallback={null}>
-            <QuotePage />
-          </Suspense>
-        }
-      />
-      <Route
-        path="/client-login"
-        element={
-          <Suspense fallback={null}>
-            <ClientLoginPage />
-          </Suspense>
-        }
-      />
-      <Route
-        path="/portal"
-        element={
-          <Suspense fallback={null}>
-            <ClientDashboardPage />
-          </Suspense>
-        }
-      />
       <Route element={<AppLayout />}>
         <Route index element={<HomePage />} />
         <Route path="about" element={<AboutPage />} />
@@ -79,6 +57,9 @@ export default function App() {
         <Route path="blog/:slug" element={<BlogPostPage />} />
         <Route path="contact" element={<ContactPage />} />
         <Route path="quote" element={<QuotePage />} />
+        <Route path="menu" element={<MobileMenuPage />} />
+        <Route path="client-login" element={<ClientLoginPage />} />
+        <Route path="portal" element={<ClientDashboardPage />} />
       </Route>
     </Routes>
     </>

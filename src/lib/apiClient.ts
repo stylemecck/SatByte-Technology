@@ -14,6 +14,8 @@ export const api = axios.create({
   baseURL,
 })
 
+console.log('[SatByte API] Initialized with:', baseURL)
+
 export function setAuthToken(token: string | null) {
   if (token) {
     api.defaults.headers.common.Authorization = `Bearer ${token}`
