@@ -13,6 +13,7 @@ const isProduction = import.meta.env.PROD
 
 export const api = axios.create({
   baseURL,
+  timeout: 60000, // 60 seconds to allow Render free tier to wake up
 })
 
 if (!isProduction || isProduction) {
