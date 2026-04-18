@@ -21,6 +21,8 @@ const PORT = Number(process.env.PORT || 5000)
 const allowedOrigins = [
   'http://localhost:5173',
   'http://localhost:5174',
+  'http://localhost',
+  'capacitor://localhost',
   'https://satbyte.in',
   'https://services.satbyte.in',
   'https://career.satbyte.in',

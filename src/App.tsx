@@ -4,6 +4,9 @@ import { Route, Routes } from 'react-router-dom'
 import { RequireAdmin } from '@/components/admin/RequireAdmin'
 import { ScrollToTopOnNav } from '@/components/ScrollToTopOnNav'
 import { MainLayout } from '@/layouts/MainLayout'
+import { NativeAppLayout } from '@/layouts/NativeAppLayout'
+import { isNativeApp } from '@/lib/platform'
+
 
 const HomePage = lazy(() => import('@/pages/HomePage'))
 const AboutPage = lazy(() => import('@/pages/AboutPage'))
@@ -24,6 +27,8 @@ const ClientDashboardPage = lazy(() => import('@/pages/ClientDashboardPage'))
 
 /** Top-level routes; marketing pages use `MainLayout`; admin is separate. */
 export default function App() {
+  const AppLayout = isNativeApp() ? NativeAppLayout : MainLayout
+
   return (
     <>
       <ScrollToTopOnNav />
@@ -61,7 +66,7 @@ export default function App() {
           </Suspense>
         }
       />
-      <Route element={<MainLayout />}>
+      <Route element={<AppLayout />}>
         <Route index element={<HomePage />} />
         <Route path="about" element={<AboutPage />} />
         <Route path="services" element={<ServicesPage />} />
