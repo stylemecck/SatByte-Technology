@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 
 import { Separator } from '@/components/ui/separator'
 import { NAV_LINKS, SITE, SOCIAL_LINKS } from '@/lib/constants'
+import { Logo } from './Logo'
 
 /** Brand marks (Lucide no longer ships these icons in recent versions). */
 function SocialGlyph({ icon }: { icon: (typeof SOCIAL_LINKS)[number]['icon'] }) {
@@ -44,12 +45,9 @@ export function Footer() {
       <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
         <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-4">
           <div className="space-y-4">
-            <div className="flex items-center gap-2">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary font-bold text-primary-foreground">
-                SB
-              </div>
-              <span className="font-heading text-lg font-bold text-foreground">{SITE.name}</span>
-            </div>
+            <Link to="/" className="inline-block">
+              <Logo variant="full" theme="dark" className="scale-110 origin-left" />
+            </Link>
             <p className="text-sm leading-relaxed text-muted-foreground">
               Modern websites, software, and digital solutions for businesses across India — based in{' '}
               {SITE.location}.

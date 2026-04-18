@@ -25,6 +25,7 @@ const AdminDashboardPage = lazy(() => import('@/pages/AdminDashboardPage'))
 const ClientLoginPage = lazy(() => import('@/pages/ClientLoginPage'))
 const ClientDashboardPage = lazy(() => import('@/pages/ClientDashboardPage'))
 const MobileMenuPage = lazy(() => import('@/pages/MobileMenuPage'))
+const PrivacyPolicyPage = lazy(() => import('@/pages/PrivacyPolicyPage'))
 
 
 /** Top-level routes; marketing pages use `MainLayout`; admin is separate. */
@@ -60,6 +61,7 @@ export default function App() {
         <Route path="menu" element={<MobileMenuPage />} />
         <Route path="client-login" element={<ClientLoginPage />} />
         <Route path="portal" element={<ClientDashboardPage />} />
+        <Route path="privacy" element={<PrivacyPolicyPage />} />
       </Route>
     </Routes>
     </>

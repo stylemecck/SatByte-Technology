@@ -8,7 +8,8 @@ import {
   BookOpen, 
   Mail, 
   FileText,
-  ChevronRight
+  ChevronRight,
+  Lock
 } from 'lucide-react'
 
 const MENU_GROUPS = [
@@ -32,6 +33,7 @@ const MENU_GROUPS = [
     items: [
       { label: "Contact Us", href: "/contact", icon: Mail },
       { label: "Request a Quote", href: "/quote", icon: FileText },
+      { label: "Privacy & Usage Policy", href: "/privacy", icon: Lock },
     ]
   }
 ]

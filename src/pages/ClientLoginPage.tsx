@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { SEO } from '@/components/SEO'
 import { SectionHeader } from '@/components/SectionHeader'
+import { Logo } from '@/components/Logo'
 
 export default function ClientLoginPage() {
   if (getStoredToken()) {
@@ -97,6 +98,9 @@ export default function ClientLoginPage() {
     <>
       <SEO title="Client Access" description="Access your SatByte projects" path="/client-login" />
       <div className="mx-auto max-w-md px-4 py-20 min-h-[70vh]">
+        <div className="flex justify-center mb-10">
+          <Logo variant="full" className="scale-125" />
+        </div>
         <SectionHeader eyebrow="Secure Portal" title={authMode === 'login' ? "Client Login" : "Client Registration"} subtitle="Manage your high-end digital projects." />
         
         <Card className="mt-8 border-border bg-card shadow-lg overflow-hidden rounded-3xl">

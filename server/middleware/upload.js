@@ -1,6 +1,7 @@
 import multer from 'multer'
 
-const storage = multer.memoryStorage()
+// Explicitly use memoryStorage and check for common ESM/CJS interop issues to avoid "Missing multer destination directory" error
+const storage = multer.memoryStorage ? multer.memoryStorage() : multer({}).storage;
 
 /** Single image field for Cloudinary pipeline (buffer in memory). */
 export const uploadSingleImage = multer({

@@ -9,6 +9,7 @@ import { useTheme } from '@/contexts/ThemeContext'
 import { SITE } from '@/lib/constants'
 import { cn } from '@/lib/utils'
 import { getStoredToken } from '@/lib/apiClient'
+import { Logo } from './Logo'
 
 const PRIMARY_LINKS = [
   { href: '/services', label: 'Services' },
@@ -55,15 +56,9 @@ export function Navbar() {
         {/* Brand */}
         <Link
           to="/"
-          className="flex items-center gap-2.5 transition-opacity hover:opacity-80 outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-md"
+          className="flex items-center transition-opacity hover:opacity-80 outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-md"
         >
-          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-foreground text-background">
-            <Rocket className="h-4 w-4" />
-          </div>
-          <span className="font-heading text-[15px] font-bold tracking-tighter text-foreground">
-            {/* SatByte Technologies */}
-              {SITE.name}
-          </span>
+          <Logo theme={theme === 'dark' ? 'dark' : 'light'} className="scale-75 sm:scale-90 origin-left" />
         </Link>
 
         {/* Desktop Navigation */}
@@ -154,9 +149,9 @@ export function Navbar() {
                 <Dialog.Title className="sr-only">Mobile Menu</Dialog.Title>
                 
                 <div className="flex items-center justify-between mb-8">
-                   <div className="flex items-center gap-2 text-foreground font-bold font-heading">
-                      <Rocket className="h-4 w-4" /> Menu
-                   </div>
+                   <Link to="/" className="flex items-center">
+                      <Logo theme={theme === 'dark' ? 'dark' : 'light'} variant="full" className="scale-90 origin-left" />
+                   </Link>
                    <Dialog.Close asChild>
                      <button className="flex h-8 w-8 items-center justify-center rounded-full bg-secondary text-foreground transition-transform active:scale-90">
                        <X className="h-4 w-4" />

@@ -7,6 +7,7 @@ import { pageVariants } from '@/animations/pageVariants'
 import { PageSkeleton } from '@/components/PageSkeleton'
 import { BottomNav } from '../components/BottomNav'
 import { SITE } from '@/lib/constants'
+import { Logo } from '@/components/Logo'
 
 export function NativeAppLayout() {
   const location = useLocation()
@@ -42,8 +43,8 @@ export function NativeAppLayout() {
               <ChevronLeft className="h-6 w-6" />
             </button>
           ) : (
-            <div className="h-8 w-8 rounded-full bg-white flex items-center justify-center text-black">
-              <Rocket className="h-4 w-4" />
+            <div className="h-8 w-8 flex items-center justify-center">
+              <Logo variant="icon" theme="dark" className="scale-75" />
             </div>
           )}
         </div>

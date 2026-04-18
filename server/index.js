@@ -11,6 +11,7 @@ import projectRoutes from './routes/projectRoutes.js'
 import serviceRoutes from './routes/serviceRoutes.js'
 import ticketRoutes from './routes/ticketRoutes.js'
 import jobRoutes from './routes/jobRoutes.js'
+import mobileRoutes from './routes/mobileRoutes.js'
 import internshipRoutes from './routes/internshipRoutes.js'
 import certificationRoutes from './routes/certificationRoutes.js'
 import { handlePurchaseSuccess } from './controllers/checkoutController.js'
@@ -58,6 +59,7 @@ app.use('/api/contact', contactRoutes)
 app.use('/api/checkout', checkoutRoutes)
 app.use('/api/tickets', ticketRoutes)
 app.use('/api/jobs', jobRoutes)
+app.use('/api/mobile', mobileRoutes)
 app.use('/api/internships', internshipRoutes)
 app.use('/api/certifications', certificationRoutes)
 
