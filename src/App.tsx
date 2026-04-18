@@ -30,9 +30,17 @@ const DownloadAppPage = lazy(() => import('@/pages/DownloadAppPage'))
 
 import { UpdateModal } from '@/components/UpdateModal'
 
+import { useEffect } from 'react'
+import { CapacitorUpdater } from '@capgo/capacitor-updater'
+
 /** Top-level routes; marketing pages use `MainLayout`; admin is separate. */
 export default function App() {
   const AppLayout = isNativeApp() ? NativeAppLayout : MainLayout
+
+  useEffect(() => {
+    // Notify Capgo that the app is ready and the update is successful
+    CapacitorUpdater.notifyAppReady();
+  }, [])
 
   return (
     <>

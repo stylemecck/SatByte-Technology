@@ -10,7 +10,8 @@ import {
   verifyRazorpayPayment,
   createPayuSession,
   uploadOrderAsset,
-  removeOrderAsset
+  removeOrderAsset,
+  downloadInvoice
 } from '../controllers/checkoutController.js'
 import { requireAuth, requireAdmin } from '../middleware/auth.js'
 import { uploadSingleFile } from '../middleware/upload.js'
@@ -31,6 +32,7 @@ router.post('/payu/create-session', createPayuSession)
 // Order management (protected)
 router.get('/orders', requireAuth, requireAdmin, getOrders)
 router.get('/my-orders', requireAuth, getMyOrders)
+router.get('/my-orders/:id/invoice', requireAuth, downloadInvoice)
 router.put('/orders/:id/status', requireAuth, requireAdmin, updateOrderStatus)
 
 // Project Files (protected)

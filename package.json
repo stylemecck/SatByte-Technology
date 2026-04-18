@@ -9,7 +9,8 @@
     "dev:full": "concurrently -n client,api -c blue,green \"vite\" \"npm run dev --prefix server\"",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "deploy:app": "npm run build && npx @capgo/cli@latest bundle upload --channel production --apikey YOUR_API_KEY_HERE"
   },
   "dependencies": {
     "@capacitor-community/contacts": "^7.1.0",
@@ -19,6 +20,7 @@
     "@capacitor/core": "^8.3.1",
     "@capacitor/filesystem": "^8.1.2",
     "@capawesome/capacitor-file-picker": "^8.0.2",
+    "@capgo/capacitor-updater": "^8.45.9",
     "@emailjs/browser": "^4.4.1",
     "@radix-ui/react-dialog": "^1.1.15",
     "@radix-ui/react-dropdown-menu": "^2.1.16",

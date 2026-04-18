@@ -2,6 +2,7 @@ import Stripe from 'stripe'
 import Razorpay from 'razorpay'
 import crypto from 'crypto'
 import { sendPurchaseConfirmation } from '../config/mailTransporter.js'
+import { generateInvoiceBuffer } from '../utils/invoiceGenerator.js'
 import { Order } from '../models/Order.js'
 
 /** INR amounts in paise (smallest currency unit) — must match marketing prices. */
@@ -279,6 +280,32 @@ export async function removeOrderAsset(req, res) {
   } catch (error) {
     console.error('[remove-order-asset]', error);
     res.status(500).json({ message: 'Failed to remove asset' });
+  }
+}
+
+export async function downloadInvoice(req, res) {
+  try {
+    const { id } = req.params;
+    const order = await Order.findById(id);
+    if (!order) return res.status(404).json({ message: 'Order not found' });
+
+    // Access control: Admin or Order owner
+    if (req.user?.role !== 'admin' && order.email !== req.user?.email) {
+      return res.status(403).json({ message: 'Forbidden' });
+    }
+
+    const buffer = await generateInvoiceBuffer(order);
+    
+    res.set({
+      'Content-Type': 'application/pdf',
+      'Content-Disposition': `attachment; filename=Invoice-${order.emailReferenceId}.pdf`,
+      'Content-Length': buffer.length,
+    });
+
+    res.end(buffer);
+  } catch (error) {
+    console.error('[download-invoice]', error);
+    res.status(500).json({ message: 'Failed to generate invoice' });
   }
 }
 

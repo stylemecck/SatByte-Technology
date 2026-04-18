@@ -18,13 +18,15 @@ import {
   Send,
   Pencil,
   X,
-  Save
+  Save,
+  Download
 } from 'lucide-react'
 
 import { api, getStoredToken, setAuthToken, clearToken } from '@/lib/apiClient'
 import { SEO } from '@/components/SEO'
 import { Button } from '@/components/ui/button'
 import { isNativeApp } from '@/lib/platform'
+import { OrderDetailsModal } from '@/components/dashboard/OrderDetailsModal'
 
 const fadeAnim = {
   initial: { opacity: 0, y: 20 },
@@ -107,6 +109,26 @@ export default function ClientDashboardPage() {
   const [profileForm, setProfileForm] = useState({ name: '', phone: '', company: '' })
   const [profileLoading, setProfileLoading] = useState(false)
   const [isEditingProfile, setIsEditingProfile] = useState(false)
+
+  const [selectedOrderDetails, setSelectedOrderDetails] = useState<any | null>(null)
+  const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false)
+
+  const handleDownloadInvoice = async (order: any) => {
+    try {
+      const response = await api.get(`checkout/my-orders/${order._id}/invoice`, {
+        responseType: 'blob'
+      });
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `Invoice-${order.emailReferenceId}.pdf`);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    } catch (err) {
+      alert('Failed to download invoice. Please try again later.');
+    }
+  };
 
   useEffect(() => {
     if (profile) {
@@ -325,7 +347,15 @@ export default function ClientDashboardPage() {
                                 {order.status === 'paid' ? 'Active' : order.status}
                               </span>
                               <h3 className="font-heading text-2xl font-bold text-white mb-1">{order.planName}</h3>
-                              <p className="text-sm font-mono text-slate-500">Ref: {order.emailReferenceId}</p>
+                              <div className="flex items-center gap-3">
+                                <p className="text-sm font-mono text-slate-500">Ref: {order.emailReferenceId}</p>
+                                <button 
+                                  onClick={() => { setSelectedOrderDetails(order); setIsDetailsModalOpen(true); }}
+                                  className="text-[10px] font-bold text-primary uppercase tracking-widest hover:underline flex items-center gap-1"
+                                >
+                                  Details <ChevronRight className="h-2 w-2" />
+                                </button>
+                              </div>
                             </div>
                             <div className="text-right">
                               <span className="text-xs text-slate-400 uppercase font-bold tracking-wider block mb-1">Status</span>
@@ -485,6 +515,21 @@ export default function ClientDashboardPage() {
                             <span className="inline-flex items-center rounded-full bg-white/10 px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wider text-slate-300 sm:mt-1">
                               Paid
                             </span>
+                          </div>
+                          <div className="flex items-center gap-2 w-full sm:w-auto mt-4 sm:mt-0">
+                             <button 
+                              onClick={() => { setSelectedOrderDetails(order); setIsDetailsModalOpen(true); }}
+                              className="flex-1 sm:flex-none px-4 py-2 rounded-xl border border-white/10 bg-white/5 text-xs font-bold text-white hover:bg-white/10 transition-colors"
+                             >
+                               Details
+                             </button>
+                             <button 
+                              onClick={() => handleDownloadInvoice(order)}
+                              className="flex-1 sm:flex-none px-4 py-2 rounded-xl bg-primary text-xs font-bold text-white hover:bg-primary/90 transition-colors flex items-center justify-center gap-2"
+                             >
+                               <Download className="h-3.5 w-3.5" />
+                               Invoice
+                             </button>
                           </div>
                         </motion.div>
                       ))}
@@ -828,6 +873,11 @@ export default function ClientDashboardPage() {
           )}
         </AnimatePresence>
       </div>
+      <OrderDetailsModal 
+        isOpen={isDetailsModalOpen} 
+        onClose={() => setIsDetailsModalOpen(false)} 
+        order={selectedOrderDetails} 
+      />
     </div>
   )
 }
