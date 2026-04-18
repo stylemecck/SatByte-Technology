@@ -1,4 +1,5 @@
 import nodemailer from 'nodemailer'
+import { wrapEmail } from '../config/emailTemplate.js'
 
 /**
  * Optional contact endpoint using Nodemailer (configure SMTP_* in .env).
@@ -28,12 +29,29 @@ export async function sendContact(req, res) {
       auth: { user, pass },
     })
 
+    const html = wrapEmail(
+      `New Message from ${name}`,
+      `
+        <h1>New Contact Request</h1>
+        <p>You have received a new message from your website contact form.</p>
+        <div class="meta-box">
+          <p><strong>Name:</strong> ${name}</p>
+          <p><strong>Email:</strong> ${email}</p>
+          <p><strong>Phone:</strong> ${phone || '—'}</p>
+        </div>
+        <p><strong>Message:</strong></p>
+        <p style="white-space: pre-wrap;">${message}</p>
+      `,
+      'View Dashboard',
+      'https://satbyte.in/portal'
+    )
+
     await transporter.sendMail({
       from: `"SatByte Site" <${user}>`,
       to,
       replyTo: email,
       subject: `[SatByte Contact] ${name}`,
-      text: `From: ${name}\nEmail: ${email}\nPhone: ${phone || '—'}\n\n${message}`,
+      html,
     })
 
     res.json({ message: 'Sent' })
@@ -62,14 +80,25 @@ export async function submitEstimate(req, res) {
       auth: { user, pass },
     })
 
-    const messageHtml = `
-      <h2>New Project Estimate Request</h2>
-      <p><strong>Client Email:</strong> ${email}</p>
-      <p><strong>Project Type:</strong> ${projectType}</p>
-      <p><strong>Pages Needed:</strong> ${pages || 'Not specified'}</p>
-      <p><strong>Timeline:</strong> ${timeline || 'Not specified'}</p>
-      <p><strong>Calculated Estimate:</strong> ${estimate}</p>
-    `;
+    const html = wrapEmail(
+      'New Project Estimate',
+      `
+        <h1>Project Estimate Request</h1>
+        <p>A potential client has requested a personalized estimate for their project.</p>
+        <div class="meta-box">
+          <p><strong>Client Email:</strong> ${email}</p>
+          <p><strong>Project Type:</strong> ${projectType}</p>
+          <p><strong>Pages Needed:</strong> ${pages || 'Not specified'}</p>
+          <p><strong>Timeline:</strong> ${timeline || 'Not specified'}</p>
+          <p style="font-size: 20px; color: #00e5ff; font-weight: 800; margin-top: 10px;">
+            Calculated Estimate: ${estimate}
+          </p>
+        </div>
+        <p>This estimate is based on the current pricing parameters. You may want to follow up with the client to finalize the project scope.</p>
+      `,
+      'Contact Client',
+      `mailto:${email}`
+    )
 
     // Send to Admin
     await transporter.sendMail({
@@ -77,7 +106,7 @@ export async function submitEstimate(req, res) {
       to: user,
       replyTo: email,
       subject: `[New Lead] Estimate Request from ${email}`,
-      html: messageHtml,
+      html,
     })
 
     res.json({ message: 'Estimate sent successfully' })

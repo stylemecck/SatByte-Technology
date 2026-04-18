@@ -28,6 +28,8 @@ const MobileMenuPage = lazy(() => import('@/pages/MobileMenuPage'))
 const PrivacyPolicyPage = lazy(() => import('@/pages/PrivacyPolicyPage'))
 
 
+import { UpdateModal } from '@/components/UpdateModal'
+
 /** Top-level routes; marketing pages use `MainLayout`; admin is separate. */
 export default function App() {
   const AppLayout = isNativeApp() ? NativeAppLayout : MainLayout
@@ -35,6 +37,7 @@ export default function App() {
   return (
     <>
       <ScrollToTopOnNav />
+      <UpdateModal />
       <Routes>
         <Route path="/admin/login" element={<AdminLoginPage />} />
       <Route
