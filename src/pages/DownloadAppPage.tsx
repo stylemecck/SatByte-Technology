@@ -21,11 +21,11 @@ export default function DownloadAppPage() {
   const apkUrl = "/satbyte-v1.0.1.apk"
 
   return (
-    <div className="min-h-screen bg-[#050505] text-white selection:bg-cyan-500/30">
-      {/* Background Glow */}
+    <div className="min-h-screen bg-background text-foreground transition-colors duration-500 overflow-hidden">
+      {/* Background Glows (Adaptive) */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-cyan-500/10 blur-[120px] rounded-full" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-blue-600/10 blur-[120px] rounded-full" />
+        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-cyan-500/10 dark:bg-cyan-500/10 blur-[120px] rounded-full" />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-blue-600/10 dark:bg-blue-600/10 blur-[120px] rounded-full" />
       </div>
 
       <div className="relative z-10 max-w-6xl mx-auto px-6 pt-32 pb-24">
@@ -38,17 +38,17 @@ export default function DownloadAppPage() {
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.5 }}
             >
-              <Badge variant="outline" className="px-4 py-1 rounded-full border-cyan-500/30 bg-cyan-500/5 text-cyan-400 mb-6">
+              <Badge variant="outline" className="px-4 py-1 rounded-full border-cyan-500/30 bg-cyan-500/5 text-cyan-600 dark:text-cyan-400 mb-6 font-bold">
                 v1.0.1 Production Ready
               </Badge>
-              <h1 className="text-5xl lg:text-7xl font-black tracking-tight leading-[1.1]">
+              <h1 className="text-5xl lg:text-7xl font-black tracking-tight leading-[1.1] text-foreground">
                 SatByte <br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-600 to-blue-600 dark:from-cyan-400 dark:to-blue-500">
                   Technologies
                 </span> <br />
                 for Android
               </h1>
-              <p className="mt-6 text-xl text-white/50 leading-relaxed max-w-lg">
+              <p className="mt-6 text-xl text-muted-foreground leading-relaxed max-w-lg">
                 Manage your projects, sync your gallery, and communicate with your team from anywhere. 
                 Our native Android app is engineered for speed and precision.
               </p>
@@ -61,12 +61,12 @@ export default function DownloadAppPage() {
               className="flex flex-col sm:flex-row gap-4"
             >
               <a href={apkUrl} download>
-                <Button size="lg" className="h-14 px-8 bg-cyan-500 hover:bg-cyan-400 text-black font-black text-lg gap-2 rounded-2xl transition-all hover:scale-105 active:scale-95 shadow-[0_0_20px_rgba(6,182,212,0.3)]">
+                <Button size="lg" className="h-14 px-8 bg-cyan-600 dark:bg-cyan-500 hover:bg-cyan-700 dark:hover:bg-cyan-400 text-white dark:text-black font-black text-lg gap-2 rounded-2xl transition-all hover:scale-105 active:scale-95 shadow-xl shadow-cyan-500/20">
                   <Download className="h-6 w-6" />
                   Download APK
                 </Button>
               </a>
-              <Button size="lg" variant="outline" className="h-14 px-8 border-white/10 hover:bg-white/5 text-white font-bold text-lg rounded-2xl cursor-not-allowed">
+              <Button size="lg" variant="outline" className="h-14 px-8 border-border hover:bg-accent text-foreground font-bold text-lg rounded-2xl cursor-not-allowed opacity-50">
                 iOS App (Coming Soon)
               </Button>
             </motion.div>
@@ -74,13 +74,13 @@ export default function DownloadAppPage() {
             <div className="flex items-center gap-6 pt-4">
               <div className="flex -space-x-3">
                 {[1, 2, 3, 4].map((i) => (
-                  <div key={i} className="h-10 w-10 rounded-full border-2 border-[#050505] bg-white/10 flex items-center justify-center overflow-hidden">
-                    <img src={`https://i.pravatar.cc/100?img=${i + 10}`} alt="User" />
+                  <div key={i} className="h-10 w-10 rounded-full border-2 border-background bg-muted flex items-center justify-center overflow-hidden">
+                    <img src={`https://i.pravatar.cc/100?img=${i + 15}`} alt="User" />
                   </div>
                 ))}
               </div>
-              <p className="text-sm text-white/40 font-medium">
-                Joined by <span className="text-white font-bold">500+</span> SatByte users
+              <p className="text-sm text-muted-foreground font-medium">
+                Joined by <span className="text-foreground font-bold font-black">500+</span> SatByte users
               </p>
             </div>
           </div>
@@ -93,16 +93,16 @@ export default function DownloadAppPage() {
               transition={{ delay: 0.3, duration: 0.6 }}
               className="relative"
             >
-              <div className="absolute -inset-1 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-[3rem] blur opacity-25" />
-              <Card className="relative bg-black/40 border-white/10 backdrop-blur-xl p-8 rounded-[3rem] overflow-hidden">
+              <div className="absolute -inset-1 bg-gradient-to-r from-cyan-600 to-blue-600 rounded-[3rem] blur opacity-10 dark:opacity-25" />
+              <Card className="relative bg-background/40 dark:bg-black/40 border-border backdrop-blur-xl p-8 rounded-[3.5rem] overflow-hidden shadow-2xl">
                 <div className="space-y-6">
-                  <div className="flex items-center gap-4 border-b border-white/10 pb-6">
-                    <div className="h-12 w-12 rounded-xl bg-cyan-500 flex items-center justify-center">
-                      <Download className="h-6 w-6 text-black" />
+                  <div className="flex items-center gap-4 border-b border-border pb-6">
+                    <div className="h-12 w-12 rounded-xl bg-cyan-600 dark:bg-cyan-500 flex items-center justify-center">
+                      <Download className="h-6 w-6 text-white dark:text-black" />
                     </div>
                     <div>
-                      <h4 className="font-black text-lg">System Verification</h4>
-                      <div className="flex items-center gap-2 text-green-400 text-sm font-bold">
+                      <h4 className="font-black text-lg text-foreground">System Verification</h4>
+                      <div className="flex items-center gap-2 text-emerald-600 dark:text-green-400 text-sm font-bold">
                         <CheckCircle2 className="h-4 w-4" />
                         Scanned & Secure
                       </div>
@@ -110,27 +110,27 @@ export default function DownloadAppPage() {
                   </div>
 
                   <div className="space-y-4">
-                    <p className="text-xs uppercase tracking-widest text-white/40 font-black">Installation Guide</p>
+                    <p className="text-[10px] uppercase tracking-widest text-muted-foreground font-black">Installation Guide</p>
                     <div className="space-y-4">
                       {INSTALL_STEPS.map((step, idx) => (
                         <div key={idx} className="flex gap-4 items-start">
-                          <div className="h-6 w-6 rounded-full bg-white/5 border border-white/10 flex items-center justify-center shrink-0 mt-1">
+                          <div className="h-6 w-6 rounded-full bg-muted border border-border flex items-center justify-center shrink-0 mt-1">
                             <span className="text-[10px] font-black">{idx + 1}</span>
                           </div>
-                          <p className="text-sm text-white/60 leading-relaxed">{step}</p>
+                          <p className="text-sm text-muted-foreground leading-relaxed font-medium">{step}</p>
                         </div>
                       ))}
                     </div>
                   </div>
 
-                  <div className="pt-6 border-t border-white/10 flex items-center justify-between">
+                  <div className="pt-6 border-t border-border flex items-center justify-between">
                     <div className="space-y-1">
-                      <p className="text-[10px] text-white/30 uppercase font-black tracking-widest">Build Version</p>
-                      <p className="text-sm font-bold">SB_MOBILE_1.0.1_R</p>
+                      <p className="text-[10px] text-muted-foreground uppercase font-black tracking-widest">Build Version</p>
+                      <p className="text-sm font-bold text-foreground">SB_MOBILE_1.0.1_R</p>
                     </div>
                     <div className="text-right space-y-1">
-                      <p className="text-[10px] text-white/30 uppercase font-black tracking-widest">File Size</p>
-                      <p className="text-sm font-bold">5.9 MB</p>
+                      <p className="text-[10px] text-muted-foreground uppercase font-black tracking-widest">File Size</p>
+                      <p className="text-sm font-bold text-foreground">5.9 MB</p>
                     </div>
                   </div>
                 </div>
@@ -148,25 +148,25 @@ export default function DownloadAppPage() {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ delay: idx * 0.1 }}
               viewport={{ once: true }}
-              className="p-8 rounded-[2rem] bg-white/[0.02] border border-white/[0.05] hover:border-cyan-500/20 transition-all hover:bg-white/[0.04] group"
+              className="p-8 rounded-[2.5rem] bg-muted/40 border border-border hover:border-cyan-500/20 transition-all hover:bg-muted/60 group shadow-sm"
             >
-              <div className="h-12 w-12 rounded-2xl bg-white/5 flex items-center justify-center mb-6 group-hover:bg-cyan-500/10 transition-all">
-                <feature.icon className="h-6 w-6 text-white group-hover:text-cyan-400" />
+              <div className="h-12 w-12 rounded-2xl bg-muted flex items-center justify-center mb-6 group-hover:bg-cyan-600/10 dark:group-hover:bg-cyan-500/10 transition-all">
+                <feature.icon className="h-6 w-6 text-foreground group-hover:text-cyan-600 dark:group-hover:text-cyan-400" />
               </div>
-              <h3 className="text-xl font-black mb-2">{feature.title}</h3>
-              <p className="text-white/40 leading-relaxed">{feature.description}</p>
+              <h3 className="text-xl font-black mb-2 text-foreground">{feature.title}</h3>
+              <p className="text-muted-foreground leading-relaxed">{feature.description}</p>
             </motion.div>
           ))}
         </div>
 
         {/* Disclaimer */}
-        <div className="mt-40 p-10 rounded-[2.5rem] bg-amber-500/5 border border-amber-500/10 flex gap-6 items-center">
-          <div className="h-14 w-14 rounded-2xl bg-amber-500/10 flex items-center justify-center shrink-0 text-amber-500">
+        <div className="mt-40 p-10 rounded-[3rem] bg-amber-500/5 dark:bg-amber-500/5 border border-amber-500/10 dark:border-amber-500/10 flex gap-6 items-center">
+          <div className="h-14 w-14 rounded-2xl bg-amber-500/10 flex items-center justify-center shrink-0 text-amber-600 dark:text-amber-500">
             <Info className="h-7 w-7" />
           </div>
           <div className="space-y-1">
-            <h4 className="font-bold text-amber-200">Production Build Information</h4>
-            <p className="text-sm text-amber-200/50 leading-relaxed">
+            <h4 className="font-bold text-amber-700 dark:text-amber-200">Production Build Information</h4>
+            <p className="text-sm text-amber-700/60 dark:text-amber-200/50 leading-relaxed font-medium">
               This is a direct-run APK provided for beta testers and early adopters. 
               Please ensure your device allows installation from unknown sources to run the application securely.
             </p>
@@ -175,7 +175,7 @@ export default function DownloadAppPage() {
 
         {/* Background Footer Detail */}
         <div className="text-center mt-32">
-          <p className="text-[10px] text-white/10 uppercase font-black tracking-[0.5em]">
+          <p className="text-[10px] text-muted-foreground/30 uppercase font-black tracking-[0.5em]">
             ENGINEERED AT SATBYTE PRECISION LABS
           </p>
         </div>
