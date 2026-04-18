@@ -5,10 +5,7 @@ import {
   Download, 
   CheckCircle2, 
   Clock, 
-  CreditCard, 
-  ChevronRight,
-  ShieldCheck,
-  Calendar
+  ShieldCheck
 } from 'lucide-react';
 import { api } from '@/lib/apiClient';
 

@@ -38,8 +38,10 @@ export default function App() {
   const AppLayout = isNativeApp() ? NativeAppLayout : MainLayout
 
   useEffect(() => {
-    // Notify Capgo that the app is ready and the update is successful
-    CapacitorUpdater.notifyAppReady();
+    if (isNativeApp()) {
+      // Notify Capgo that the app is ready and the update is successful
+      CapacitorUpdater.notifyAppReady();
+    }
   }, [])
 
   return (

@@ -79,8 +79,9 @@ export const generateInvoiceBuffer = (orderData) => {
        .text('Sat', MARGIN + 55, headerY + 8, { continued: true })
        .fillColor(CYAN).text('Byte');
     
-    doc.fillColor(TEXT_LIGHT).font('Helvetica-Bold').fontSize(8).tracking(2)
-       .text('TECHNOLOGIES', MARGIN + 56, headerY + 34);
+    doc.fillColor(TEXT_LIGHT).font('Helvetica-Bold').fontSize(8).characterSpacing(2)
+       .text('TECHNOLOGIES', MARGIN + 56, headerY + 34)
+       .characterSpacing(0); // Reset for next text calls
 
     // INVOICE label (Right)
     doc.fillColor(DEEP_BLUE).font('Helvetica-Bold').fontSize(36)
