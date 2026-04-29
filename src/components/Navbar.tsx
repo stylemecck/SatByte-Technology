@@ -97,7 +97,7 @@ export function Navbar() {
           {isLoggedIn ? (
             <Link 
               to="/portal" 
-              className="hidden md:flex items-center gap-2 px-4 py-1.5 rounded-full bg-foreground text-background text-xs font-black uppercase tracking-widest hover:opacity-90 transition-opacity"
+              className="hidden md:flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary text-primary-foreground text-[11px] font-black uppercase tracking-widest hover:opacity-90 transition-opacity shadow-lg shadow-primary/20"
             >
               <LayoutDashboard className="h-3.5 w-3.5" /> Dashboard
             </Link>
@@ -180,14 +180,14 @@ export function Navbar() {
                   {isLoggedIn ? (
                     <Link
                       to="/portal"
-                      className="flex items-center justify-center w-full px-4 py-4 mt-2 text-sm font-bold bg-foreground text-background rounded-xl hover:opacity-90 transition-opacity"
+                      className="flex items-center justify-center w-full px-4 py-4 mt-2 text-sm font-black bg-primary text-primary-foreground rounded-xl hover:opacity-90 transition-opacity"
                     >
                       Dashboard
                     </Link>
                   ) : (
                     <Link
                       to="/client-login"
-                      className="flex items-center justify-center w-full px-4 py-3 mt-2 text-sm font-bold bg-foreground text-background rounded-xl hover:opacity-90 transition-opacity"
+                      className="flex items-center justify-center w-full px-4 py-3 mt-2 text-sm font-black bg-primary text-primary-foreground rounded-xl hover:opacity-90 transition-opacity"
                     >
                       Client Sign In
                     </Link>

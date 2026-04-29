@@ -140,7 +140,7 @@ export default function AdminDashboardPage() {
           <div className="mt-auto p-8 border-t border-border">
             <button 
               onClick={logout}
-              className="flex items-center gap-3 w-full px-4 py-3 rounded-xl text-slate-500 font-semibold hover:text-red-400 hover:bg-red-400/5 transition-all"
+              className="flex items-center gap-3 w-full px-4 py-3 rounded-xl text-muted-foreground font-semibold hover:text-red-400 hover:bg-red-400/5 transition-all"
             >
               <LogOut className="h-5 w-5" />
               Sign Out
@@ -159,10 +159,10 @@ export default function AdminDashboardPage() {
           </div>
           <div className="flex items-center gap-6">
             <div className="relative hidden md:block">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-600" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground/60" />
               <input 
                 placeholder="Global search..." 
-                className="bg-white/5 border border-white/10 rounded-full pl-10 pr-4 py-2 text-sm focus:outline-none focus:border-primary/50 transition-colors w-64"
+                className="bg-white/5 border border-border/50 rounded-full pl-10 pr-4 py-2 text-sm focus:outline-none focus:border-primary/50 transition-colors w-64"
               />
             </div>
             <div className="flex items-center gap-3">
@@ -232,33 +232,33 @@ function CareersPanel() {
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-3xl font-black text-white tracking-tighter">Career Management</h2>
-          <p className="text-slate-500 text-sm">Control talent acquisition and internship pipelines.</p>
+          <p className="text-muted-foreground text-sm">Control talent acquisition and internship pipelines.</p>
         </div>
         <div className="flex gap-3">
           <Button onClick={() => setShowForm('Job')} className="rounded-2xl bg-primary shadow-xl shadow-primary/20 h-12 px-6">New Job Role</Button>
-          <Button onClick={() => setShowForm('Internship')} variant="outline" className="rounded-2xl border-white/10 bg-white/5 h-12 px-6">New Internship</Button>
+          <Button onClick={() => setShowForm('Internship')} variant="outline" className="rounded-2xl border-border/50 bg-white/5 h-12 px-6">New Internship</Button>
         </div>
       </div>
 
       <AnimatePresence>
         {showForm && (
           <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="overflow-hidden">
-            <div className="bg-[#0A111D]/80 border border-white/10 p-10 rounded-[2.5rem] shadow-2xl mb-10">
+            <div className="bg-[#0A111D]/80 border border-border/50 p-10 rounded-[2.5rem] shadow-2xl mb-10">
               <div className="flex justify-between items-center mb-8">
                 <h3 className="text-xl font-bold text-white">Create New {showForm}</h3>
                 <Button variant="ghost" onClick={() => setShowForm(null)}><X size={20} /></Button>
               </div>
               <form onSubmit={handleSubmit(onSubmit)} className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-2"><Label>Title</Label><Input {...register('title')} required className="bg-white/5 border-white/10 h-12" /></div>
-                <div className="space-y-2"><Label>Location</Label><Input {...register('location')} defaultValue="Remote" className="bg-white/5 border-white/10 h-12" /></div>
+                <div className="space-y-2"><Label>Title</Label><Input {...register('title')} required className="bg-white/5 border-border/50 h-12" /></div>
+                <div className="space-y-2"><Label>Location</Label><Input {...register('location')} defaultValue="Remote" className="bg-white/5 border-border/50 h-12" /></div>
                 
                 {showForm === 'Job' ? (
                   <>
-                    <div className="space-y-2"><Label>Experience</Label><Input {...register('experience')} placeholder="1-3 years" className="bg-white/5 border-white/10 h-12" /></div>
-                    <div className="space-y-2"><Label>Salary</Label><Input {...register('salary')} placeholder="₹10L - ₹15L" className="bg-white/5 border-white/10 h-12" /></div>
+                    <div className="space-y-2"><Label>Experience</Label><Input {...register('experience')} placeholder="1-3 years" className="bg-white/5 border-border/50 h-12" /></div>
+                    <div className="space-y-2"><Label>Salary</Label><Input {...register('salary')} placeholder="₹10L - ₹15L" className="bg-white/5 border-border/50 h-12" /></div>
                     <div className="space-y-2">
                        <Label>Category</Label>
-                       <select {...register('category')} className="w-full h-12 bg-white/5 border border-white/10 rounded-xl px-4 text-white appearance-none">
+                       <select {...register('category')} className="w-full h-12 bg-white/5 border border-border/50 rounded-xl px-4 text-white appearance-none">
                          <option value="Engineering" className="bg-slate-900">Engineering</option>
                          <option value="Design" className="bg-slate-900">Design</option>
                          <option value="Marketing" className="bg-slate-900">Marketing</option>
@@ -267,14 +267,14 @@ function CareersPanel() {
                   </>
                 ) : (
                   <>
-                    <div className="space-y-2"><Label>Duration</Label><Input {...register('duration')} placeholder="6 Months" className="bg-white/5 border-white/10 h-12" /></div>
-                    <div className="space-y-2"><Label>Stipend</Label><Input {...register('stipend')} placeholder="₹5,000/month" className="bg-white/5 border-white/10 h-12" /></div>
+                    <div className="space-y-2"><Label>Duration</Label><Input {...register('duration')} placeholder="6 Months" className="bg-white/5 border-border/50 h-12" /></div>
+                    <div className="space-y-2"><Label>Stipend</Label><Input {...register('stipend')} placeholder="₹5,000/month" className="bg-white/5 border-border/50 h-12" /></div>
                   </>
                 )}
 
-                <div className="md:col-span-2 space-y-2"><Label>Summary</Label><Textarea {...register('description')} required className="bg-white/5 border-white/10 min-h-[100px]" /></div>
-                <div className="space-y-2"><Label>Requirements (One per line)</Label><Textarea {...register('requirements')} className="bg-white/5 border-white/10 min-h-[120px]" /></div>
-                <div className="space-y-2"><Label>{showForm === 'Job' ? 'Responsibilities' : 'Skills'} (One per line)</Label><Textarea {...register(showForm === 'Job' ? 'responsibilities' : 'skills')} className="bg-white/5 border-white/10 min-h-[120px]" /></div>
+                <div className="md:col-span-2 space-y-2"><Label>Summary</Label><Textarea {...register('description')} required className="bg-white/5 border-border/50 min-h-[100px]" /></div>
+                <div className="space-y-2"><Label>Requirements (One per line)</Label><Textarea {...register('requirements')} className="bg-white/5 border-border/50 min-h-[120px]" /></div>
+                <div className="space-y-2"><Label>{showForm === 'Job' ? 'Responsibilities' : 'Skills'} (One per line)</Label><Textarea {...register(showForm === 'Job' ? 'responsibilities' : 'skills')} className="bg-white/5 border-border/50 min-h-[120px]" /></div>
                 
                 <Button type="submit" className="md:col-span-2 h-14 bg-primary text-white font-bold text-lg rounded-2xl mt-4">Publish Role Globally</Button>
               </form>
@@ -285,17 +285,17 @@ function CareersPanel() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Jobs Section */}
-        <div className="bg-[#0A111D]/80 border border-white/5 rounded-[2.5rem] p-8">
+        <div className="bg-[#0A111D]/80 border border-border/30 rounded-[2.5rem] p-8">
           <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-3">
              <div className="h-2 w-2 rounded-full bg-blue-500 animate-pulse" /> Live Job Openings
           </h3>
           <div className="space-y-4">
-            {jobsLoading ? <p className="text-slate-600 text-sm">Syncing jobs...</p> : 
+            {jobsLoading ? <p className="text-muted-foreground/60 text-sm">Syncing jobs...</p> : 
               jobs?.map(job => (
-                <div key={job._id} className="p-5 rounded-2xl bg-white/[0.03] border border-white/5 group hover:border-white/10 transition-all flex items-center justify-between">
+                <div key={job._id} className="p-5 rounded-2xl bg-white/[0.03] border border-border/30 group hover:border-border/50 transition-all flex items-center justify-between">
                   <div>
                     <h4 className="font-bold text-white">{job.title}</h4>
-                    <p className="text-xs text-slate-500">{job.location} • {job.experience || 'Entry Level'}</p>
+                    <p className="text-xs text-muted-foreground">{job.location} • {job.experience || 'Entry Level'}</p>
                   </div>
                   <Button variant="ghost" onClick={() => deleteJob.mutate(job._id)} className="opacity-0 group-hover:opacity-100 text-red-400 hover:bg-red-400/10 rounded-lg"><Trash2 size={16} /></Button>
                 </div>
@@ -304,17 +304,17 @@ function CareersPanel() {
         </div>
 
         {/* Internships Section */}
-        <div className="bg-[#0A111D]/80 border border-white/5 rounded-[2.5rem] p-8">
+        <div className="bg-[#0A111D]/80 border border-border/30 rounded-[2.5rem] p-8">
           <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-3">
              <div className="h-2 w-2 rounded-full bg-accent animate-pulse" /> Active Internship Cohorts
           </h3>
           <div className="space-y-4">
-            {internshipsLoading ? <p className="text-slate-600 text-sm">Syncing internships...</p> : 
+            {internshipsLoading ? <p className="text-muted-foreground/60 text-sm">Syncing internships...</p> : 
               internships?.map(intern => (
-                <div key={intern._id} className="p-5 rounded-2xl bg-white/[0.03] border border-white/5 group hover:border-white/10 transition-all flex items-center justify-between">
+                <div key={intern._id} className="p-5 rounded-2xl bg-white/[0.03] border border-border/30 group hover:border-border/50 transition-all flex items-center justify-between">
                   <div>
                     <h4 className="font-bold text-white">{intern.title}</h4>
-                    <p className="text-xs text-slate-500">{intern.duration} • {intern.stipend || 'Unpaid'}</p>
+                    <p className="text-xs text-muted-foreground">{intern.duration} • {intern.stipend || 'Unpaid'}</p>
                   </div>
                   <Button variant="ghost" onClick={() => deleteInternship.mutate(intern._id)} className="opacity-0 group-hover:opacity-100 text-red-400 hover:bg-red-400/10 rounded-lg"><Trash2 size={16} /></Button>
                 </div>
@@ -340,19 +340,19 @@ function ApplicationsPanel() {
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-3xl font-black text-white tracking-tighter">Candidate Pipeline</h2>
-          <p className="text-slate-500 text-sm">Review applications and manage potential talent.</p>
+          <p className="text-muted-foreground text-sm">Review applications and manage potential talent.</p>
         </div>
-        <div className="flex bg-white/5 rounded-2xl p-1 border border-white/10">
+        <div className="flex bg-white/5 rounded-2xl p-1 border border-border/50">
           {(['All', 'Job', 'Internship'] as const).map(f => (
-            <button key={f} onClick={() => setFilter(f)} className={`px-5 py-2 rounded-xl text-xs font-bold transition-all ${filter === f ? 'bg-primary text-white shadow-lg' : 'text-slate-500 hover:text-white'}`}>{f}</button>
+            <button key={f} onClick={() => setFilter(f)} className={`px-5 py-2 rounded-xl text-xs font-bold transition-all ${filter === f ? 'bg-primary text-white shadow-lg' : 'text-muted-foreground hover:text-white'}`}>{f}</button>
           ))}
         </div>
       </div>
 
-      <div className="bg-[#0A111D]/80 border border-white/5 rounded-[2.5rem] overflow-hidden">
+      <div className="bg-[#0A111D]/80 border border-border/30 rounded-[2.5rem] overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-sm">
-            <thead className="bg-white/5 text-[10px] font-bold uppercase tracking-widest text-slate-500">
+            <thead className="bg-white/5 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
               <tr>
                 <th className="px-8 py-5">Candidate</th>
                 <th className="px-8 py-5">Applied For</th>
@@ -367,7 +367,7 @@ function ApplicationsPanel() {
                 <tr key={app._id} className="hover:bg-white/[0.02] group transition-colors">
                   <td className="px-8 py-6">
                     <p className="font-bold text-white">{app.user?.name || 'Unknown'}</p>
-                    <p className="text-xs text-slate-500">{app.user?.email}</p>
+                    <p className="text-xs text-muted-foreground">{app.user?.email}</p>
                   </td>
                   <td className="px-8 py-6">
                     <p className="font-bold text-slate-300">{app.job?.title || app.internship?.title}</p>
@@ -383,14 +383,14 @@ function ApplicationsPanel() {
                     </select>
                   </td>
                   <td className="px-8 py-6 text-right">
-                    <a href={app.resumeUrl} target="_blank" className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-xs font-bold text-slate-300 hover:bg-primary hover:text-white hover:border-transparent transition-all">
+                    <a href={app.resumeUrl} target="_blank" className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 border border-border/50 text-xs font-bold text-slate-300 hover:bg-primary hover:text-white hover:border-transparent transition-all">
                       <FileText size={14} /> View Document
                     </a>
                   </td>
                 </tr>
               ))}
               {!filteredApps?.length && !isLoading && (
-                <tr><td colSpan={4} className="py-20 text-center text-slate-600 text-sm italic">No applications found in this category.</td></tr>
+                <tr><td colSpan={4} className="py-20 text-center text-muted-foreground/60 text-sm italic">No applications found in this category.</td></tr>
               )}
             </tbody>
           </table>
@@ -423,7 +423,7 @@ function EducationPanel() {
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-3xl font-black text-white tracking-tighter">Education CMS</h2>
-          <p className="text-slate-500 text-sm">Manage professional masterclasses and curricula.</p>
+          <p className="text-muted-foreground text-sm">Manage professional masterclasses and curricula.</p>
         </div>
         <Button onClick={() => setIsAdding(!isAdding)} className="rounded-2xl bg-primary h-12 px-6 font-bold shadow-xl shadow-primary/20">
           {isAdding ? 'Cancel Entry' : 'New Masterclass'}
@@ -433,20 +433,20 @@ function EducationPanel() {
       <AnimatePresence>
         {isAdding && (
           <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }}>
-            <div className="bg-[#0A111D]/80 border border-white/10 p-10 rounded-[2.5rem] shadow-2xl mb-10">
+            <div className="bg-[#0A111D]/80 border border-border/50 p-10 rounded-[2.5rem] shadow-2xl mb-10">
               <form onSubmit={handleSubmit(onSubmit)} className="grid md:grid-cols-2 gap-8">
-                <div className="space-y-2"><Label>Course Title</Label><Input {...register('title')} required className="bg-white/5 border-white/10 h-12" /></div>
-                <div className="space-y-2"><Label>Access Price (INR)</Label><Input type="number" {...register('price')} required className="bg-white/5 border-white/10 h-12" /></div>
-                <div className="space-y-2"><Label>Duration</Label><Input {...register('duration')} placeholder="4 Weeks" className="bg-white/5 border-white/10 h-12" /></div>
+                <div className="space-y-2"><Label>Course Title</Label><Input {...register('title')} required className="bg-white/5 border-border/50 h-12" /></div>
+                <div className="space-y-2"><Label>Access Price (INR)</Label><Input type="number" {...register('price')} required className="bg-white/5 border-border/50 h-12" /></div>
+                <div className="space-y-2"><Label>Duration</Label><Input {...register('duration')} placeholder="4 Weeks" className="bg-white/5 border-border/50 h-12" /></div>
                 <div className="space-y-2">
                    <Label>Status</Label>
-                   <select {...register('status')} className="w-full h-12 bg-white/5 border border-white/10 rounded-xl px-4 text-white appearance-none">
+                   <select {...register('status')} className="w-full h-12 bg-white/5 border border-border/50 rounded-xl px-4 text-white appearance-none">
                      <option value="Active" className="bg-slate-900">Active</option>
                      <option value="Draft" className="bg-slate-900">Draft</option>
                    </select>
                 </div>
-                <div className="md:col-span-2 space-y-2"><Label>Detailed Description</Label><Textarea {...register('description')} required className="bg-white/5 border-white/10 min-h-[100px]" /></div>
-                <div className="md:col-span-2 space-y-2"><Label>Features & Modules (One per line)</Label><Textarea {...register('features')} className="bg-white/5 border-white/10 min-h-[120px]" /></div>
+                <div className="md:col-span-2 space-y-2"><Label>Detailed Description</Label><Textarea {...register('description')} required className="bg-white/5 border-border/50 min-h-[100px]" /></div>
+                <div className="md:col-span-2 space-y-2"><Label>Features & Modules (One per line)</Label><Textarea {...register('features')} className="bg-white/5 border-border/50 min-h-[120px]" /></div>
                 <Button type="submit" className="md:col-span-2 h-14 bg-primary text-white font-bold text-lg rounded-2xl">Publish Course Material</Button>
               </form>
             </div>
@@ -457,19 +457,19 @@ function EducationPanel() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {isLoading ? <p>Loading courses...</p> : 
           certs?.map(cert => (
-            <div key={cert._id} className="relative group bg-[#0A111D]/80 border border-white/5 rounded-[2.5rem] p-8 hover:border-white/15 transition-all">
+            <div key={cert._id} className="relative group bg-[#0A111D]/80 border border-border/30 rounded-[2.5rem] p-8 hover:border-white/15 transition-all">
               <div className="flex justify-between items-start mb-6">
                 <div className="h-12 w-12 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary">
                   <GraduationCap size={24} />
                 </div>
                 <div className="text-right">
-                  <p className="text-[10px] font-black uppercase text-slate-500 tracking-widest">Enrollment Fee</p>
+                  <p className="text-[10px] font-black uppercase text-muted-foreground tracking-widest">Enrollment Fee</p>
                   <p className="text-xl font-black text-white">₹{cert.price}</p>
                 </div>
               </div>
               <h4 className="text-xl font-bold text-white mb-2">{cert.title}</h4>
-              <p className="text-xs text-slate-500 line-clamp-2 mb-6">{cert.description}</p>
-              <div className="flex items-center justify-between border-t border-white/5 pt-6">
+              <p className="text-xs text-muted-foreground line-clamp-2 mb-6">{cert.description}</p>
+              <div className="flex items-center justify-between border-t border-border/30 pt-6">
                  <span className={`text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full ${cert.status === 'Active' ? 'bg-green-500/10 text-green-400' : 'bg-yellow-500/10 text-yellow-500'}`}>{cert.status}</span>
                  <Button variant="ghost" onClick={() => deleteCert.mutate(cert._id)} className="text-red-400 hover:bg-red-400/10 rounded-xl"><Trash2 size={16} /></Button>
               </div>
@@ -508,7 +508,7 @@ function AnalyticsPanel() {
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {stats.map((s) => (
-          <div key={s.label} className="p-6 rounded-[2rem] bg-white/[0.03] border border-white/5 backdrop-blur-xl shadow-2xl group hover:border-white/10 transition-colors">
+          <div key={s.label} className="p-6 rounded-[2rem] bg-white/[0.03] border border-border/30 backdrop-blur-xl shadow-2xl group hover:border-border/50 transition-colors">
             <div className="flex justify-between items-start mb-4">
               <div className={`p-3 rounded-2xl bg-white/5 ${s.color}`}>
                 <s.icon className="h-6 w-6" />
@@ -518,20 +518,20 @@ function AnalyticsPanel() {
                 {s.trend}
               </div>
             </div>
-            <p className="text-slate-500 text-sm font-bold uppercase tracking-wider">{s.label}</p>
+            <p className="text-muted-foreground text-sm font-bold uppercase tracking-wider">{s.label}</p>
             <h3 className="text-3xl font-extrabold text-white mt-1 tracking-tight">{s.value}</h3>
           </div>
         ))}
       </div>
 
       {/* Analytics Chart */}
-      <div className="p-8 rounded-[2rem] bg-[#0A111D]/80 border border-white/5 shadow-2xl">
+      <div className="p-8 rounded-[2rem] bg-[#0A111D]/80 border border-border/30 shadow-2xl">
         <div className="flex items-center justify-between mb-8">
           <div>
             <h3 className="text-xl font-bold text-white font-heading">Revenue Growth</h3>
-            <p className="text-sm text-slate-500">Daily earnings tracking over the last 10 transactions.</p>
+            <p className="text-sm text-muted-foreground">Daily earnings tracking over the last 10 transactions.</p>
           </div>
-          <Button variant="outline" className="rounded-xl border-white/10 bg-white/5">Export CSV</Button>
+          <Button variant="outline" className="rounded-xl border-border/50 bg-white/5">Export CSV</Button>
         </div>
         
         <div className="h-[400px] w-full">
@@ -600,80 +600,80 @@ function OrdersPanel() {
       <div className="flex items-center justify-between mb-4">
         <div>
           <h2 className="text-2xl font-bold text-white font-heading">Order Management</h2>
-          <p className="text-slate-500">Track and manage project deliverables for your clients.</p>
+          <p className="text-muted-foreground">Track and manage project deliverables for your clients.</p>
         </div>
         <div className="flex items-center gap-2">
-          <Button variant="outline" className="rounded-xl border-white/10 bg-white/5"><Filter className="h-4 w-4 mr-2" /> Filter</Button>
-          <Button variant="outline" className="rounded-xl border-white/10 bg-white/5"><ArrowUpRight className="h-4 w-4 mr-2" /> Export</Button>
+          <Button variant="outline" className="rounded-xl border-border/50 bg-white/5"><Filter className="h-4 w-4 mr-2" /> Filter</Button>
+          <Button variant="outline" className="rounded-xl border-border/50 bg-white/5"><ArrowUpRight className="h-4 w-4 mr-2" /> Export</Button>
         </div>
       </div>
 
       <div className="grid gap-6">
         {isPending ? (
-          [1, 2, 3].map(i => <div key={i} className="h-48 w-full animate-pulse rounded-[2rem] bg-white/5 border border-white/10" />)
+          [1, 2, 3].map(i => <div key={i} className="h-48 w-full animate-pulse rounded-[2rem] bg-white/5 border border-border/50" />)
         ) : !data?.length ? (
-          <div className="py-24 text-center border border-dashed border-white/10 rounded-[2rem]">
-            <p className="text-slate-500">No projects found.</p>
+          <div className="py-24 text-center border border-dashed border-border/50 rounded-[2rem]">
+            <p className="text-muted-foreground">No projects found.</p>
           </div>
         ) : (
           data.map((order) => (
-            <div key={order._id} className="group relative rounded-[2.5rem] bg-[#0A111D]/80 border border-white/5 transition-all overflow-hidden flex flex-col xl:flex-row">
+            <div key={order._id} className="group relative rounded-[2.5rem] bg-[#0A111D]/80 border border-border/30 transition-all overflow-hidden flex flex-col xl:flex-row">
               <div className="p-8 flex-1">
                 <div className="flex justify-between items-start mb-6">
                   <div>
                     <div className="flex items-center gap-2 mb-2">
                       <span className="h-2 w-2 rounded-full bg-blue-500" />
-                      <span className="text-xs font-bold text-slate-500 uppercase tracking-widest">{order.emailReferenceId}</span>
+                      <span className="text-xs font-bold text-muted-foreground uppercase tracking-widest">{order.emailReferenceId}</span>
                     </div>
                     <h3 className="text-2xl font-extrabold text-white tracking-tight">{order.planName}</h3>
                   </div>
                   <div className="text-right">
-                    <span className="text-[10px] uppercase font-bold text-slate-500 block mb-1">Total Paid</span>
+                    <span className="text-[10px] uppercase font-bold text-muted-foreground block mb-1">Total Paid</span>
                     <span className="text-xl font-extrabold text-white">₹{((order.amountPaid || 0) / 100).toLocaleString()}</span>
                   </div>
                 </div>
 
-                <div className="grid md:grid-cols-2 gap-8 items-center border-t border-white/5 pt-8">
+                <div className="grid md:grid-cols-2 gap-8 items-center border-t border-border/30 pt-8">
                   <div>
-                    <h4 className="text-xs font-bold uppercase tracking-widest text-slate-500 mb-4">Client Detail</h4>
+                    <h4 className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-4">Client Detail</h4>
                     <div className="flex items-center gap-4">
                       <div className="h-10 w-10 rounded-full bg-blue-500/10 flex items-center justify-center border border-blue-500/20 text-blue-400 font-bold">
                         {order.customerName?.[0] || 'U'}
                       </div>
                       <div>
                         <p className="text-white font-bold">{order.customerName || 'Anonymous'}</p>
-                        <p className="text-xs text-slate-500">{order.email}</p>
+                        <p className="text-xs text-muted-foreground">{order.email}</p>
                       </div>
                     </div>
                   </div>
                   <div>
-                    <h4 className="text-xs font-bold uppercase tracking-widest text-slate-500 mb-4 flex justify-between">
+                    <h4 className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-4 flex justify-between">
                       Project Status <span>{order.progress || 0}%</span>
                     </h4>
                     <div className="h-2.5 w-full bg-slate-800 rounded-full overflow-hidden">
                       <div className="h-full bg-primary" style={{ width: `${order.progress || 0}%` }} />
                     </div>
-                    <p className="mt-2 text-xs text-slate-400 font-medium italic">"{order.projectStatus || 'Pending assignment'}"</p>
+                    <p className="mt-2 text-xs text-muted-foreground/80 font-medium italic">"{order.projectStatus || 'Pending assignment'}"</p>
                   </div>
                 </div>
               </div>
 
               {/* Action Sidebar on Card */}
-              <div className="xl:w-80 bg-white/[0.02] border-t xl:border-t-0 xl:border-l border-white/5 p-8 flex flex-col gap-6">
+              <div className="xl:w-80 bg-white/[0.02] border-t xl:border-t-0 xl:border-l border-border/30 p-8 flex flex-col gap-6">
                 <div>
-                  <h4 className="text-xs font-bold uppercase tracking-widest text-slate-500 mb-4">Deliverables</h4>
+                  <h4 className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-4">Deliverables</h4>
                   <div className="space-y-2 mb-4">
                    {order.assets?.slice(0, 3).map((asset: any) => (
-                      <div key={asset._id} className="flex justify-between items-center group/file bg-white/5 p-2 px-3 rounded-lg border border-transparent hover:border-white/10 text-xs">
+                      <div key={asset._id} className="flex justify-between items-center group/file bg-white/5 p-2 px-3 rounded-lg border border-transparent hover:border-border/50 text-xs">
                         <a href={asset.fileUrl} target="_blank" className="font-medium text-slate-300 hover:text-primary truncate max-w-[150px]">{asset.fileName}</a>
                         <button onClick={() => deleteAsset(order._id, asset._id)} className="opacity-0 group-hover/file:opacity-100 text-red-500 hover:scale-110 transition-all"><Trash2 className="h-3 w-3" /></button>
                       </div>
                     ))}
-                    {!order.assets?.length && <p className="text-[11px] text-slate-600 italic">No files shared.</p>}
+                    {!order.assets?.length && <p className="text-[11px] text-muted-foreground/60 italic">No files shared.</p>}
                   </div>
                   <div className="relative">
                     <input type="file" className="absolute inset-0 opacity-0 cursor-pointer" onChange={(e) => e.target.files?.[0] && uploadAsset(order._id, e.target.files[0])} />
-                    <Button variant="outline" className="w-full text-xs h-9 rounded-xl border-white/10 bg-transparent hover:bg-white/5" disabled={uploadingId === order._id}>
+                    <Button variant="outline" className="w-full text-xs h-9 rounded-xl border-border/50 bg-transparent hover:bg-white/5" disabled={uploadingId === order._id}>
                       <Plus className="h-3 w-3 mr-2" /> {uploadingId === order._id ? 'Uploading...' : 'Quick Upload'}
                     </Button>
                   </div>
@@ -712,14 +712,14 @@ function ClientsPanel() {
       <div className="flex items-center justify-between mb-4">
         <div>
           <h2 className="text-2xl font-bold text-white font-heading">Clients Portal</h2>
-          <p className="text-slate-500">Manage registered accounts and verification status.</p>
+          <p className="text-muted-foreground">Manage registered accounts and verification status.</p>
         </div>
       </div>
 
-      <div className="bg-[#0A111D]/80 border border-white/5 rounded-[2.5rem] overflow-hidden shadow-2xl">
+      <div className="bg-[#0A111D]/80 border border-border/30 rounded-[2.5rem] overflow-hidden shadow-2xl">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-sm">
-            <thead className="bg-white/5 text-slate-500 uppercase text-[10px] font-bold tracking-widest">
+            <thead className="bg-white/5 text-muted-foreground uppercase text-[10px] font-bold tracking-widest">
               <tr>
                 <th className="px-8 py-5">Profile</th>
                 <th className="px-8 py-5">Joined At</th>
@@ -733,12 +733,12 @@ function ClientsPanel() {
               ) : data?.map((client) => (
                 <tr key={client._id} className="hover:bg-white/[0.02] transition-colors group">
                   <td className="px-8 py-5 flex items-center gap-4">
-                    <div className="h-10 w-10 rounded-full bg-slate-800 border border-white/10 flex items-center justify-center font-bold text-primary">
+                    <div className="h-10 w-10 rounded-full bg-slate-800 border border-border/50 flex items-center justify-center font-bold text-primary">
                       {client.email?.[0].toUpperCase()}
                     </div>
                     <span className="font-bold text-white pr-4">{client.email}</span>
                   </td>
-                  <td className="px-8 py-5 text-slate-500 font-medium">
+                  <td className="px-8 py-5 text-muted-foreground font-medium">
                     {new Date(client.createdAt).toLocaleDateString(undefined, { month: 'long', day: 'numeric', year: 'numeric' })}
                   </td>
                   <td className="px-8 py-5">
@@ -748,7 +748,7 @@ function ClientsPanel() {
                     </span>
                   </td>
                   <td className="px-8 py-5 text-right">
-                    <button className="p-2 rounded-lg hover:bg-white/5 text-slate-600 hover:text-white transition-colors">
+                    <button className="p-2 rounded-lg hover:bg-white/5 text-muted-foreground/60 hover:text-white transition-colors">
                       <MoreVertical className="h-4 w-4" />
                     </button>
                   </td>
@@ -786,14 +786,14 @@ function TicketsPanel() {
   }
 
   return (
-    <div className="h-[75vh] flex flex-col md:flex-row bg-[#0A111D]/80 border border-white/10 rounded-[2.5rem] overflow-hidden shadow-2xl">
-      <div className={`md:w-96 border-r border-white/10 flex flex-col ${selectedTicketId ? 'hidden md:flex' : 'flex'}`}>
-        <div className="p-8 border-b border-white/5">
+    <div className="h-[75vh] flex flex-col md:flex-row bg-[#0A111D]/80 border border-border/50 rounded-[2.5rem] overflow-hidden shadow-2xl">
+      <div className={`md:w-96 border-r border-border/50 flex flex-col ${selectedTicketId ? 'hidden md:flex' : 'flex'}`}>
+        <div className="p-8 border-b border-border/30">
           <h2 className="text-xl font-bold text-white font-heading mb-1">Support Queue</h2>
-          <p className="text-xs text-slate-500 font-bold uppercase tracking-widest">Global Inquiries</p>
+          <p className="text-xs text-muted-foreground font-bold uppercase tracking-widest">Global Inquiries</p>
         </div>
         <div className="flex-1 overflow-y-auto p-4 space-y-2 hide-scrollbar">
-          {isPending ? <p className="text-center p-8 animate-pulse text-slate-600">Syncing...</p> : 
+          {isPending ? <p className="text-center p-8 animate-pulse text-muted-foreground/60">Syncing...</p> : 
             ticketsItems?.map((ticket: any) => (
               <button 
                 key={ticket._id} 
@@ -887,30 +887,30 @@ function ProjectsPanel({ onChanged }: { onChanged: () => void }) {
 
   return (
     <div className="space-y-10">
-      <div className="bg-[#0A111D]/80 border border-white/10 p-10 rounded-[2.5rem] shadow-2xl">
+      <div className="bg-[#0A111D]/80 border border-border/50 p-10 rounded-[2.5rem] shadow-2xl">
         <h3 className="text-2xl font-bold text-white mb-8 font-heading">Publish to Portfolio</h3>
         <form onSubmit={createProject} className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-4 md:col-span-2">
             <Label>Project Title</Label>
-            <Input {...register('title')} className="rounded-xl h-12 bg-white/5 border-white/10" />
+            <Input {...register('title')} className="rounded-xl h-12 bg-white/5 border-border/50" />
           </div>
           <div className="space-y-4 md:col-span-2">
             <Label>Summary</Label>
-            <Textarea {...register('description')} className="rounded-2xl min-h-[100px] bg-white/5 border-white/10" />
+            <Textarea {...register('description')} className="rounded-2xl min-h-[100px] bg-white/5 border-border/50" />
           </div>
           <div className="space-y-4">
             <Label>Tags</Label>
-            <Input {...register('technologies')} placeholder="React, Node.js..." className="rounded-xl h-12 bg-white/5 border-white/10" />
+            <Input {...register('technologies')} placeholder="React, Node.js..." className="rounded-xl h-12 bg-white/5 border-border/50" />
           </div>
           <div className="space-y-4">
             <Label>Category</Label>
-            <select {...register('category')} className="w-full h-12 rounded-xl bg-white/5 border border-white/10 px-4 text-white focus:outline-none">
+            <select {...register('category')} className="w-full h-12 rounded-xl bg-white/5 border border-border/50 px-4 text-white focus:outline-none">
               {categories.map(c => <option key={c} value={c} className="bg-[#0f172a]">{c}</option>)}
             </select>
           </div>
-          <div className="md:col-span-2 p-10 border-2 border-dashed border-white/10 rounded-3xl text-center bg-white/[0.02]">
-            <PlusCircle className="h-8 w-8 text-slate-600 mx-auto mb-3" />
-            <p className="text-sm text-slate-500 mb-4">Choose a high-quality cover image for this showcase</p>
+          <div className="md:col-span-2 p-10 border-2 border-dashed border-border/50 rounded-3xl text-center bg-white/[0.02]">
+            <PlusCircle className="h-8 w-8 text-muted-foreground/60 mx-auto mb-3" />
+            <p className="text-sm text-muted-foreground mb-4">Choose a high-quality cover image for this showcase</p>
             <Input type="file" ref={fileRef} className="max-w-[300px] mx-auto bg-transparent border-0" />
           </div>
           <Button type="submit" className="md:col-span-2 h-14 rounded-2xl bg-primary text-white font-bold text-lg">Add Project to Site</Button>
@@ -919,7 +919,7 @@ function ProjectsPanel({ onChanged }: { onChanged: () => void }) {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {data?.map(p => (
-           <div key={p._id} className="group relative bg-[#0A111D]/80 border border-white/5 rounded-[2.5rem] overflow-hidden shadow-2xl hover:border-white/20 transition-all duration-500">
+           <div key={p._id} className="group relative bg-[#0A111D]/80 border border-border/30 rounded-[2.5rem] overflow-hidden shadow-2xl hover:border-white/20 transition-all duration-500">
              <div className="relative h-48 overflow-hidden">
                 <LazyImage src={p.imageUrl} alt={p.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#0A111D] to-transparent opacity-60" />
@@ -930,8 +930,8 @@ function ProjectsPanel({ onChanged }: { onChanged: () => void }) {
                 <div className="flex gap-2 mb-6">
                   {p.technologies.slice(0, 3).map(t => <span key={t} className="text-[10px] bg-white/10 px-2 py-0.5 rounded-full text-slate-300 font-bold">{t}</span>)}
                 </div>
-                <div className="flex gap-3 pt-4 border-t border-white/5">
-                  <Button variant="outline" className="flex-1 rounded-xl border-white/10 h-10 text-xs"><Edit3 className="h-3 w-3 mr-2" /> Edit</Button>
+                <div className="flex gap-3 pt-4 border-t border-border/30">
+                  <Button variant="outline" className="flex-1 rounded-xl border-border/50 h-10 text-xs"><Edit3 className="h-3 w-3 mr-2" /> Edit</Button>
                   <Button variant="outline" className="flex-1 rounded-xl border-red-500/20 h-10 text-xs text-red-400 hover:bg-red-500/10" onClick={() => { if(confirm('Delete?')) del.mutate(p._id, {onSuccess: onChanged}) }}><Trash2 className="h-3 w-3 mr-2" /> Delete</Button>
                 </div>
              </div>
@@ -963,7 +963,7 @@ function BlogsPanel({ onChanged }: { onChanged: () => void }) {
         <h2 className="text-2xl font-bold text-white font-heading px-4">Latest Posts</h2>
         <div className="space-y-6">
           {data?.map(b => (
-            <div key={b._id} className="flex flex-col md:flex-row gap-6 p-6 rounded-[2.5rem] bg-[#0A111D]/80 border border-white/5 hover:border-white/15 transition-all">
+            <div key={b._id} className="flex flex-col md:flex-row gap-6 p-6 rounded-[2.5rem] bg-[#0A111D]/80 border border-border/30 hover:border-white/15 transition-all">
               <div className="h-44 w-full md:w-64 rounded-3xl overflow-hidden shrink-0">
                 <LazyImage src={b.imageUrl} alt={b.title} className="w-full h-full object-cover" />
               </div>
@@ -971,10 +971,10 @@ function BlogsPanel({ onChanged }: { onChanged: () => void }) {
                 <div className="flex gap-4 items-center mb-3">
                   <span className="text-xs font-bold text-primary uppercase">{b.category}</span>
                   <span className="h-1 w-1 rounded-full bg-slate-600" />
-                  <span className="text-xs text-slate-500">{b.author}</span>
+                  <span className="text-xs text-muted-foreground">{b.author}</span>
                 </div>
                 <h4 className="text-xl font-bold text-white mb-2 leading-tight">{b.title}</h4>
-                <p className="text-sm text-slate-500 line-clamp-2 mb-4 pr-10">{b.excerpt || 'View this article on the blog page...'}</p>
+                <p className="text-sm text-muted-foreground line-clamp-2 mb-4 pr-10">{b.excerpt || 'View this article on the blog page...'}</p>
                 <div className="mt-auto flex gap-3">
                   <button className="text-xs font-bold text-white border-b border-white pb-0.5 hover:text-primary hover:border-primary transition-colors">Edit Article</button>
                   <button onClick={() => { if(confirm('Del?')) del.mutate(b._id, {onSuccess: onChanged}) }} className="text-xs font-bold text-red-500 hover:text-red-400 transition-colors pl-4">Delete Permanently</button>
@@ -986,20 +986,20 @@ function BlogsPanel({ onChanged }: { onChanged: () => void }) {
       </div>
 
       <div className="space-y-6">
-        <div className="p-8 rounded-[2.5rem] bg-[#0A111D]/80 border border-white/10 sticky top-28">
+        <div className="p-8 rounded-[2.5rem] bg-[#0A111D]/80 border border-border/50 sticky top-28">
           <h3 className="text-xl font-bold text-white mb-6">Write New Post</h3>
           <form onSubmit={createBlog} className="space-y-4">
-            <Input {...register('title')} placeholder="Catchy Headline" className="bg-white/5 rounded-xl border-white/10" />
+            <Input {...register('title')} placeholder="Catchy Headline" className="bg-white/5 rounded-xl border-border/50" />
             <div className="grid grid-cols-2 gap-4">
-               <Input {...register('readTime')} placeholder="5 min read" className="bg-white/5 rounded-xl border-white/10" />
-               <Input {...register('category')} placeholder="Category" className="bg-white/5 rounded-xl border-white/10" />
+               <Input {...register('readTime')} placeholder="5 min read" className="bg-white/5 rounded-xl border-border/50" />
+               <Input {...register('category')} placeholder="Category" className="bg-white/5 rounded-xl border-border/50" />
             </div>
-            <Input {...register('excerpt')} placeholder="Brief summary..." className="bg-white/5 rounded-xl border-white/10" />
-            <div className="border border-white/10 rounded-2xl overflow-hidden bg-white/5">
+            <Input {...register('excerpt')} placeholder="Brief summary..." className="bg-white/5 rounded-xl border-border/50" />
+            <div className="border border-border/50 rounded-2xl overflow-hidden bg-white/5">
               <RichTextEditor value={contentHtml} onChange={setContentHtml} />
             </div>
             <div className="py-2">
-              <Label className="text-[10px] text-slate-500 uppercase font-bold pl-1">Thumbnail Image</Label>
+              <Label className="text-[10px] text-muted-foreground uppercase font-bold pl-1">Thumbnail Image</Label>
               <Input type="file" ref={fileRef} className="mt-2 bg-transparent border-0" />
             </div>
             <Button type="submit" className="w-full rounded-xl py-6 bg-primary font-bold">Post to CMS</Button>
@@ -1026,13 +1026,13 @@ function ServicesPanel({ onChanged }: { onChanged: () => void }) {
 
   return (
     <div className="space-y-10">
-      <div className="bg-[#0A111D]/80 border border-white/10 p-10 rounded-[2.5rem]">
+      <div className="bg-[#0A111D]/80 border border-border/50 p-10 rounded-[2.5rem]">
         <h3 className="text-xl font-bold text-white mb-6">Manage Services</h3>
         <form onSubmit={createService} className="grid md:grid-cols-2 gap-6">
-          <div className="space-y-4"><Label>Title</Label><Input {...register('title')} className="rounded-xl h-12 bg-white/5 border-white/10" /></div>
-          <div className="space-y-4"><Label>Icon Mapping</Label><Input {...register('iconKey')} placeholder="Globe, Search, etc" className="rounded-xl h-12 bg-white/5 border-white/10" /></div>
-          <div className="space-y-4 md:col-span-2"><Label>Description</Label><Textarea {...register('description')} className="rounded-2xl bg-white/5 border-white/10" /></div>
-          <div className="md:col-span-2 flex items-center gap-6 p-6 border border-white/5 rounded-2xl bg-white/[0.02]">
+          <div className="space-y-4"><Label>Title</Label><Input {...register('title')} className="rounded-xl h-12 bg-white/5 border-border/50" /></div>
+          <div className="space-y-4"><Label>Icon Mapping</Label><Input {...register('iconKey')} placeholder="Globe, Search, etc" className="rounded-xl h-12 bg-white/5 border-border/50" /></div>
+          <div className="space-y-4 md:col-span-2"><Label>Description</Label><Textarea {...register('description')} className="rounded-2xl bg-white/5 border-border/50" /></div>
+          <div className="md:col-span-2 flex items-center gap-6 p-6 border border-border/30 rounded-2xl bg-white/[0.02]">
             <Label className="shrink-0 font-bold">Icon PNG/SVG</Label>
             <Input type="file" ref={fileRef} className="bg-transparent border-0" />
           </div>
@@ -1042,15 +1042,15 @@ function ServicesPanel({ onChanged }: { onChanged: () => void }) {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {data?.map(s => (
-          <div key={s._id} className="p-6 rounded-[2rem] bg-[#0A111D]/80 border border-white/5 group relative overflow-hidden">
+          <div key={s._id} className="p-6 rounded-[2rem] bg-[#0A111D]/80 border border-border/30 group relative overflow-hidden">
              <div className="flex justify-between items-start mb-4">
-                <div className="h-14 w-14 bg-white/5 rounded-2xl flex items-center justify-center p-2 border border-white/5 group-hover:border-primary/30 transition-colors">
+                <div className="h-14 w-14 bg-white/5 rounded-2xl flex items-center justify-center p-2 border border-border/30 group-hover:border-primary/30 transition-colors">
                   <LazyImage src={s.iconUrl} alt={s.title} className="w-full h-full object-contain" />
                 </div>
                 <button onClick={() => { if(confirm('Del?')) del.mutate(s._id, {onSuccess: onChanged}) }} className="p-2 opacity-0 group-hover:opacity-100 text-red-500 hover:bg-red-500/10 rounded-lg transition-all"><Trash2 className="h-4 w-4" /></button>
              </div>
              <h4 className="text-lg font-bold text-white mb-2">{s.title}</h4>
-             <p className="text-sm text-slate-500 line-clamp-2">{s.description}</p>
+             <p className="text-sm text-muted-foreground line-clamp-2">{s.description}</p>
           </div>
         ))}
       </div>

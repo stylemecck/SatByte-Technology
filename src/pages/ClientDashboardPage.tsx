@@ -131,14 +131,15 @@ export default function ClientDashboardPage() {
   };
 
   useEffect(() => {
-    if (profile) {
+    // Only update the form when NOT in active edit mode and when profile is loaded
+    if (profile && !isEditingProfile) {
       setProfileForm({
         name: profile.name || '',
         phone: profile.phone || '',
         company: profile.company || ''
       })
     }
-  }, [profile])
+  }, [profile, isEditingProfile])
 
   // Force dark mode aesthetic on body
   useEffect(() => {
@@ -270,7 +271,7 @@ export default function ClientDashboardPage() {
         {/* Navigation */}
         <motion.div 
           initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1, duration: 0.4 }}
-          className="flex space-x-2 border-b border-white/10 mb-10 overflow-x-auto hide-scrollbar pb-1"
+          className="flex space-x-2 border-b border-border/50 mb-10 overflow-x-auto hide-scrollbar pb-1"
         >
           {NAV_ITEMS.map(({ id, label, icon: Icon }) => (
             <button
@@ -303,7 +304,7 @@ export default function ClientDashboardPage() {
         {isPending && (
           <div className="grid gap-6">
             {[1, 2].map((i) => (
-              <div key={i} className="h-48 w-full animate-pulse rounded-[2rem] bg-white/5 border border-white/10" />
+              <div key={i} className="h-48 w-full animate-pulse rounded-[2rem] bg-white/5 border border-border/50" />
             ))}
           </div>
         )}
@@ -325,13 +326,13 @@ export default function ClientDashboardPage() {
               {/* TAB: PROJECTS */}
               {activeTab === 'projects' && (
                 data?.length === 0 ? (
-                  <div className="flex flex-col items-center justify-center text-center py-24 rounded-[2rem] border border-white/10 bg-white/5 backdrop-blur-md">
+                  <div className="flex flex-col items-center justify-center text-center py-24 rounded-[2rem] border border-border/50 bg-white/5 backdrop-blur-md">
                     <div className="h-16 w-16 mb-4 rounded-full bg-white/5 flex items-center justify-center">
-                      <FolderGit2 className="h-8 w-8 text-slate-500" />
+                      <FolderGit2 className="h-8 w-8 text-muted-foreground" />
                     </div>
                     <h3 className="text-xl font-bold text-white mb-2">No Active Projects</h3>
-                    <p className="text-slate-400 max-w-sm mb-6">Looks like you don't have any ongoing projects. Head over to pricing to start a new engagement.</p>
-                    <Link to="/pricing" className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-primary text-white font-semibold hover:bg-primary/90 transition-colors shadow-[0_0_20px_rgba(37,99,235,0.3)]">
+                    <p className="text-muted-foreground/80 max-w-sm mb-6">Looks like you don't have any ongoing projects. Head over to pricing to start a new engagement.</p>
+                    <Link to="/pricing" className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-primary text-primary-foreground font-black hover:opacity-90 transition-all shadow-[0_0_20px_rgba(250,250,250,0.3)]">
                       Explore Services <ChevronRight className="h-4 w-4" />
                     </Link>
                   </div>
@@ -348,7 +349,7 @@ export default function ClientDashboardPage() {
                               </span>
                               <h3 className="font-heading text-2xl font-bold text-white mb-1">{order.planName}</h3>
                               <div className="flex items-center gap-3">
-                                <p className="text-sm font-mono text-slate-500">Ref: {order.emailReferenceId}</p>
+                                <p className="text-sm font-mono text-muted-foreground">Ref: {order.emailReferenceId}</p>
                                 <button 
                                   onClick={() => { setSelectedOrderDetails(order); setIsDetailsModalOpen(true); }}
                                   className="text-[10px] font-bold text-primary uppercase tracking-widest hover:underline flex items-center gap-1"
@@ -358,17 +359,17 @@ export default function ClientDashboardPage() {
                               </div>
                             </div>
                             <div className="text-right">
-                              <span className="text-xs text-slate-400 uppercase font-bold tracking-wider block mb-1">Status</span>
+                              <span className="text-xs text-muted-foreground/80 uppercase font-bold tracking-wider block mb-1">Status</span>
                               <span className="text-white font-medium">{order.projectStatus || 'Pending Assignment'}</span>
                             </div>
                           </div>
 
                           <div className="space-y-3">
                             <div className="flex justify-between text-sm">
-                              <span className="font-medium text-slate-400">Development Progress</span>
+                              <span className="font-medium text-muted-foreground/80">Development Progress</span>
                               <span className="font-bold text-white">{order.progress || 0}%</span>
                             </div>
-                            <div className="h-2.5 w-full bg-[#1A2235] rounded-full overflow-hidden shadow-inner">
+                            <div className="h-2.5 w-full bg-muted rounded-full overflow-hidden shadow-inner border border-border/30">
                               <motion.div
                                 initial={{ width: 0 }}
                                 animate={{ width: `${order.progress || 0}%` }}
@@ -381,15 +382,15 @@ export default function ClientDashboardPage() {
                           </div>
                         </div>
 
-                        <div className="px-8 py-6 border-t border-white/5 bg-black/20">
-                          <h4 className="text-sm font-bold uppercase tracking-widest text-slate-500 mb-4 flex items-center gap-2">
+                        <div className="px-8 py-6 border-t border-border/30 bg-black/20">
+                          <h4 className="text-sm font-bold uppercase tracking-widest text-muted-foreground mb-4 flex items-center gap-2">
                             <FileText className="h-4 w-4" /> Project Deliverables
                           </h4>
                           
                           <div className="space-y-2.5 mb-6 max-h-[160px] overflow-y-auto hide-scrollbar">
                             {order.assets && order.assets.length > 0 ? (
                               order.assets.map((asset: any) => (
-                                <div key={asset._id} className="group/asset flex items-center justify-between p-3 rounded-xl border border-white/5 bg-white/5 hover:bg-white/10 transition-colors">
+                                <div key={asset._id} className="group/asset flex items-center justify-between p-3 rounded-xl border border-border/30 bg-white/5 hover:bg-white/10 transition-colors">
                                   <div className="flex items-center space-x-3 overflow-hidden">
                                     <div className="h-8 w-8 rounded-full bg-primary/20 flex items-center justify-center shrink-0">
                                       <FileText className="h-4 w-4 text-primary" />
@@ -398,7 +399,7 @@ export default function ClientDashboardPage() {
                                       <a href={asset.fileUrl} target="_blank" rel="noopener noreferrer" className="text-sm text-white hover:text-primary transition-colors truncate block">
                                         {asset.fileName}
                                       </a>
-                                      <p className="text-xs text-slate-500 mt-0.5">{new Date(asset.uploadedAt).toLocaleDateString()}</p>
+                                      <p className="text-xs text-muted-foreground mt-0.5">{new Date(asset.uploadedAt).toLocaleDateString()}</p>
                                     </div>
                                   </div>
                                   <button 
@@ -407,15 +408,15 @@ export default function ClientDashboardPage() {
                                       try { await api.delete(`checkout/orders/${order._id}/assets/${asset._id}`); refetch(); } 
                                       catch (e) { alert('Failed to delete file') }
                                     }}
-                                    className="p-2 text-slate-500 hover:text-red-400 hover:bg-red-400/10 rounded-lg transition-colors opacity-0 group-hover/asset:opacity-100"
+                                    className="p-2 text-muted-foreground hover:text-red-400 hover:bg-red-400/10 rounded-lg transition-colors opacity-0 group-hover/asset:opacity-100"
                                   >
                                     <Trash2 className="h-4 w-4" />
                                   </button>
                                 </div>
                               ))
                             ) : (
-                              <div className="text-center py-6 border border-dashed border-white/10 rounded-xl bg-white/[0.02]">
-                                <p className="text-sm text-slate-500">No assets uploaded yet.</p>
+                              <div className="text-center py-6 border border-dashed border-border/50 rounded-xl bg-white/[0.02]">
+                                <p className="text-sm text-muted-foreground">No assets uploaded yet.</p>
                               </div>
                             )}
                           </div>
@@ -464,10 +465,10 @@ export default function ClientDashboardPage() {
                                   document.getElementById(`file-upload-${order._id}`)?.click();
                                 }
                               }}
-                              className="flex items-center justify-center gap-2 w-full py-3.5 rounded-xl border border-white/10 bg-white/5 text-sm font-semibold text-white hover:bg-white/10 transition-colors group-hover:border-primary/30"
+                              className="flex items-center justify-center gap-2 w-full py-3.5 rounded-xl border border-border/50 bg-white/5 text-sm font-semibold text-white hover:bg-white/10 transition-colors group-hover:border-primary/30"
                             >
                               <UploadCloud className="h-4 w-4 text-primary" />
-                              Upload Asset <span className="text-xs text-slate-500 font-normal ml-1">(Max 15MB)</span>
+                              Upload Asset <span className="text-xs text-muted-foreground font-normal ml-1">(Max 15MB)</span>
                             </button>
                           </div>
                         </div>
@@ -487,28 +488,28 @@ export default function ClientDashboardPage() {
                   </div>
                   
                   {data?.length === 0 ? (
-                    <div className="text-center py-12 border border-dashed border-white/10 rounded-2xl">
-                      <CreditCard className="h-10 w-10 text-slate-600 mx-auto mb-3" />
-                      <p className="text-slate-500">No billing records found.</p>
+                    <div className="text-center py-12 border border-dashed border-border/50 rounded-2xl">
+                      <CreditCard className="h-10 w-10 text-muted-foreground/60 mx-auto mb-3" />
+                      <p className="text-muted-foreground">No billing records found.</p>
                     </div>
                   ) : (
                     <motion.div variants={staggerContainer} initial="initial" animate="animate" className="space-y-4">
                       {data?.map((order) => (
-                        <motion.div key={order._id} variants={fadeAnim} className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-5 rounded-2xl border border-white/5 bg-white/5 hover:bg-white/10 transition-colors gap-4">
+                        <motion.div key={order._id} variants={fadeAnim} className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-5 rounded-2xl border border-border/30 bg-white/5 hover:bg-white/10 transition-colors gap-4">
                           <div className="flex items-center gap-4">
                             <div className="h-12 w-12 rounded-full bg-green-500/10 border border-green-500/20 flex items-center justify-center shrink-0">
                               <CheckCircle2 className="h-6 w-6 text-green-400" />
                             </div>
                             <div>
                               <h4 className="font-semibold text-white text-lg">{order.planName}</h4>
-                              <div className="flex items-center gap-3 text-xs font-mono text-slate-500 mt-1">
+                              <div className="flex items-center gap-3 text-xs font-mono text-muted-foreground mt-1">
                                 <span>{order.emailReferenceId}</span>
                                 <span>•</span>
                                 <span>{new Date(order.createdAt).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}</span>
                               </div>
                             </div>
                           </div>
-                          <div className="text-right sm:text-right w-full sm:w-auto flex sm:block justify-between items-center sm:mt-0 pt-3 sm:pt-0 border-t border-white/5 sm:border-0 mt-2">
+                          <div className="text-right sm:text-right w-full sm:w-auto flex sm:block justify-between items-center sm:mt-0 pt-3 sm:pt-0 border-t border-border/30 sm:border-0 mt-2">
                             <span className="text-xl font-heading font-extrabold text-white block">
                               {order.amountPaid ? `₹${(order.amountPaid / 100).toLocaleString('en-IN')}` : '—'}
                             </span>
@@ -519,7 +520,7 @@ export default function ClientDashboardPage() {
                           <div className="flex items-center gap-2 w-full sm:w-auto mt-4 sm:mt-0">
                              <button 
                               onClick={() => { setSelectedOrderDetails(order); setIsDetailsModalOpen(true); }}
-                              className="flex-1 sm:flex-none px-4 py-2 rounded-xl border border-white/10 bg-white/5 text-xs font-bold text-white hover:bg-white/10 transition-colors"
+                              className="flex-1 sm:flex-none px-4 py-2 rounded-xl border border-border/50 bg-white/5 text-xs font-bold text-white hover:bg-white/10 transition-colors"
                              >
                                Details
                              </button>
@@ -560,7 +561,7 @@ export default function ClientDashboardPage() {
                     
                     <div className="flex-1 overflow-y-auto hide-scrollbar p-3 space-y-2">
                       {!ticketsItems?.length && (
-                        <p className="text-center text-sm text-slate-500 py-10">No messages yet.</p>
+                        <p className="text-center text-sm text-muted-foreground py-10">No messages yet.</p>
                       )}
                       {ticketsItems?.map((ticket: any) => (
                         <button 
@@ -611,13 +612,13 @@ export default function ClientDashboardPage() {
                           <div className="flex items-center gap-3">
                             <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${
                               selectedTicket.status === 'Open' ? 'bg-green-500/10 text-green-400 border border-green-500/20'
-                              : selectedTicket.status === 'Closed' ? 'bg-slate-800 text-slate-400 border border-white/10'
+                              : selectedTicket.status === 'Closed' ? 'bg-slate-800 text-muted-foreground/80 border border-border/50'
                               : 'bg-yellow-500/10 text-yellow-400 border border-yellow-500/20'
                             }`}>
                               {selectedTicket.status}
                             </span>
                             {selectedTicket.status !== 'Closed' && (
-                              <button onClick={handleCloseTicket} className="text-xs font-semibold text-slate-400 hover:text-white border-b border-slate-600 hover:border-white pb-0.5 transition-colors">
+                              <button onClick={handleCloseTicket} className="text-xs font-semibold text-muted-foreground/80 hover:text-white border-b border-slate-600 hover:border-white pb-0.5 transition-colors">
                                 Close
                               </button>
                             )}
@@ -763,23 +764,23 @@ export default function ClientDashboardPage() {
                     
                     <div className="grid md:grid-cols-2 gap-8">
                       <div className="space-y-2">
-                        <label className="text-xs font-bold uppercase tracking-wider text-slate-500">Full Name</label>
+                        <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Full Name</label>
                         {isEditingProfile ? (
                           <input
-                            className="w-full bg-muted border border-border rounded-xl px-4 py-3.5 text-foreground placeholder-slate-600 focus:border-primary/50 focus:outline-none"
+                            className="w-full bg-muted border border-border rounded-xl px-4 py-3.5 text-foreground placeholder-muted-foreground focus:border-primary/50 focus:outline-none"
                             placeholder="John Doe"
                             value={profileForm.name}
                             onChange={(e) => setProfileForm(p => ({...p, name: e.target.value}))}
                           />
                         ) : (
-                          <div className="px-4 py-3.5 bg-white/[0.02] border border-white/5 rounded-xl text-white font-medium min-h-[52px] flex items-center">
-                            {profileForm.name || <span className="text-slate-600 italic">Not set</span>}
+                          <div className="px-4 py-3.5 bg-muted/30 border border-border rounded-xl text-foreground font-medium min-h-[52px] flex items-center">
+                            {profileForm.name || <span className="text-muted-foreground italic">Not set</span>}
                           </div>
                         )}
                       </div>
 
                       <div className="space-y-2">
-                        <label className="text-xs font-bold uppercase tracking-wider text-slate-500">Phone Number</label>
+                        <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Phone Number</label>
                         {isEditingProfile ? (
                           <input
                             className="w-full bg-muted border border-border rounded-xl px-4 py-3.5 text-foreground placeholder-slate-600 focus:border-primary/50 focus:outline-none"
@@ -788,38 +789,38 @@ export default function ClientDashboardPage() {
                             onChange={(e) => setProfileForm(p => ({...p, phone: e.target.value}))}
                           />
                         ) : (
-                          <div className="px-4 py-3.5 bg-white/[0.02] border border-white/5 rounded-xl text-white font-medium min-h-[52px] flex items-center">
-                            {profileForm.phone || <span className="text-slate-600 italic">Not set</span>}
+                          <div className="px-4 py-3.5 bg-white/[0.02] border border-border/30 rounded-xl text-white font-medium min-h-[52px] flex items-center">
+                            {profileForm.phone || <span className="text-muted-foreground/60 italic">Not set</span>}
                           </div>
                         )}
                       </div>
 
                       <div className="space-y-2 md:col-span-2">
-                        <label className="text-xs font-bold uppercase tracking-wider text-slate-500">Company / Organization</label>
+                        <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Company / Organization</label>
                         {isEditingProfile ? (
                           <input
-                            className="w-full bg-muted border border-border rounded-xl px-4 py-3.5 text-foreground placeholder-slate-600 focus:border-primary/50 focus:outline-none"
+                            className="w-full bg-muted border border-border rounded-xl px-4 py-3.5 text-foreground placeholder-muted-foreground focus:border-primary/50 focus:outline-none"
                             placeholder="SatByte Technology Inc."
                             value={profileForm.company}
                             onChange={(e) => setProfileForm(p => ({...p, company: e.target.value}))}
                           />
                         ) : (
-                          <div className="px-4 py-3.5 bg-white/[0.02] border border-white/5 rounded-xl text-white font-medium min-h-[52px] flex items-center">
-                            {profileForm.company || <span className="text-slate-600 italic">Not set</span>}
+                          <div className="px-4 py-3.5 bg-muted/30 border border-border rounded-xl text-foreground font-medium min-h-[52px] flex items-center">
+                            {profileForm.company || <span className="text-muted-foreground italic">Not set</span>}
                           </div>
                         )}
                       </div>
                     </div>
 
-                    <div className="mt-12 pt-10 border-t border-white/5">
+                    <div className="mt-12 pt-10 border-t border-border/30">
                        <h3 className="text-2xl font-bold font-heading text-white mb-2">Change Password</h3>
-                       <p className="text-slate-400 mb-8 max-w-sm">Secure your account with a permanent access key.</p>
+                       <p className="text-muted-foreground/80 mb-8 max-w-sm">Secure your account with a permanent access key.</p>
                        <form onSubmit={handleUpdatePassword} className="space-y-5 max-w-md">
                         <div className="space-y-2">
-                          <label className="text-xs font-bold uppercase tracking-wider text-slate-500">New Password</label>
+                          <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">New Password</label>
                           <input
                             type="password"
-                            className="w-full bg-[#121A2F] border border-white/10 rounded-xl px-4 py-3.5 text-white placeholder-slate-600 focus:border-primary/50 focus:outline-none"
+                            className="w-full bg-muted/50 border border-border rounded-xl px-4 py-3.5 text-foreground placeholder-muted-foreground focus:border-primary/50 focus:outline-none"
                             placeholder="••••••••"
                             value={newPassword}
                             onChange={(e) => setNewPassword(e.target.value)}
@@ -833,7 +834,7 @@ export default function ClientDashboardPage() {
                             {passMsg.text}
                           </div>
                         )}
-                        <Button type="submit" disabled={passLoading} className="rounded-xl font-bold px-8 h-12 border border-white/10 hover:border-white/20 hover:bg-white/10 bg-white/5 text-white w-full sm:w-auto">
+                        <Button type="submit" disabled={passLoading} className="rounded-xl font-bold px-8 h-12 border border-border/50 hover:border-white/20 hover:bg-white/10 bg-white/5 text-white w-full sm:w-auto">
                           {passLoading ? 'Saving...' : 'Update Password'}
                         </Button>
                       </form>
@@ -844,14 +845,14 @@ export default function ClientDashboardPage() {
                     <motion.div variants={fadeAnim} className="h-fit bg-card/40 backdrop-blur-xl border border-border rounded-[2rem] p-8 md:p-10 shadow-lg">
                       <h3 className="text-xl font-bold font-heading text-foreground mb-6">Account Overview</h3>
                       <div className="space-y-6">
-                        <div className="pb-6 border-b border-white/5">
-                          <label className="text-xs font-bold uppercase tracking-wider text-slate-500 block mb-2">Registered Email</label>
+                        <div className="pb-6 border-b border-border/30">
+                          <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground block mb-2">Registered Email</label>
                           <div className="font-mono text-[15px] text-white">
                             {profile?.email || 'Loading...'}
                           </div>
                         </div>
                         <div>
-                          <label className="text-xs font-bold uppercase tracking-wider text-slate-500 block mb-2">Status</label>
+                          <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground block mb-2">Status</label>
                           <span className="inline-flex items-center gap-1.5 rounded-full border border-blue-500/30 bg-blue-500/10 px-3 py-1 text-xs font-bold text-blue-400 shadow-inner">
                             <span className="h-1.5 w-1.5 rounded-full bg-blue-400 animate-pulse" />
                             Premium Client
@@ -860,10 +861,10 @@ export default function ClientDashboardPage() {
                       </div>
                     </motion.div>
 
-                    <motion.div variants={fadeAnim} className="bg-gradient-to-br from-primary/10 to-transparent border border-white/5 rounded-[2rem] p-8 shadow-xl">
+                    <motion.div variants={fadeAnim} className="bg-gradient-to-br from-primary/10 to-transparent border border-border/30 rounded-[2rem] p-8 shadow-xl">
                        <h4 className="text-white font-bold mb-3">Developer Mode</h4>
-                       <p className="text-xs text-slate-500 leading-relaxed mb-4">Enable API access to integrate SatByte workflows into your own internal dashboards and tools.</p>
-                       <Button variant="outline" className="text-xs rounded-lg border-white/10 h-9 opacity-50 cursor-not-allowed">Request API Key</Button>
+                       <p className="text-xs text-muted-foreground leading-relaxed mb-4">Enable API access to integrate SatByte workflows into your own internal dashboards and tools.</p>
+                       <Button variant="outline" className="text-xs rounded-lg border-border/50 h-9 opacity-50 cursor-not-allowed">Request API Key</Button>
                     </motion.div>
                   </div>
                 </div>

@@ -270,8 +270,51 @@ export async function updateProfile(req, res) {
 
 export async function getClients(req, res) {
   try {
-    const clients = await User.find({ role: 'client' }).select('-passwordHash').sort({ createdAt: -1 })
-    res.json(clients)
+    // 1. Fetch all unique emails from the Order collection with their earliest creation date
+    const orders = await Order.aggregate([
+      { $sort: { createdAt: 1 } },
+      { $group: { 
+          _id: "$email", 
+          email: { $first: "$email" },
+          customerName: { $first: "$customerName" },
+          createdAt: { $first: "$createdAt" }
+      }}
+    ])
+
+    // 2. Fetch all registered users with role 'client'
+    const users = await User.find({ role: 'client' }).select('-passwordHash').lean()
+
+    // 3. Create a map to merge them, prioritizing User record details
+    const clientsMap = new Map()
+
+    // Start with Order data (potential shadow clients)
+    orders.forEach(o => {
+      clientsMap.set(o.email, {
+        email: o.email,
+        name: o.customerName || '',
+        createdAt: o.createdAt,
+        role: 'client',
+        hasPassword: false
+      })
+    })
+
+    // Overlay with registered User data
+    users.forEach(u => {
+      const existing = clientsMap.get(u.email)
+      clientsMap.set(u.email, {
+        ...existing,
+        ...u,
+        hasPassword: !!u.passwordHash || (existing?.hasPassword ?? false)
+      })
+    })
+
+    const combined = Array.from(clientsMap.values()).sort((a,b) => {
+      const dateA = a.createdAt ? new Date(a.createdAt).getTime() : 0
+      const dateB = b.createdAt ? new Date(b.createdAt).getTime() : 0
+      return dateB - dateA
+    })
+
+    res.json(combined)
   } catch (e) {
     console.error('[get-clients]', e)
     res.status(500).json({ message: 'Failed to fetch clients' })
