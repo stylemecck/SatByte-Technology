@@ -1,391 +1,265 @@
-import { motion, useInView } from 'framer-motion'
-import { useRef, useEffect, useState } from 'react'
+import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
-import { ArrowRight, MapPin, Rocket, Users, Star, Calendar } from 'lucide-react'
+import { ArrowRight, Code2, Cpu, Layout, Lightbulb, Rocket, ShieldCheck, Zap, Search, Palette, MessageSquare, Database, Layers, Cloud } from 'lucide-react'
 
-/* Brand icon SVGs (removed from lucide-react) */
-const LinkedinIcon = ({ className }: { className?: string }) => (
-  <svg className={className} fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
-  </svg>
-)
-
-const TwitterIcon = ({ className }: { className?: string }) => (
-  <svg className={className} fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.253 5.622 5.91-5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-  </svg>
-)
-
-import { fadeUpItem, staggerContainer } from '@/animations/pageVariants'
 import { SEO } from '@/components/SEO'
 import { SITE } from '@/lib/constants'
-import { cn } from '@/lib/utils'
 
-/* ── Animated Counter ── */
-function Counter({ to, suffix = '' }: { to: number; suffix?: string }) {
-  const ref = useRef<HTMLSpanElement>(null)
-  const inView = useInView(ref, { once: true })
-  const [count, setCount] = useState(0)
+import heroVisual from '@/assets/about_hero_visual.png'
 
-  useEffect(() => {
-    if (!inView) return
-    let start = 0
-    const duration = 1800
-    const step = Math.ceil(to / (duration / 16))
-    const timer = setInterval(() => {
-      start += step
-      if (start >= to) { setCount(to); clearInterval(timer) }
-      else setCount(start)
-    }, 16)
-    return () => clearInterval(timer)
-  }, [inView, to])
-
-  return <span ref={ref}>{count}{suffix}</span>
-}
-
-/* ── Data ── */
-const stats = [
-  { icon: Rocket, label: 'Projects Delivered', value: 12, suffix: '+', color: 'text-brand-blue' },
-  { icon: Calendar, label: 'Years Active', value: 3, suffix: '+', color: 'text-brand-amber' },
-  { icon: Users, label: 'Happy Clients', value: 5, suffix: '+', color: 'text-brand-emerald' },
-  { icon: Star, label: 'Client Retention', value: 98, suffix: '%', color: 'text-brand-violet' },
+const TECH_STACK = [
+  { name: 'React', icon: Layout },
+  { name: 'Node.js', icon: Cpu },
+  { name: 'MongoDB', icon: Database },
+  { name: 'Tailwind', icon: Palette },
+  { name: 'Framer Motion', icon: Zap },
+  { name: 'Cloud Native', icon: Cloud },
+  { name: 'API First', icon: Layers },
 ]
 
-const milestones = [
-  {
-    year: '2024',
-    title: 'Foundations',
-    text: 'Started delivering high-quality websites and IT support for local businesses in Bihar.',
-    color: 'border-brand-blue/30 bg-brand-blue/5',
-    badge: 'bg-brand-blue/10 text-brand-blue',
-  },
-  {
-    year: '2025',
-    title: 'Product Builds',
-    text: 'Expanded into custom dashboards, billing tools, school portals, and e-commerce systems.',
-    color: 'border-brand-amber/30 bg-brand-amber/5',
-    badge: 'bg-brand-amber/10 text-brand-amber',
-  },
-  {
-    year: '2025',
-    title: 'Full-Stack Engineering',
-    text: 'Delivered end-to-end applications with REST APIs, JWT auth, and cloud deployment pipelines.',
-    color: 'border-brand-emerald/30 bg-brand-emerald/5',
-    badge: 'bg-brand-emerald/10 text-brand-emerald',
-  },
-  {
-    year: '2026',
-    title: 'SatByte Today',
-    text: 'Now the premium IT partner for agencies, schools, and enterprises across Bihar and India.',
-    color: 'border-brand-violet/30 bg-brand-violet/5',
-    badge: 'bg-brand-violet/10 text-brand-violet',
-  },
-] as const
+const WHY_SATBYTE = [
+  { title: 'Scalable Engineering', description: 'Systems built to handle growth without compromising stability.', icon: Layers },
+  { title: 'Modern UI/UX', description: 'Design that feels intuitive and visually stunning.', icon: Palette },
+  { title: 'Performance First', description: 'Lightweight builds with lightning-fast load times.', icon: Zap },
+  { title: 'Clean Architecture', description: 'Maintainable code that doesn\'t slow down future features.', icon: Code2 },
+  { title: 'Long-term Support', description: 'Partnerships that go beyond the initial launch.', icon: ShieldCheck },
+  { title: 'Startup Focused', description: 'Speed and agility tailored for fast-moving founders.', icon: Rocket },
+]
 
-const values = [
-  { title: 'Company Mission', text: 'Deliver dependable, modern digital products that help organizations grow — with transparent pricing and measurable outcomes.' },
-  { title: 'Our Vision', text: 'Become the most trusted technology partner for SMBs and institutions in Eastern India, known for quality engineering and human support.' },
-  { title: 'How We Work', text: 'We align technical choices with your business goals, communicate clearly at every step, and treat every project as if it were our own.' },
+const PROCESS_STEPS = [
+  { title: 'Discovery', description: 'Understanding your goals and user needs.', icon: Search },
+  { title: 'Strategy', description: 'Mapping out the technical and design path.', icon: Lightbulb },
+  { title: 'Design', description: 'Prototyping pixel-perfect user experiences.', icon: Palette },
+  { title: 'Development', description: 'Crafting clean, production-ready code.', icon: Code2 },
+  { title: 'Launch', description: 'Seamless deployment and optimization.', icon: Rocket },
+  { title: 'Support', description: 'Active monitoring and iterative scaling.', icon: MessageSquare },
+]
+
+const STATS = [
+  { label: 'Uptime SLA', value: '99.9%' },
+  { label: 'Avg. Load Time', value: '<1.2s' },
+  { label: 'Deployment Success', value: '100%' },
+  { label: 'Client Satisfaction', value: '4.9/5' },
 ]
 
 export default function AboutPage() {
   return (
-    <>
-      <SEO
-        title="About Us"
-        description={`Learn about ${SITE.name}, our mission, vision, and founder ${SITE.owner} in ${SITE.location}.`}
-        path="/about"
-        schema={{
-          "@context": "https://schema.org",
-          "@type": "BreadcrumbList",
-          "itemListElement": [
-            {
-              "@type": "ListItem",
-              "position": 1,
-              "name": "Home",
-              "item": "https://satbyte.in/"
-            },
-            {
-              "@type": "ListItem",
-              "position": 2,
-              "name": "About",
-              "item": "https://satbyte.in/about"
-            }
-          ]
-        }}
+    <div className="bg-background min-h-screen">
+      <SEO 
+        title="About Us" 
+        description={`Building modern digital products at ${SITE.name}. Lead by ${SITE.owner}.`} 
+        path="/about" 
       />
 
-      {/* ── Hero ── */}
-      <section className="relative overflow-hidden bg-background pt-28 pb-28 flex items-center">
-        <div className="absolute top-0 left-0 w-[600px] h-[600px] bg-primary/15 rounded-full blur-[140px] pointer-events-none -translate-x-1/2 -translate-y-1/2" />
-        <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-accent/10 rounded-full blur-[120px] pointer-events-none translate-x-1/2 translate-y-1/2" />
-        {/* Dot Grid */}
-        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMiIgY3k9IjIiIHI9IjEuNSIgZmlsbD0icmdiYSgyNTUsMjU1LDI1NSwwLjAzKSIvPjwvc3ZnPg==')] opacity-60" />
-
-        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
-          <motion.div
-            variants={staggerContainer}
-            initial="initial"
-            animate="animate"
-            className="flex flex-col items-center"
-          >
-            <motion.span
-              variants={fadeUpItem}
-              className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-4 py-1.5 text-sm font-bold text-primary dark:text-accent mb-6"
-            >
-              <MapPin className="h-3.5 w-3.5" /> Bihar · India
-            </motion.span>
-
-            <motion.h1
-              variants={fadeUpItem}
-              className="font-heading text-5xl sm:text-6xl lg:text-7xl font-extrabold text-foreground leading-[1.1] tracking-tight max-w-4xl"
-            >
-              We turn{' '}
-              <span className="bg-gradient-to-r from-accent via-white to-primary bg-clip-text text-transparent">
-                ideas into
-              </span>{' '}
-              digital reality
-            </motion.h1>
-
-            <motion.p
-              variants={fadeUpItem}
-              className="mt-6 text-lg sm:text-xl text-muted-foreground max-w-2xl leading-relaxed"
-            >
-              {SITE.name} combines deep technical expertise with human-first communication — so your digital presence works as hard as you do.
-            </motion.p>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* ── Animated Stats Bar ── */}
-      <section className="bg-muted py-16 border-y border-border">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <motion.div
-            variants={staggerContainer}
-            initial="initial"
-            whileInView="animate"
-            viewport={{ once: true }}
-            className="grid grid-cols-2 lg:grid-cols-4 gap-8"
-          >
-            {stats.map((s) => {
-              const Icon = s.icon
-              return (
-                <motion.div
-                  key={s.label}
-                  variants={fadeUpItem}
-                  className="flex flex-col items-center text-center gap-3"
-                >
-                  <div className={cn('flex h-12 w-12 items-center justify-center rounded-2xl bg-white/5', s.color)}>
-                    <Icon className="h-6 w-6" />
-                  </div>
-                  <p className="font-heading text-4xl sm:text-5xl font-extrabold text-foreground">
-                    <Counter to={s.value} suffix={s.suffix} />
-                  </p>
-                  <p className="text-sm font-medium text-muted-foreground uppercase tracking-wider">{s.label}</p>
-                </motion.div>
-              )
-            })}
-          </motion.div>
-        </div>
-      </section>
-
-      {/* ── Mission / Vision / Values ── */}
-      <section className="bg-background py-24">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <motion.div
-            variants={staggerContainer}
-            initial="initial"
-            whileInView="animate"
-            viewport={{ once: true }}
-            className="grid grid-cols-1 md:grid-cols-3 gap-8"
-          >
-            {values.map((v, i) => (
-              <motion.div
-                key={v.title}
-                variants={fadeUpItem}
-                custom={i}
-                className="group relative rounded-[2rem] border border-border bg-card p-8 backdrop-blur-sm hover:border-primary/30 transition-all duration-500 hover:-translate-y-2 hover:shadow-xl hover:shadow-primary/10"
-              >
-                <div className="absolute top-0 left-8 h-[2px] w-12 bg-gradient-to-r from-primary to-accent rounded-full" />
-                <h3 className="font-heading text-xl font-bold text-foreground mt-4">{v.title}</h3>
-                <p className="mt-4 text-muted-foreground leading-relaxed">{v.text}</p>
-              </motion.div>
-            ))}
-          </motion.div>
-        </div>
-      </section>
-
-      {/* ── Founder Spotlight ── */}
-      <section className="bg-muted py-24">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center"
-          >
-            {/* Avatar Side */}
-            <div className="flex flex-col items-center lg:items-start gap-8">
-              <div className="relative">
-                {/* Glowing ring */}
-                <div className="absolute -inset-1 rounded-full bg-gradient-to-br from-primary to-accent blur-md opacity-50" />
-                <div className="relative h-40 w-40 rounded-full border-2 border-white/20 bg-muted flex items-center justify-center shadow-2xl overflow-hidden">
-                  <img 
-                    src={SITE.ownerImage} 
-                    alt={SITE.owner}
-                    className="h-full w-full object-cover"
-                  />
+      {/* Hero Section */}
+      <section className="pt-32 pb-20 px-4">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}>
+              <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-primary mb-6 block">Our Mission</span>
+              <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight text-foreground leading-[1.1] mb-8">
+                Building modern digital products with <span className="text-primary">clean design</span> and scalable engineering.
+              </h1>
+              <p className="text-lg text-muted-foreground leading-relaxed max-w-xl mb-10">
+                At {SITE.name}, we believe every business deserves enterprise-grade technology. We combine aesthetic precision with rigorous engineering to build tools that drive growth.
+              </p>
+              <div className="flex flex-wrap gap-4">
+                <Link to="/contact" className="px-8 py-4 rounded-xl bg-primary text-primary-foreground font-bold shadow-lg shadow-primary/20 hover:bg-primary/90 transition-all">
+                  Start a Project
+                </Link>
+                <div className="flex items-center gap-4 px-4">
+                   <div className="flex -space-x-2">
+                     {[1,2,3].map(i => <div key={i} className="h-8 w-8 rounded-full border-2 border-background bg-secondary" />)}
+                   </div>
+                   <span className="text-sm font-medium text-muted-foreground">Trusted by 10+ founders</span>
                 </div>
               </div>
-              <div className="text-center lg:text-left">
-                <p className="text-xs font-bold uppercase tracking-widest text-primary dark:text-accent">Founder & CEO</p>
-                <h2 className="font-heading text-4xl font-extrabold text-foreground mt-2">{SITE.owner}</h2>
-                <p className="text-muted-foreground mt-1 flex items-center gap-2 justify-center lg:justify-start">
-                  <MapPin className="h-4 w-4" /> {SITE.location}
-                </p>
-                {/* Social Links */}
-                <div className="flex gap-3 mt-6 justify-center lg:justify-start">
-                  <a
-                    href="#"
-                    className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-slate-400 hover:text-white hover:border-white/30 hover:bg-white/10 transition-all duration-300"
-                  >
-                    <LinkedinIcon className="h-4 w-4" />
-                  </a>
-                  <a
-                    href="#"
-                    className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-slate-400 hover:text-white hover:border-white/30 hover:bg-white/10 transition-all duration-300"
-                  >
-                    <TwitterIcon className="h-4 w-4" />
-                  </a>
-                </div>
-              </div>
-            </div>
-
-            {/* Bio Side */}
-            <div>
-              <div className="relative">
-                <div className="text-8xl text-primary/10 font-serif absolute -top-8 -left-4 leading-none select-none">"</div>
-                <blockquote className="relative z-10 text-2xl font-medium text-foreground leading-relaxed italic">
-                  Every business deserves enterprise-grade technology — not just the big ones.
-                </blockquote>
-              </div>
-              <p className="mt-8 text-muted-foreground text-lg leading-relaxed">
-                Satyam Kumar is an IT professional and entrepreneur based in Mahua, Vaishali, Bihar. With a vision to bridge the technology gap between enterprise companies and growing Indian businesses, he founded {SITE.name} to deliver world-class digital solutions at accessible prices.
-              </p>
-              <p className="mt-4 text-muted-foreground leading-relaxed">
-                From designing pixel-perfect interfaces to architecting scalable backend APIs, Satyam leads every project with precision, care, and a relentless commitment to measurable results.
-              </p>
-              <Link
-                to="/contact"
-                className="inline-flex items-center gap-2 mt-8 font-bold text-primary dark:text-accent border-b-2 border-primary/30 pb-1 hover:border-primary transition-colors"
-              >
-                Work directly with Satyam <ArrowRight className="h-4 w-4" />
-              </Link>
-            </div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* ── Alternating Zigzag Timeline ── */}
-      <section className="bg-background py-24">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <span className="inline-block rounded-full border border-primary/30 bg-primary/10 px-4 py-1.5 text-sm font-bold text-primary mb-4">
-              Our Journey
-            </span>
-            <h2 className="font-heading text-4xl font-extrabold text-foreground">Milestones that shaped us</h2>
-          </div>
-
-          <div className="relative">
-            {/* Central line */}
-            <motion.div
-              className="absolute left-1/2 top-0 hidden lg:block h-full w-px bg-gradient-to-b from-transparent via-white/10 to-transparent -translate-x-1/2"
-              initial={{ scaleY: 0 }}
-              whileInView={{ scaleY: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 1.2, ease: 'easeOut' }}
-              style={{ transformOrigin: 'top' }}
-            />
-
-            <div className="space-y-12">
-              {milestones.map((m, i) => {
-                const isLeft = i % 2 === 0
-                return (
-                  <motion.div
-                    key={`${m.year}-${m.title}`}
-                    initial={{ opacity: 0, x: isLeft ? -40 : 40 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true, margin: '-80px' }}
-                    transition={{ duration: 0.6, delay: i * 0.1, ease: [0.22, 1, 0.36, 1] }}
-                    className={cn(
-                      'relative grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center',
-                    )}
-                  >
-                    {/* Content block — swap order based on left/right */}
-                    <div className={cn(isLeft ? 'lg:text-right lg:order-1' : 'lg:order-2')}>
-                      <div className={cn(
-                        'rounded-[1.5rem] border p-8 backdrop-blur-sm transition-all duration-500 hover:-translate-y-2 hover:shadow-xl',
-                        m.color
-                      )}>
-                        <span className={cn('inline-block rounded-full px-3 py-1 text-xs font-extrabold uppercase tracking-widest mb-3', m.badge)}>
-                          {m.year}
-                        </span>
-                        <h3 className="font-heading text-2xl font-extrabold text-foreground">{m.title}</h3>
-                        <p className="mt-3 text-muted-foreground leading-relaxed">{m.text}</p>
-                      </div>
-                    </div>
-
-                    {/* Center dot */}
-                    <div className={cn(
-                      'hidden lg:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10',
-                    )}>
-                      <div className="h-5 w-5 rounded-full border-2 border-primary bg-background shadow-[0_0_12px_rgba(37,99,235,0.5)]" />
-                    </div>
-
-                    {/* Empty opposing side */}
-                    <div className={cn(isLeft ? 'lg:order-2' : 'lg:order-1')} />
-                  </motion.div>
-                )
-              })}
-            </div>
+            </motion.div>
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.95 }} 
+              animate={{ opacity: 1, scale: 1 }}
+              className="relative aspect-square lg:aspect-video rounded-2xl overflow-hidden border border-border bg-secondary/30"
+            >
+               <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent" />
+               {/* Generated Premium Visual */}
+               <img 
+                 src={heroVisual} 
+                 alt="SatByte Studio Visual"
+                 className="w-full h-full object-cover opacity-80"
+               />
+               <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent" />
+            </motion.div>
           </div>
         </div>
       </section>
 
-      {/* ── Bottom CTA ── */}
-      <section className="bg-muted py-24 border-t border-border">
-        <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            <h2 className="font-heading text-4xl sm:text-5xl font-extrabold text-foreground">
-              Ready to work with us?
-            </h2>
-            <p className="mt-4 text-muted-foreground text-lg max-w-lg mx-auto">
-              Let's discuss your idea or project — we're just one message away and always excited to start something new.
+      {/* Story Section */}
+      <section className="py-24 px-4 border-t border-border bg-secondary/10">
+        <div className="max-w-3xl mx-auto text-center">
+          <h2 className="text-sm font-bold uppercase tracking-widest text-primary mb-8">The SatByte Story</h2>
+          <div className="space-y-6 text-lg md:text-xl text-foreground leading-relaxed font-medium">
+            <p>
+              SatByte started with a simple observation: most small to medium businesses were being left behind by the rapid pace of digital transformation.
             </p>
-            <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
-              <Link
-                to="/contact"
-                className="inline-flex items-center justify-center gap-2 h-14 px-8 rounded-full bg-primary text-primary-foreground font-bold text-base shadow-xl shadow-primary/20 transition-all duration-300 hover:-translate-y-1"
-              >
-                Start a conversation
-                <ArrowRight className="h-5 w-5" />
-              </Link>
-              <Link
-                to="/portfolio"
-                className="inline-flex items-center justify-center gap-2 h-14 px-8 rounded-full border border-border bg-transparent text-foreground font-bold text-base hover:bg-muted transition-all duration-300 hover:-translate-y-1"
-              >
-                View our work
-              </Link>
-            </div>
-          </motion.div>
+            <p>
+              Founded by {SITE.owner}, we set out to build a studio that combines the agility of a startup with the discipline of an enterprise engineering firm.
+            </p>
+            <p>
+              Today, we are a small but focused team of engineers and designers dedicated to one thing: building products that matter.
+            </p>
+          </div>
         </div>
       </section>
-    </>
+
+      {/* Mission & Vision */}
+      <section className="py-24 px-4">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+            {[
+              { label: 'Mission', title: 'Empower growth through technology.', content: 'Our mission is to provide businesses with the technical tools they need to compete on a global scale.' },
+              { label: 'Vision', title: 'The standard for modern studio.', content: 'We aim to become the leading choice for founders who value quality, transparency, and speed.' },
+              { label: 'Philosophy', title: 'Code is a means to an end.', content: 'We don\'t just write code; we solve business problems. Every line we ship must deliver measurable value.' }
+            ].map((item) => (
+              <div key={item.label} className="space-y-4">
+                <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">{item.label}</span>
+                <h3 className="text-xl font-bold">{item.title}</h3>
+                <p className="text-muted-foreground leading-relaxed text-sm">{item.content}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Why SatByte */}
+      <section className="py-24 px-4 bg-secondary/20">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl font-bold tracking-tight mb-4">Why founders choose SatByte</h2>
+            <p className="text-muted-foreground">Engineering excellence meets modern product strategy.</p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+             {WHY_SATBYTE.map((item) => (
+               <div key={item.title} className="p-8 rounded-2xl border border-border bg-background hover:border-primary/50 transition-colors group">
+                  <item.icon className="h-6 w-6 text-primary mb-6 transition-transform group-hover:scale-110" />
+                  <h4 className="text-lg font-bold mb-3">{item.title}</h4>
+                  <p className="text-sm text-muted-foreground leading-relaxed">{item.description}</p>
+               </div>
+             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Process Section */}
+      <section className="py-24 px-4">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl font-bold tracking-tight mb-4">Our Process</h2>
+            <p className="text-muted-foreground">A rigorous approach to building digital products.</p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-6 gap-8 relative">
+             <div className="hidden md:block absolute top-10 left-0 w-full h-px bg-border -z-10" />
+             {PROCESS_STEPS.map((step) => (
+               <div key={step.title} className="flex flex-col items-center text-center bg-background px-4">
+                  <div className="h-20 w-20 rounded-2xl bg-secondary/50 border border-border flex items-center justify-center text-primary mb-6">
+                    <step.icon className="h-8 w-8" />
+                  </div>
+                  <h4 className="text-sm font-bold mb-2">{step.title}</h4>
+                  <p className="text-[10px] text-muted-foreground leading-relaxed">{step.description}</p>
+               </div>
+             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Technology Stack */}
+      <section className="py-24 px-4 bg-secondary/10 border-y border-border">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-12">
+            <div className="max-w-md">
+              <h2 className="text-3xl font-bold tracking-tight mb-4">Built with a modern stack.</h2>
+              <p className="text-muted-foreground leading-relaxed">
+                We use the latest technologies to ensure your product is fast, secure, and ready to scale from day one.
+              </p>
+            </div>
+            <div className="flex-1 grid grid-cols-2 sm:grid-cols-4 gap-4">
+               {TECH_STACK.map((tech) => (
+                 <div key={tech.name} className="flex flex-col items-center gap-3 p-6 rounded-xl border border-border bg-background">
+                    <tech.icon className="h-6 w-6 text-primary" />
+                    <span className="text-[10px] font-bold uppercase tracking-wider">{tech.name}</span>
+                 </div>
+               ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Founder Section */}
+      <section className="py-24 px-4">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <div className="order-2 lg:order-1">
+              <span className="text-sm font-bold text-primary mb-6 block uppercase tracking-widest">The Founder's Note</span>
+              <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight mb-8">Building for the long term.</h2>
+              <div className="space-y-6 text-muted-foreground leading-relaxed text-lg italic border-l-4 border-primary pl-8">
+                <p>
+                  "At {SITE.name}, we don't just ship features. We ship confidence. My goal is to build a studio where founders feel like they have a technical co-founder, not just a service provider."
+                </p>
+              </div>
+              <div className="mt-12 flex items-center gap-4">
+                 <div>
+                   <h4 className="font-bold text-foreground">{SITE.owner}</h4>
+                   <p className="text-sm text-muted-foreground">Founder & Lead Engineer</p>
+                 </div>
+              </div>
+            </div>
+            <div className="order-1 lg:order-2 flex justify-center">
+               <div className="relative w-80 h-80 lg:w-96 lg:h-96">
+                  <div className="absolute inset-0 bg-primary/20 rounded-[3rem] rotate-6" />
+                  <div className="absolute inset-0 bg-background border-2 border-border rounded-[3rem] overflow-hidden">
+                    <img 
+                      src={SITE.ownerImage} 
+                      alt={SITE.owner}
+                      className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500" 
+                    />
+                  </div>
+               </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Stats Section */}
+      <section className="py-24 px-4 border-y border-border bg-secondary/10">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+             {STATS.map((stat) => (
+               <div key={stat.label} className="text-center">
+                  <p className="text-4xl font-extrabold text-foreground mb-2">{stat.value}</p>
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">{stat.label}</p>
+               </div>
+             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Closing CTA */}
+      <section className="py-32 px-4">
+        <div className="max-w-4xl mx-auto text-center">
+           <h2 className="text-4xl md:text-6xl font-extrabold tracking-tight mb-8">Let's build something meaningful together.</h2>
+           <p className="text-xl text-muted-foreground mb-12 max-w-2xl mx-auto leading-relaxed">
+             Ready to take your product from idea to production? We're currently accepting new projects for {new Date().getFullYear()}.
+           </p>
+           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+             <Link to="/contact" className="w-full sm:w-auto px-10 py-4 rounded-xl bg-primary text-primary-foreground font-bold shadow-lg shadow-primary/20 hover:bg-primary/90 transition-all flex items-center justify-center gap-2">
+               Start a Project <ArrowRight className="h-5 w-5" />
+             </Link>
+             <Link to="/portfolio" className="w-full sm:w-auto px-10 py-4 rounded-xl bg-background border border-border font-bold hover:bg-secondary transition-all">
+               View Work
+             </Link>
+           </div>
+        </div>
+      </section>
+    </div>
   )
 }
+
