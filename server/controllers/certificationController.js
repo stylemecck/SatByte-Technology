@@ -1,6 +1,7 @@
 import Stripe from 'stripe'
 import { Certification } from '../models/Certification.js'
 import { Enrollment } from '../models/Enrollment.js'
+import { deleteImage, uploadImageBuffer } from '../config/cloudinary.js'
 
 /** Public: List all certifications */
 export async function getAllCertifications(req, res) {
@@ -26,9 +27,42 @@ export async function getCertificationById(req, res) {
 /** Admin: Create new certification */
 export async function createCertification(req, res) {
   try {
-    const cert = await Certification.create(req.body)
+    if (!req.file?.buffer) {
+      return res.status(400).json({ message: 'Cover image is required (field name: image)' })
+    }
+
+    const { title, description, price, duration, features, syllabus, status } = req.body
+    if (!title || !description || !price) {
+      return res.status(400).json({ message: 'title, description and price are required' })
+    }
+
+    let featureList = []
+    if (typeof features === 'string') {
+      try {
+        featureList = JSON.parse(features)
+      } catch {
+        featureList = features.split('\n').map(f => f.trim()).filter(Boolean)
+      }
+    } else if (Array.isArray(features)) {
+      featureList = features
+    }
+
+    const { secure_url, public_id } = await uploadImageBuffer(req.file.buffer, 'certifications')
+
+    const cert = await Certification.create({
+      title,
+      description,
+      price: Number(price),
+      duration: duration || '4 Weeks',
+      features: featureList,
+      syllabus: syllabus || [],
+      status: status || 'Active',
+      imageUrl: secure_url,
+      cloudinaryPublicId: public_id,
+    })
     res.status(201).json(cert)
   } catch (e) {
+    console.error(e)
     res.status(500).json({ message: 'Failed to create certification' })
   }
 }
@@ -149,10 +183,43 @@ export async function verifyEnrollment(req, res) {
 /** Admin: Update existing certification */
 export async function updateCertification(req, res) {
   try {
-    const cert = await Certification.findByIdAndUpdate(req.params.id, req.body, { new: true })
+    const cert = await Certification.findById(req.params.id)
     if (!cert) return res.status(404).json({ message: 'Certification not found' })
+
+    const { title, description, price, duration, features, status } = req.body
+    if (title) cert.title = title
+    if (description) cert.description = description
+    if (price) cert.price = Number(price)
+    if (duration) cert.duration = duration
+    if (status) cert.status = status
+
+    if (features !== undefined) {
+      let featureList = []
+      if (typeof features === 'string') {
+        try {
+          featureList = JSON.parse(features)
+        } catch {
+          featureList = features.split('\n').map(f => f.trim()).filter(Boolean)
+        }
+      } else if (Array.isArray(features)) {
+        featureList = features
+      }
+      cert.features = featureList
+    }
+
+    if (req.file?.buffer) {
+      if (cert.cloudinaryPublicId) {
+        await deleteImage(cert.cloudinaryPublicId)
+      }
+      const { secure_url, public_id } = await uploadImageBuffer(req.file.buffer, 'certifications')
+      cert.imageUrl = secure_url
+      cert.cloudinaryPublicId = public_id
+    }
+
+    await cert.save()
     res.json(cert)
   } catch (e) {
+    console.error(e)
     res.status(500).json({ message: 'Failed to update certification' })
   }
 }
@@ -160,10 +227,17 @@ export async function updateCertification(req, res) {
 /** Admin: Delete certification */
 export async function deleteCertification(req, res) {
   try {
-    const cert = await Certification.findByIdAndDelete(req.params.id)
+    const cert = await Certification.findById(req.params.id)
     if (!cert) return res.status(404).json({ message: 'Certification not found' })
+
+    if (cert.cloudinaryPublicId) {
+      await deleteImage(cert.cloudinaryPublicId)
+    }
+
+    await cert.deleteOne()
     res.json({ message: 'Certification deleted successfully' })
   } catch (e) {
+    console.error(e)
     res.status(500).json({ message: 'Failed to delete certification' })
   }
 }

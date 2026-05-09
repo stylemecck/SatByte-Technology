@@ -9,7 +9,9 @@ const certificationSchema = new mongoose.Schema(
     features: [{ type: String }],
     syllabus: [{ type: String }],
     imageUrl: { type: String },
-    status: { type: String, enum: ['Active', 'Inactive'], default: 'Active' },
+    /** Required to delete the asset from Cloudinary when the certification is removed. */
+    cloudinaryPublicId: { type: String },
+    status: { type: String, enum: ['Active', 'Draft'], default: 'Active' },
   },
   { timestamps: true }
 )

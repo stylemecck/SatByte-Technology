@@ -33,6 +33,7 @@ router.post('/client-reset-password', clientResetPassword)
 router.post('/client-set-password', requireAuth, clientSetPassword)
 router.get('/profile', requireAuth, getProfile)
 router.put('/profile', requireAuth, updateProfile)
+router.get('/clients', requireAuth, requireAdmin, getClients)
 
 // GET fallbacks — return a helpful JSON message when someone opens these URLs in a browser
 const postOnly = (_req, res) =>

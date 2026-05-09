@@ -408,11 +408,16 @@ function EducationPanel() {
 
   const onSubmit = async (data: any) => {
     try {
-      await api.post('certifications', { 
-        ...data, 
-        price: Number(data.price),
-        features: data.features?.split('\n').filter((l: string) => l.trim())
+      const fd = new FormData();
+      Object.entries(data).forEach(([key, val]: any) => {
+        if (key === 'image') {
+          if (val && val[0]) fd.append('image', val[0]);
+        } else {
+          fd.append(key, val);
+        }
       });
+      
+      await api.post('certifications', fd, { headers: { 'Content-Type': 'multipart/form-data' } });
       reset();
       setIsAdding(false);
     } catch (e: any) { alert(e.response?.data?.message || 'Failed to save'); }
@@ -444,6 +449,10 @@ function EducationPanel() {
                      <option value="Active" className="bg-slate-900">Active</option>
                      <option value="Draft" className="bg-slate-900">Draft</option>
                    </select>
+                </div>
+                <div className="md:col-span-2 space-y-2">
+                  <Label>Cover Image</Label>
+                  <Input type="file" {...register('image')} accept="image/*" className="bg-white/5 border-border/50 h-12" />
                 </div>
                 <div className="md:col-span-2 space-y-2"><Label>Detailed Description</Label><Textarea {...register('description')} required className="bg-white/5 border-border/50 min-h-[100px]" /></div>
                 <div className="md:col-span-2 space-y-2"><Label>Features & Modules (One per line)</Label><Textarea {...register('features')} className="bg-white/5 border-border/50 min-h-[120px]" /></div>
