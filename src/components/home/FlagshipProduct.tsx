@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { ArrowRight, ExternalLink, Shield, Zap, Globe, Cpu, Layout, CheckCircle2 } from 'lucide-react'
+import { ExternalLink, Zap, Globe, Cpu, Layout, CheckCircle2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 
@@ -49,7 +49,7 @@ export function FlagshipProduct() {
 
               {/* Features Grid */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-12">
-                {FEATURES.map((f, i) => (
+                {FEATURES.map((f) => (
                   <div key={f.label} className="flex gap-4 group">
                     <div className="flex-shrink-0 h-10 w-10 rounded-xl bg-secondary border border-border flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-300">
                       <f.icon className="h-5 w-5" />
