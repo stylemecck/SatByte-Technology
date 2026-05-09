@@ -1,122 +1,52 @@
 import emailjs from '@emailjs/browser'
 import { motion, AnimatePresence } from 'framer-motion'
-import { CheckCircle2, Loader2, Mail, MapPin, MessageCircle, Phone, Send, ArrowRight } from 'lucide-react'
+import { CheckCircle2, Loader2, Mail, MapPin, ArrowRight, ShieldCheck, Zap, MessageSquare, Search, Lightbulb, Code2, Rocket, Clock, Lock } from 'lucide-react'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 
 import { SEO } from '@/components/SEO'
 import { SITE } from '@/lib/constants'
-import { cn } from '@/lib/utils'
 
 type FormValues = {
   name: string
   email: string
-  phone: string
+  company: string
+  service: string
+  budget: string
+  timeline: string
   message: string
 }
 
-const MAP_EMBED =
-  'https://maps.google.com/maps?q=Mahua%2C%20Vaishali%2C%20Bihar&z=13&ie=UTF8&iwloc=&output=embed'
-
-const contactTiles = [
-  {
-    icon: MapPin,
-    label: 'Our Location',
-    value: SITE.location,
-    href: 'https://maps.google.com/?q=Mahua,Vaishali,Bihar',
-    color: 'from-brand-blue/10 to-brand-blue/5',
-    border: 'border-brand-blue/30',
-    iconBg: 'bg-brand-blue/10 text-brand-blue',
-    glow: 'hover:shadow-brand-blue/20',
-  },
-  {
-    icon: Phone,
-    label: 'Call Us',
-    value: SITE.phone,
-    href: `tel:${SITE.phoneDigits}`,
-    color: 'from-brand-emerald/10 to-brand-emerald/5',
-    border: 'border-brand-emerald/30',
-    iconBg: 'bg-brand-emerald/10 text-brand-emerald',
-    glow: 'hover:shadow-brand-emerald/20',
-  },
-  {
-    icon: Mail,
-    label: 'Email Us',
-    value: SITE.email,
-    href: `mailto:${SITE.email}`,
-    color: 'from-brand-violet/10 to-brand-violet/5',
-    border: 'border-brand-violet/30',
-    iconBg: 'bg-brand-violet/10 text-brand-violet',
-    glow: 'hover:shadow-brand-violet/20',
-  },
+const BUDGET_OPTIONS = [
+  '₹50k - ₹1L',
+  '₹1L - ₹3L',
+  '₹3L - ₹10L',
+  '₹10L+',
+  'Not decided'
 ]
 
-/** Floating label input component */
-function FloatingInput({
-  id,
-  label,
-  type = 'text',
-  placeholder,
-  error,
-  registration,
-  multiline,
-}: {
-  id: string
-  label: string
-  type?: string
-  placeholder?: string
-  error?: string
-  registration: object
-  multiline?: boolean
-}) {
-  const [focused, setFocused] = useState(false)
+const TIMELINE_OPTIONS = [
+  'Less than 1 month',
+  '1-3 months',
+  '3-6 months',
+  '6+ months'
+]
 
-    const baseClass =
-      'w-full bg-transparent border-0 border-b-2 border-border focus:outline-none focus:border-primary text-foreground placeholder-transparent transition-all duration-300 py-3 text-base resize-none'
+const SERVICES = [
+  'Web Development',
+  'SaaS Platform',
+  'Mobile App',
+  'UI/UX Design',
+  'SEO / Marketing',
+  'Enterprise Solution'
+]
 
-    return (
-    <div className="relative mb-8">
-      {multiline ? (
-        <textarea
-          id={id}
-          placeholder={placeholder || label}
-          rows={4}
-          className={cn(baseClass, 'pt-6')}
-          onFocus={() => setFocused(true)}
-          onBlur={(e) => setFocused(e.target.value.length > 0)}
-          {...registration}
-        />
-      ) : (
-        <input
-          id={id}
-          type={type}
-          placeholder={placeholder || label}
-          className={cn(baseClass, 'pt-6 h-14')}
-          onFocus={() => setFocused(true)}
-          onBlur={(e) => setFocused(e.target.value.length > 0)}
-          {...registration}
-        />
-      )}
-      <label
-        htmlFor={id}
-        className={cn(
-          'absolute left-0 text-muted-foreground transition-all duration-300 pointer-events-none',
-          focused ? 'top-0 text-xs font-semibold text-primary' : 'top-4 text-base',
-        )}
-      >
-        {label}
-      </label>
-      {/* Animated bottom line */}
-      <span
-        className={cn(
-          'absolute bottom-0 left-0 h-[2px] bg-gradient-to-r from-primary to-accent transition-all duration-500',
-          focused ? 'w-full' : 'w-0',
-        )}
-      />
-      {error && <p className="mt-1 text-xs text-red-400">{error}</p>}
-    </div>
-  )
-}
+const FAQ_ITEMS = [
+  { q: 'How long does a typical project take?', a: 'Most web projects take 4-8 weeks, while complex SaaS platforms can take 3-6 months depending on the scope.' },
+  { q: 'Do you offer maintenance after launch?', a: 'Yes, we offer ongoing maintenance and support packages to ensure your product stays updated and secure.' },
+  { q: 'How do you handle project payments?', a: 'We typically work with a milestone-based payment structure: deposit, design approval, development, and final launch.' },
+  { q: 'Can you work with my existing tech team?', a: 'Absolutely. We often integrate with existing teams to provide specialized expertise or extra engineering capacity.' }
+]
 
 export default function ContactPage() {
   const [status, setStatus] = useState<'idle' | 'sending' | 'ok' | 'err'>('idle')
@@ -124,8 +54,11 @@ export default function ContactPage() {
     register,
     handleSubmit,
     reset,
-    formState: { errors },
-  } = useForm<FormValues>({ defaultValues: { name: '', email: '', phone: '', message: '' } })
+  } = useForm<FormValues>({ 
+    defaultValues: { 
+      name: '', email: '', company: '', service: '', budget: '', timeline: '', message: '' 
+    } 
+  })
 
   const onSubmit = async (values: FormValues) => {
     const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID as string | undefined
@@ -145,7 +78,10 @@ export default function ContactPage() {
         {
           from_name: values.name,
           reply_to: values.email,
-          phone: values.phone,
+          company: values.company,
+          service: values.service,
+          budget: values.budget,
+          timeline: values.timeline,
           message: values.message,
           to_email: SITE.email,
         },
@@ -159,247 +95,146 @@ export default function ContactPage() {
   }
 
   return (
-    <>
-      <SEO
-        title="Contact Us"
-        description={`Contact ${SITE.name} — ${SITE.phone}, ${SITE.email}. Mahua, Vaishali, Bihar.`}
-        path="/contact"
-        schema={{
-          "@context": "https://schema.org",
-          "@type": "BreadcrumbList",
-          "itemListElement": [
-            {
-              "@type": "ListItem",
-              "position": 1,
-              "name": "Home",
-              "item": "https://satbyte.in/"
-            },
-            {
-              "@type": "ListItem",
-              "position": 2,
-              "name": "Contact",
-              "item": "https://satbyte.in/contact"
-            }
-          ]
-        }}
+    <div className="bg-background min-h-screen">
+      <SEO 
+        title="Contact Us" 
+        description="Start your project with SatByte. Premium software studio for startups and enterprises." 
+        path="/contact" 
       />
 
-      {/* ── Hero Section ── */}
-      <section className="relative overflow-hidden bg-background pt-28 pb-24">
-        {/* Ambient orbs */}
-        <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-primary/15 rounded-full blur-[130px] pointer-events-none" />
-        <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-accent/10 rounded-full blur-[100px] pointer-events-none" />
-
-        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      {/* Hero Section */}
+      <section className="pt-32 pb-20 px-4">
+        <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            {/* Left: Headline */}
-            <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-            >
-              <span className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-4 py-1.5 text-sm font-bold text-primary mb-6">
-                <Send className="h-3.5 w-3.5" />
-                Let's Connect
-              </span>
-              <h1 className="font-heading text-5xl sm:text-6xl font-extrabold text-foreground leading-[1.1] tracking-tight">
-                Let's build{' '}
-                <span className="bg-gradient-to-r from-accent via-foreground/90 to-primary bg-clip-text text-transparent">
-                  something great
-                </span>{' '}
-                together
+            <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}>
+              <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-primary mb-6 block">Inquiry</span>
+              <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight text-foreground leading-[1.1] mb-8">
+                Let's build something <span className="text-primary">exceptional</span> together.
               </h1>
-              <p className="mt-6 text-lg text-muted-foreground leading-relaxed max-w-md">
-                Share your vision with us — we reply within one business day and are always ready to explore innovative ideas with ambitious teams.
+              <p className="text-lg text-muted-foreground leading-relaxed max-w-xl mb-10">
+                From technical strategy to full-scale product engineering, we help startups and businesses build scalable digital products that drive impact.
               </p>
-
-              {/* WhatsApp Pulse CTA */}
-              <div className="mt-10 flex items-center gap-4">
-                <div className="relative">
-                  <span className="absolute inset-0 rounded-full bg-[#25D366]/40 animate-ping" />
-                  <a
-                    href={SITE.whatsappUrl}
-                    target="_blank"
-                    rel="noreferrer noopener"
-                    className="relative inline-flex items-center gap-3 rounded-full bg-[#25D366] px-6 py-3.5 text-[15px] font-bold text-white shadow-lg shadow-[#25D366]/30 hover:bg-[#20bd5a] hover:shadow-[#25D366]/50 transition-all duration-300 hover:-translate-y-1"
-                  >
-                    <MessageCircle className="h-5 w-5" />
-                    Chat on WhatsApp
-                  </a>
-                </div>
+              
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-10">
+                 <div className="flex items-center gap-3 p-4 rounded-xl border border-border bg-secondary/20">
+                   <Clock className="h-5 w-5 text-primary" />
+                   <div>
+                     <p className="text-xs font-bold text-foreground">Response Time</p>
+                     <p className="text-xs text-muted-foreground">Average: &lt; 12 hours</p>
+                   </div>
+                 </div>
+                 <div className="flex items-center gap-3 p-4 rounded-xl border border-border bg-secondary/20">
+                   <Lock className="h-5 w-5 text-primary" />
+                   <div>
+                     <p className="text-xs font-bold text-foreground">Confidentiality</p>
+                     <p className="text-xs text-muted-foreground">NDAs upon request</p>
+                   </div>
+                 </div>
               </div>
             </motion.div>
 
-            {/* Right: 3 Contact Tiles */}
-            <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.7, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
-              className="grid gap-4"
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }} 
+              animate={{ opacity: 1, y: 0 }}
+              className="bg-secondary/10 border border-border rounded-3xl p-8 md:p-12"
             >
-              {contactTiles.map((tile, i) => {
-                const Icon = tile.icon
-                return (
-                  <motion.a
-                    key={tile.label}
-                    href={tile.href}
-                    target={tile.href.startsWith('http') ? '_blank' : undefined}
-                    rel="noreferrer"
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.2 + i * 0.1, duration: 0.5 }}
-                    whileHover={{ x: 6 }}
-                    className={cn(
-                      'group flex items-center gap-5 rounded-2xl border bg-gradient-to-br p-5 backdrop-blur-sm transition-all duration-300 hover:shadow-xl',
-                      tile.color,
-                      tile.border,
-                      tile.glow,
-                    )}
-                  >
-                    <div className={cn('flex h-14 w-14 shrink-0 items-center justify-center rounded-xl', tile.iconBg)}>
-                      <Icon className="h-6 w-6" />
-                    </div>
-                    <div className="min-w-0">
-                      <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground">{tile.label}</p>
-                      <p className="mt-0.5 text-[15px] font-semibold text-foreground truncate">{tile.value}</p>
-                    </div>
-                    <ArrowRight className="ml-auto h-5 w-5 text-muted-foreground opacity-0 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-1 shrink-0" />
-                  </motion.a>
-                )
-              })}
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── Contact Form ── */}
-      <section className="bg-muted py-24 border-y border-border">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
-            {/* Left: Sticky context */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="lg:sticky lg:top-32"
-            >
-              <h2 className="font-heading text-4xl font-extrabold text-foreground leading-tight">
-                Tell us about your project
-              </h2>
-              <p className="mt-4 text-muted-foreground text-lg leading-relaxed">
-                Fill in a few details and our engineering team will reach out with a clear proposal and no-obligation consultation.
-              </p>
-              <ul className="mt-8 space-y-4">
-                {[
-                  'Free 30-minute consultation call',
-                  'Clear, itemised project proposal',
-                  'No long-term contracts required',
-                  'Response within one business day',
-                ].map((item) => (
-                  <li key={item} className="flex items-center gap-3 text-muted-foreground">
-                    <CheckCircle2 className="h-5 w-5 shrink-0 text-primary" />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </motion.div>
-
-            {/* Right: Form */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.1 }}
-              className="rounded-[2rem] border border-border bg-card p-8 sm:p-12 backdrop-blur-xl shadow-xl"
-            >
-              <AnimatePresence mode="wait">
+               <AnimatePresence mode="wait">
                 {status === 'ok' ? (
                   <motion.div
                     key="success"
-                    initial={{ opacity: 0, scale: 0.9 }}
+                    initial={{ opacity: 0, scale: 0.95 }}
                     animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0 }}
-                    className="flex flex-col items-center justify-center py-16 text-center gap-4"
+                    className="text-center py-12"
                   >
-                    <div className="flex h-20 w-20 items-center justify-center rounded-full bg-primary/20 shadow-lg shadow-primary/20">
-                      <CheckCircle2 className="h-10 w-10 text-primary" />
-                    </div>
-                    <h3 className="font-heading text-2xl font-bold text-foreground">Message Sent!</h3>
-                    <p className="text-muted-foreground max-w-xs">
-                      Thank you for reaching out. We'll get back to you within one business day.
-                    </p>
-                    <button
-                      onClick={() => setStatus('idle')}
-                      className="mt-4 text-sm font-medium text-primary underline"
-                    >
-                      Send another message
+                    <CheckCircle2 className="h-16 w-16 text-primary mx-auto mb-6" />
+                    <h3 className="text-2xl font-bold mb-2">Message Sent!</h3>
+                    <p className="text-muted-foreground mb-8">Thank you for your inquiry. We'll be in touch soon.</p>
+                    <button onClick={() => setStatus('idle')} className="text-sm font-bold text-primary hover:underline">
+                      Send another inquiry
                     </button>
                   </motion.div>
                 ) : (
-                  <motion.form
-                    key="form"
-                    onSubmit={handleSubmit(onSubmit)}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                  >
-                    <div className="grid sm:grid-cols-2 gap-x-8">
-                      <FloatingInput
-                        id="name"
-                        label="Your Name"
-                        error={errors.name?.message}
-                        registration={register('name', { required: 'Name is required' })}
-                      />
-                      <FloatingInput
-                        id="email"
-                        label="Email Address"
-                        type="email"
-                        error={errors.email?.message}
-                        registration={register('email', { required: 'Email is required' })}
+                  <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div className="space-y-2">
+                        <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Name</label>
+                        <input 
+                          {...register('name', { required: true })}
+                          placeholder="Your Name"
+                          className="w-full bg-background border border-border rounded-xl px-4 py-3 focus:border-primary outline-none transition-colors"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Email</label>
+                        <input 
+                          {...register('email', { required: true, pattern: /^\S+@\S+$/i })}
+                          type="email"
+                          placeholder="your@email.com"
+                          className="w-full bg-background border border-border rounded-xl px-4 py-3 focus:border-primary outline-none transition-colors"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Company / Project Name</label>
+                      <input 
+                        {...register('company')}
+                        placeholder="Company Name"
+                        className="w-full bg-background border border-border rounded-xl px-4 py-3 focus:border-primary outline-none transition-colors"
                       />
                     </div>
-                    <FloatingInput
-                      id="phone"
-                      label="Phone Number"
-                      placeholder="+91 …"
-                      error={errors.phone?.message}
-                      registration={register('phone', { required: 'Phone is required' })}
-                    />
-                    <FloatingInput
-                      id="message"
-                      label="Tell us about your project…"
-                      error={errors.message?.message}
-                      registration={register('message', { required: 'Message is required' })}
-                      multiline
-                    />
 
-                    {status === 'err' && (
-                      <p className="mb-4 text-sm text-red-400">
-                        {!import.meta.env.VITE_EMAILJS_SERVICE_ID
-                          ? 'Add VITE_EMAILJS_* keys in a .env file, then restart the dev server.'
-                          : 'Something went wrong. Please try again or email us directly.'}
-                      </p>
-                    )}
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                      <div className="space-y-2">
+                        <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Service</label>
+                        <select 
+                          {...register('service', { required: true })}
+                          className="w-full bg-background border border-border rounded-xl px-4 py-3 focus:border-primary outline-none transition-colors appearance-none"
+                        >
+                          <option value="">Select...</option>
+                          {SERVICES.map(s => <option key={s} value={s}>{s}</option>)}
+                        </select>
+                      </div>
+                      <div className="space-y-2">
+                        <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Budget</label>
+                        <select 
+                          {...register('budget', { required: true })}
+                          className="w-full bg-background border border-border rounded-xl px-4 py-3 focus:border-primary outline-none transition-colors appearance-none"
+                        >
+                          <option value="">Select...</option>
+                          {BUDGET_OPTIONS.map(o => <option key={o} value={o}>{o}</option>)}
+                        </select>
+                      </div>
+                      <div className="space-y-2">
+                        <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Timeline</label>
+                        <select 
+                          {...register('timeline', { required: true })}
+                          className="w-full bg-background border border-border rounded-xl px-4 py-3 focus:border-primary outline-none transition-colors appearance-none"
+                        >
+                          <option value="">Select...</option>
+                          {TIMELINE_OPTIONS.map(o => <option key={o} value={o}>{o}</option>)}
+                        </select>
+                      </div>
+                    </div>
 
-                    <button
+                    <div className="space-y-2">
+                      <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Project Description</label>
+                      <textarea 
+                        {...register('message', { required: true })}
+                        placeholder="Tell us about your project goals..."
+                        rows={4}
+                        className="w-full bg-background border border-border rounded-xl px-4 py-3 focus:border-primary outline-none transition-colors resize-none"
+                      />
+                    </div>
+
+                    <button 
                       type="submit"
                       disabled={status === 'sending'}
-                      className="group relative inline-flex h-14 w-full items-center justify-center gap-3 rounded-full bg-primary text-primary-foreground font-bold text-base overflow-hidden shadow-xl shadow-primary/20 transition-all duration-300 hover:-translate-y-1 disabled:opacity-70 disabled:cursor-not-allowed"
+                      className="w-full h-14 rounded-xl bg-primary text-primary-foreground font-bold shadow-lg shadow-primary/20 hover:bg-primary/90 transition-all flex items-center justify-center gap-2 disabled:opacity-70"
                     >
-                      {status === 'sending' ? (
-                        <>
-                          <Loader2 className="h-5 w-5 animate-spin" />
-                          Sending…
-                        </>
-                      ) : (
-                        <>
-                          <Send className="h-5 w-5 transition-transform duration-300 group-hover:rotate-12" />
-                          Send Message
-                          <ArrowRight className="h-4 w-4 opacity-0 -translate-x-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0" />
-                        </>
-                      )}
+                      {status === 'sending' ? <Loader2 className="animate-spin h-5 w-5" /> : 'Start Your Project'}
                     </button>
-                  </motion.form>
+                  </form>
                 )}
               </AnimatePresence>
             </motion.div>
@@ -407,41 +242,105 @@ export default function ContactPage() {
         </div>
       </section>
 
-      {/* ── Calendly Booking ── */}
-      <section className="bg-background py-24">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <span className="inline-block rounded-full border border-primary/30 bg-primary/10 px-4 py-1.5 text-sm font-bold text-primary mb-4">
-              Book a Call
-            </span>
-            <h2 className="font-heading text-4xl font-extrabold text-foreground">Schedule a Discovery Call</h2>
-            <p className="mt-4 text-muted-foreground text-lg">Pick a time that works for you — no commitment required.</p>
-          </div>
-          <div className="overflow-hidden rounded-[2rem] border border-border bg-card shadow-lg backdrop-blur-sm">
-            <iframe
-              src="https://calendly.com/satyamkashyapoffical/30min?hide_event_type_details=1&hide_gdpr_banner=1"
-              width="100%"
-              height="700"
-              className="border-0"
-              title="Schedule a call on Calendly"
-            />
+      {/* Quick Contact & Trust Section */}
+      <section className="py-24 px-4 bg-secondary/10 border-y border-border">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
+             <div>
+                <h3 className="text-2xl font-bold mb-8">Why work with SatByte?</h3>
+                <div className="grid gap-6">
+                   {[
+                     { icon: Zap, title: 'Modern Engineering', desc: 'We build with the latest React & Node.js ecosystems for longevity.' },
+                     { icon: ShieldCheck, title: 'Scalable Architecture', desc: 'Your product will handle 10 or 10,000 users without breaking.' },
+                     { icon: MessageSquare, title: 'Fast Communication', desc: 'Direct access to lead engineers, not just project managers.' }
+                   ].map(item => (
+                     <div key={item.title} className="flex gap-4">
+                        <div className="h-10 w-10 shrink-0 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center text-primary">
+                           <item.icon className="h-5 w-5" />
+                        </div>
+                        <div>
+                           <h4 className="font-bold text-sm">{item.title}</h4>
+                           <p className="text-xs text-muted-foreground leading-relaxed">{item.desc}</p>
+                        </div>
+                     </div>
+                   ))}
+                </div>
+             </div>
+             <div>
+                <h3 className="text-2xl font-bold mb-8">Quick Contacts</h3>
+                <div className="grid gap-4">
+                   <a href={`mailto:${SITE.email}`} className="flex items-center gap-4 p-4 rounded-xl border border-border bg-background hover:border-primary/50 transition-colors">
+                      <Mail className="h-5 w-5 text-primary" />
+                      <span className="text-sm font-medium">{SITE.email}</span>
+                   </a>
+                   <a href="https://linkedin.com" target="_blank" className="flex items-center gap-4 p-4 rounded-xl border border-border bg-background hover:border-primary/50 transition-colors">
+                      <MapPin className="h-5 w-5 text-primary" />
+                      <span className="text-sm font-medium">Bihar, India</span>
+                   </a>
+                </div>
+             </div>
           </div>
         </div>
       </section>
 
-      {/* ── Google Map ── */}
-      <div className="mx-auto max-w-7xl px-4 pb-24 sm:px-6 lg:px-8">
-        <div className="overflow-hidden rounded-[2rem] border border-border shadow-lg">
-          <iframe
-            title="SatByte Technologies location"
-            src={MAP_EMBED}
-            className="h-[400px] w-full border-0 grayscale-[30%] opacity-90"
-            loading="lazy"
-            referrerPolicy="no-referrer-when-downgrade"
-            allowFullScreen
-          />
+      {/* Process Preview */}
+      <section className="py-24 px-4">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl font-bold tracking-tight mb-4">The Road to Launch</h2>
+            <p className="text-muted-foreground">What happens after you reach out?</p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+             {[
+               { icon: Search, title: 'Discovery', desc: 'Qualifying needs and setting goals.' },
+               { icon: Lightbulb, title: 'Planning', desc: 'Architecture & UX wireframing.' },
+               { icon: Code2, title: 'Development', desc: 'Clean, agile sprint cycles.' },
+               { icon: Rocket, title: 'Launch', desc: 'Optimization and global deployment.' }
+             ].map((step, i) => (
+               <div key={step.title} className="relative p-6 rounded-2xl border border-border bg-secondary/5 text-center">
+                  <div className="h-12 w-12 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-primary mx-auto mb-6">
+                    <step.icon className="h-5 w-5" />
+                  </div>
+                  <h4 className="font-bold mb-2 text-sm">{i + 1}. {step.title}</h4>
+                  <p className="text-xs text-muted-foreground leading-relaxed">{step.desc}</p>
+               </div>
+             ))}
+          </div>
         </div>
-      </div>
-    </>
+      </section>
+
+      {/* FAQ Section */}
+      <section className="py-24 px-4 bg-secondary/5 border-t border-border">
+        <div className="max-w-3xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold tracking-tight">Project FAQs</h2>
+          </div>
+          <div className="space-y-6">
+             {FAQ_ITEMS.map(faq => (
+               <div key={faq.q} className="p-6 rounded-2xl border border-border bg-background">
+                  <h4 className="font-bold mb-2 text-sm">{faq.q}</h4>
+                  <p className="text-sm text-muted-foreground leading-relaxed">{faq.a}</p>
+               </div>
+             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Final CTA */}
+      <section className="py-32 px-4 border-t border-border">
+        <div className="max-w-4xl mx-auto text-center">
+           <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-8">Ready to turn your idea into a scalable product?</h2>
+           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+             <button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="w-full sm:w-auto px-10 py-4 rounded-xl bg-primary text-primary-foreground font-bold shadow-lg shadow-primary/20 hover:bg-primary/90 transition-all">
+               Start Your Inquiry
+             </button>
+             <a href="https://calendly.com/satyamkashyapoffical/30min" target="_blank" className="w-full sm:w-auto px-10 py-4 rounded-xl bg-background border border-border font-bold hover:bg-secondary transition-all flex items-center justify-center gap-2">
+               Schedule a Call <ArrowRight className="h-5 w-5" />
+             </a>
+           </div>
+        </div>
+      </section>
+    </div>
   )
 }
+
