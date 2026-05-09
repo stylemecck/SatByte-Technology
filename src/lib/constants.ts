@@ -128,6 +128,14 @@ export const ALL_SERVICES = [
 
 export const HOME_PORTFOLIO = [
   {
+    title: 'Toolkit — All-in-One Utility Platform',
+    description: 'A scalable ecosystem of 80+ modern developer, SEO, and productivity utilities built for speed and simplicity.',
+    image: '/toolkit-preview.png',
+    tech: ['React', 'TypeScript', 'Tailwind CSS', 'Vite'],
+    demoUrl: 'https://toolkit.satbyte.in',
+    githubUrl: 'https://toolkit.satbyte.in/tools',
+  },
+  {
     title: 'Enterprise FinTech Dashboard',
     description: 'A high-performance analytics platform handling millions of daily transactions with sub-second latency.',
     image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80',
@@ -163,6 +171,14 @@ export const HOME_PORTFOLIO = [
 
 /** Portfolio page projects with filters. */
 export const PORTFOLIO_PROJECTS = [
+  {
+    id: 'toolkit',
+    title: 'Toolkit.satbyte.in',
+    description: 'Flagship utility platform featuring 80+ tools for developers and creators.',
+    tech: ['React', 'TypeScript', 'Vite', 'Tailwind'],
+    category: 'Product',
+    image: '/toolkit-preview.png',
+  },
   {
     id: '1',
     title: 'School Management System',

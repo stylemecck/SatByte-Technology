@@ -10,10 +10,21 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
 import { useProjectsQuery } from '@/hooks/useCmsQueries'
 import { cn } from '@/lib/utils'
+import { PORTFOLIO_PROJECTS } from '@/lib/constants'
 
 export default function PortfolioPage() {
-  const { data, isPending, isError } = useProjectsQuery()
+  const { data: apiData, isPending, isError } = useProjectsQuery()
   const [filter, setFilter] = useState<string>('All')
+
+  const data = useMemo(() => {
+    if (apiData?.length) return apiData
+    return PORTFOLIO_PROJECTS.map(p => ({
+      ...p,
+      _id: p.id,
+      imageUrl: p.image,
+      technologies: p.tech
+    }))
+  }, [apiData])
 
   const categories = useMemo(() => {
     const fromData = [...new Set(data?.map((p) => p.category) ?? [])]
@@ -137,7 +148,7 @@ export default function PortfolioPage() {
           </>
         ) : null}
 
-        {!isPending && !data?.length ? (
+        {!isPending && !data?.length && isError ? (
           <p className="text-center text-muted-foreground">
             No projects yet. Add some from the{' '}
             <a href="/admin/login" className="text-primary underline">

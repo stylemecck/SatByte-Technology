@@ -1,6 +1,7 @@
 import { AboutPreview } from '@/components/home/AboutPreview'
 import { ContactBanner } from '@/components/home/ContactBanner'
 import { HeroSection } from '@/components/home/HeroSection'
+import { FlagshipProduct } from '@/components/home/FlagshipProduct'
 import { PortfolioPreview } from '@/components/home/PortfolioPreview'
 import { ServicesPreview } from '@/components/home/ServicesPreview'
 import { TestimonialsSection } from '@/components/home/TestimonialsSection'
@@ -65,6 +66,7 @@ export default function HomePage() {
         ]}
       />
       <HeroSection />
+      <FlagshipProduct />
       <ServicesPreview />
       <AboutPreview />
       <WhyChooseUs />
