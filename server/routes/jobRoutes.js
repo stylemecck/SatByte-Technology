@@ -20,10 +20,10 @@ router.get('/my/applications', requireAuth, getMyApplications)
 router.post('/apply', requireAuth, applyForJob)
 
 // Admin only
-router.post('/', requireAdmin, createJob)
-router.put('/:id', requireAdmin, updateJob)
-router.delete('/:id', requireAdmin, deleteJob)
-router.get('/admin/applications', requireAdmin, getAllApplications)
-router.put('/applications/:id/status', requireAdmin, updateApplicationStatus)
+router.post('/', requireAuth, requireAdmin, createJob)
+router.put('/:id', requireAuth, requireAdmin, updateJob)
+router.delete('/:id', requireAuth, requireAdmin, deleteJob)
+router.get('/admin/applications', requireAuth, requireAdmin, getAllApplications)
+router.put('/applications/:id/status', requireAuth, requireAdmin, updateApplicationStatus)
 
 export default router

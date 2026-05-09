@@ -16,8 +16,8 @@ router.get('/:id', getInternshipById)
 router.post('/apply', requireAuth, applyForInternship)
 
 // Admin only
-router.post('/', requireAdmin, createInternship)
-router.put('/:id', requireAdmin, updateInternship)
-router.delete('/:id', requireAdmin, deleteInternship)
+router.post('/', requireAuth, requireAdmin, createInternship)
+router.put('/:id', requireAuth, requireAdmin, updateInternship)
+router.delete('/:id', requireAuth, requireAdmin, deleteInternship)
 
 export default router
