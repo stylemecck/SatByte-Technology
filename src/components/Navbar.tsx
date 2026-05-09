@@ -5,7 +5,6 @@ import { useState, useEffect } from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
 
 
-import { useTheme } from '@/contexts/ThemeContext'
 import { cn } from '@/lib/utils'
 import { getStoredToken } from '@/lib/apiClient'
 import { Logo } from './Logo'
@@ -21,23 +20,19 @@ const PRIMARY_LINKS = [
 ]
 
 export function Navbar() {
-  const { theme, toggleTheme } = useTheme()
   const [open, setOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const location = useLocation()
 
-  // Update login status based on stored token
   useEffect(() => {
     setIsLoggedIn(!!getStoredToken())
   }, [location.pathname])
 
-  // Close mobile menu on route change
   useEffect(() => {
     setOpen(false)
   }, [location.pathname])
 
-  // Detect scroll for subtle shadow/border adjustments
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20)
     window.addEventListener('scroll', handleScroll, { passive: true })
@@ -45,31 +40,31 @@ export function Navbar() {
   }, [])
 
   return (
-    <div className="fixed top-0 inset-x-0 z-50 flex justify-center pt-4 px-4 pointer-events-none transition-all duration-300">
-      <header className={cn(
-        "pointer-events-auto flex items-center justify-between w-full max-w-5xl h-14 rounded-full border px-4 sm:px-6 transition-all duration-500",
-        scrolled 
-          ? "bg-background/70 backdrop-blur-xl border-border shadow-sm dark:shadow-black/50" 
-          : "bg-background/40 backdrop-blur-md border-transparent shadow-none"
-      )}>
+    <div className={cn(
+      "fixed top-0 inset-x-0 z-50 h-16 transition-all duration-300 border-b",
+      scrolled 
+        ? "bg-background/80 backdrop-blur-md border-border" 
+        : "bg-background/0 border-transparent"
+    )}>
+      <header className="h-full w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
         
         {/* Brand */}
         <Link
           to="/"
           className="flex items-center transition-opacity hover:opacity-80 outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-md"
         >
-          <Logo theme={theme === 'dark' ? 'dark' : 'light'} className="scale-75 sm:scale-90 origin-left" />
+          <Logo theme="auto" speed="fast" pauseOnHover trailBlocks={5}  />
         </Link>
 
         {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center h-full">
+        <nav className="hidden md:flex items-center h-full gap-1 lg:gap-2">
           {PRIMARY_LINKS.map(({ href, label }) => (
             <NavLink
               key={href}
               to={href}
               className={({ isActive }) =>
                 cn(
-                  'relative h-full flex items-center px-4 text-sm font-medium transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-md',
+                  'relative h-8 px-3 flex items-center text-sm font-medium transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-md',
                   isActive 
                     ? 'text-foreground' 
                     : 'text-muted-foreground hover:text-foreground'
@@ -82,7 +77,7 @@ export function Navbar() {
                   {isActive && (
                     <motion.div 
                       layoutId="nav-active-desktop" 
-                      className="absolute bottom-[-1px] left-0 right-0 h-[2px] bg-foreground mx-4 rounded-t-full"
+                      className="absolute inset-0 bg-secondary/50 rounded-md z-0"
                     />
                   )}
                 </>
@@ -92,40 +87,33 @@ export function Navbar() {
         </nav>
 
         {/* Actions */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3 lg:gap-4">
           {/* Dashboard / Login Link (Desktop) */}
           {isLoggedIn ? (
             <Link 
               to="/portal" 
-              className="hidden md:flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary text-primary-foreground text-[11px] font-black uppercase tracking-widest hover:opacity-90 transition-opacity shadow-lg shadow-primary/20"
+              className="hidden md:flex items-center gap-2 px-4 py-2 rounded-md bg-foreground text-background text-sm font-semibold hover:bg-foreground/90 transition-colors shadow-sm"
             >
-              <LayoutDashboard className="h-3.5 w-3.5" /> Dashboard
+              <LayoutDashboard className="h-4 w-4" /> Dashboard
             </Link>
           ) : (
             <Link 
               to="/client-login" 
-              className="hidden md:flex items-center px-3 py-1.5 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+              className="hidden md:flex items-center px-4 py-2 rounded-md bg-foreground text-background text-sm font-semibold hover:bg-foreground/90 transition-colors shadow-sm"
             >
               Sign In
             </Link>
           )}
 
-          <div className="hidden md:block w-px h-4 bg-border mx-1" />
+          <div className="hidden md:block w-px h-4 bg-border" />
 
-          {/* Theme Toggle */}
-          <button
-            onClick={toggleTheme}
-            className="flex items-center justify-center h-9 w-9 gap-2 rounded-full text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring"
-            aria-label="Toggle theme"
-          >
-            {theme === 'dark' ? <Sun className="h-[18px] w-[18px]" /> : <Moon className="h-[18px] w-[18px]" />}
-          </button>
+
 
           {/* Mobile Menu Trigger */}
           <Dialog.Root open={open} onOpenChange={setOpen}>
             <Dialog.Trigger asChild>
               <button 
-                className="md:hidden flex flex-col justify-center items-center h-9 w-9 gap-[4px] rounded-full text-foreground hover:bg-secondary transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                className="md:hidden flex flex-col justify-center items-center h-9 w-9 gap-[4px] rounded-md text-foreground hover:bg-secondary/50 transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring"
                 aria-label="Open menu"
               >
                 <motion.span 
@@ -145,28 +133,28 @@ export function Navbar() {
             
             <Dialog.Portal>
               <Dialog.Overlay className="fixed inset-0 z-[60] bg-background/80 backdrop-blur-sm transition-opacity" />
-              <Dialog.Content className="fixed top-4 inset-x-4 z-[70] flex flex-col rounded-3xl border border-border bg-background p-6 shadow-2xl outline-none origin-top transition-transform transform">
+              <Dialog.Content className="fixed top-4 inset-x-4 z-[70] flex flex-col rounded-2xl border border-border bg-background p-6 shadow-2xl outline-none origin-top transition-transform transform">
                 <Dialog.Title className="sr-only">Mobile Menu</Dialog.Title>
                 
                 <div className="flex items-center justify-between mb-8">
                    <Link to="/" className="flex items-center">
-                      <Logo theme={theme === 'dark' ? 'dark' : 'light'} variant="full" className="scale-90 origin-left" />
+                      <Logo theme="auto" speed="fast" pauseOnHover trailBlocks={5}  />
                    </Link>
                    <Dialog.Close asChild>
-                     <button className="flex h-8 w-8 items-center justify-center rounded-full bg-secondary text-foreground transition-transform active:scale-90">
+                     <button className="flex h-8 w-8 items-center justify-center rounded-md bg-secondary text-foreground hover:bg-secondary/80 transition-colors active:scale-95">
                        <X className="h-4 w-4" />
                      </button>
                    </Dialog.Close>
                 </div>
 
-                <nav className="flex flex-col gap-2">
+                <nav className="flex flex-col gap-1">
                   {PRIMARY_LINKS.map(({ href, label }) => (
                     <NavLink
                       key={href}
                       to={href}
                       className={({ isActive }) =>
                         cn(
-                          'flex items-center px-4 py-3 text-lg font-medium rounded-xl transition-colors',
+                          'flex items-center px-4 py-3 text-base font-medium rounded-md transition-colors',
                           isActive 
                             ? 'bg-secondary text-foreground' 
                             : 'text-muted-foreground hover:text-foreground hover:bg-secondary/50'
@@ -176,18 +164,18 @@ export function Navbar() {
                       {label}
                     </NavLink>
                   ))}
-                  <div className="h-px bg-border my-2" />
+                  <div className="h-px bg-border my-3" />
                   {isLoggedIn ? (
                     <Link
                       to="/portal"
-                      className="flex items-center justify-center w-full px-4 py-4 mt-2 text-sm font-black bg-primary text-primary-foreground rounded-xl hover:opacity-90 transition-opacity"
+                      className="flex items-center justify-center w-full px-4 py-3 mt-2 text-sm font-semibold bg-foreground text-background rounded-md hover:bg-foreground/90 transition-colors"
                     >
                       Dashboard
                     </Link>
                   ) : (
                     <Link
                       to="/client-login"
-                      className="flex items-center justify-center w-full px-4 py-3 mt-2 text-sm font-black bg-primary text-primary-foreground rounded-xl hover:opacity-90 transition-opacity"
+                      className="flex items-center justify-center w-full px-4 py-3 mt-2 text-sm font-semibold bg-foreground text-background rounded-md hover:bg-foreground/90 transition-colors"
                     >
                       Client Sign In
                     </Link>

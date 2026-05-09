@@ -41,8 +41,8 @@ export function Footer() {
   const year = new Date().getFullYear()
 
   return (
-    <footer className="border-t border-border bg-secondary text-muted-foreground transition-colors duration-300">
-      <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
+    <footer className="border-t border-border/50 bg-background text-muted-foreground transition-colors duration-300">
+      <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
         <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-4">
           <div className="space-y-4">
             <Link to="/" className="inline-block">
@@ -144,7 +144,7 @@ export function Footer() {
                 Subscribe to Newsletter
               </h3>
               <form 
-                className="flex flex-col sm:flex-row gap-2"
+                className="flex flex-col sm:flex-row gap-2 mt-2"
                 onSubmit={(e) => {
                   e.preventDefault();
                   alert("Thanks for subscribing! We'll be in touch.");
@@ -154,11 +154,11 @@ export function Footer() {
                   type="email" 
                   placeholder="Enter your email" 
                   required 
-                  className="w-full rounded-lg border border-border bg-card px-4 py-2 text-sm text-foreground placeholder-muted-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary transition-all"
+                  className="w-full rounded-md border border-border/50 bg-secondary/50 px-3 py-2 text-sm text-foreground placeholder-muted-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary transition-all"
                 />
                 <button 
                   type="submit" 
-                  className="rounded-lg bg-primary px-4 py-2 text-sm font-bold text-primary-foreground transition-all hover:bg-primary/90 active:scale-95"
+                  className="rounded-md bg-foreground px-4 py-2 text-sm font-semibold text-background transition-all hover:bg-foreground/90 active:scale-95"
                 >
                   Subscribe
                 </button>

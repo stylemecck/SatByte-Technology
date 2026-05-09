@@ -52,8 +52,9 @@
 
 @layer base {
   :root {
+    /* Premium Light Theme */
     --background: #FFFFFF;
-    --foreground: #09090B;          /* Dark gray, nearly black text */
+    --foreground: #09090B;
     
     --card: #FFFFFF;
     --card-foreground: #09090B;
@@ -61,67 +62,67 @@
     --popover: #FFFFFF;
     --popover-foreground: #09090B;
     
-    --primary: #000000;             /* Black primary button */
-    --primary-foreground: #FAFAFA;
+    --primary: #FF5A00;             /* Cosmic Orange for Light Mode */
+    --primary-foreground: #FFFFFF;
     
-    --secondary: #F4F4F5;           /* Light gray slightly raised */
+    --secondary: #F4F4F5;
     --secondary-foreground: #09090B;
     
     --muted: #F4F4F5;
-    --muted-foreground: #52525B;    /* Zinc 600 equivalent (darker for readability) */
+    --muted-foreground: #71717A;
     
-    --accent: #F4F4F5;              /* Hover states */
-    --accent-foreground: #09090B;
+    --accent: #FFF0E6;              /* Very light orange */
+    --accent-foreground: #FF5A00;
     
-    --border: #D4D4D8;              /* Zinc 300 equivalent (darker for input borders) */
-    --input: #D4D4D8;
-    --ring: #71717A;
+    --border: #E4E4E7;
+    --input: #E4E4E7;
+    --ring: #FF5A00;
 
-    /* Light Mode Brand (Readable saturation) */
-    --brand-blue: #2563EB;          /* Blue 600 */
-    --brand-violet: #7C3AED;        /* Violet 600 */
-    --brand-amber: #D97706;         /* Amber 600 */
-    --brand-emerald: #059669;       /* Emerald 600 */
-    --brand-pink: #DB2777;          /* Pink 600 */
-    --brand-cyan: #0891B2;          /* Cyan 600 */
-    --skeleton: #E4E4E7;            /* Zinc 200 */
+    /* Light Mode Brand */
+    --brand-blue: #2563EB;
+    --brand-violet: #7C3AED;
+    --brand-amber: #FF5A00;
+    --brand-emerald: #059669;
+    --brand-pink: #DB2777;
+    --brand-cyan: #0891B2;
+    --skeleton: #E4E4E7;
   }
   
   .dark {
-    /* Pure Modern SaaS Dark Theme */
-    --background: #09090B;          /* Very deep gray, standard for Linear/Vercel */
-    --foreground: #FAFAFA;          /* Very light gray text */
+    /* Premium Dark Theme - Cosmic Orange */
+    --background: #000000;
+    --foreground: #FAFAFA;
     
-    --card: #09090B;
+    --card: #0A0A0A;
     --card-foreground: #FAFAFA;
     
-    --popover: #09090B;
+    --popover: #0A0A0A;
     --popover-foreground: #FAFAFA;
     
-    --primary: #FAFAFA;             /* White primary button */
-    --primary-foreground: #09090B;
+    --primary: #FF5A00;             /* Cosmic Orange */
+    --primary-foreground: #FFFFFF;
     
-    --secondary: #27272A;           /* Elevated dark gray */
+    --secondary: #111111;
     --secondary-foreground: #FAFAFA;
     
-    --muted: #27272A;
-    --muted-foreground: #D4D4D8;    /* Brightened disabled text for legibility */
+    --muted: #111111;
+    --muted-foreground: #A1A1AA;
     
-    --accent: #27272A;
-    --accent-foreground: #FAFAFA;
+    --accent: #111111;              /* Subtle accent bg */
+    --accent-foreground: #FF5A00;
     
-    --border: #27272A;              /* Zinc 800 */
-    --input: #27272A;
-    --ring: #52525B;
+    --border: #1F1F22;
+    --input: #1F1F22;
+    --ring: #FF5A00;
 
-    /* Dark Mode Brand (Vibrant glow) */
-    --brand-blue: #60A5FA;          /* Blue 400 */
-    --brand-violet: #A78BFA;        /* Violet 400 */
-    --brand-amber: #FBBF24;         /* Amber 400 */
-    --brand-emerald: #34D399;       /* Emerald 400 */
-    --brand-pink: #F472B6;          /* Pink 400 */
-    --brand-cyan: #22D3EE;          /* Cyan 400 */
-    --skeleton: #27272A;            /* Zinc 800 */
+    /* Dark Mode Brand */
+    --brand-blue: #3B82F6;
+    --brand-violet: #8B5CF6;
+    --brand-amber: #FF5A00;         /* Replaced amber with cosmic orange */
+    --brand-emerald: #10B981;
+    --brand-pink: #EC4899;
+    --brand-cyan: #06B6D4;
+    --skeleton: #1F1F22;
   }
   
   html {
@@ -148,29 +149,7 @@
 }
 
 
-/* Animated mesh gradient for hero backgrounds */
-@keyframes gradient-shift {
-  0%,
-  100% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-}
 
-.animate-gradient-mesh {
-  background-size: 200% 200%;
-  animation: gradient-shift 12s ease infinite;
-}
-
-@keyframes shine {
-  100% { left: 125%; }
-}
-
-.animate-shine {
-  animation: shine 1.5s infinite;
-}
 
 /* Swiper custom theming */
 .swiper-pagination-bullet-active {
