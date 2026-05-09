@@ -1,6 +1,6 @@
 import * as Dialog from '@radix-ui/react-dialog'
 import { motion } from 'framer-motion'
-import { Moon, Sun, X, LayoutDashboard } from 'lucide-react'
+import { X, LayoutDashboard } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
 

@@ -119,6 +119,7 @@ export function Logo({
 }: LogoProps) {
   const prefersReducedMotion = useReducedMotion();
   const [resolvedTheme, setResolvedTheme] = useState<'light' | 'dark'>('light');
+  const [isHovered, setIsHovered] = useState(false);
 
   // Resolve 'auto' theme on client
   useEffect(() => {
@@ -156,6 +157,8 @@ export function Logo({
     <div 
       className={cn("flex items-center gap-3 select-none", className)} 
       style={{ color: textColor }}
+      onMouseEnter={() => pauseOnHover && setIsHovered(true)}
+      onMouseLeave={() => pauseOnHover && setIsHovered(false)}
     >
       {/* Icon with Orbit + Satellite + Trail */}
       <div 
@@ -199,7 +202,7 @@ export function Logo({
           {/* Rotating Satellite Group */}
           <motion.g
             transform="rotate(-15 50 50)"
-            animate={!prefersReducedMotion ? { rotate: 360 } : {}}
+            animate={!prefersReducedMotion && !(pauseOnHover && isHovered) ? { rotate: 360 } : {}}
             transition={{ duration, repeat: Infinity, ease: "linear" }}
             style={{ transformOrigin: "50px 50px" }}
           >

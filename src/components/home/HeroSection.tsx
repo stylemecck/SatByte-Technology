@@ -1,10 +1,11 @@
 import { motion } from 'framer-motion'
+import type { Variants } from 'framer-motion'
 import { ArrowRight, Code, Rocket, ShieldCheck, Sparkles } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
 import { Button } from '@/components/ui/button'
 
-const fadeUp = {
+const fadeUp: Variants = {
   initial: { opacity: 0, y: 20 },
   animate: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } }
 }
