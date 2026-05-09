@@ -264,8 +264,81 @@ export async function clientLoginVerify(req, res) {
       user: { id: 'client-' + normalizedEmail, email: normalizedEmail, role: 'client' },
     })
   } catch (e) {
-    console.error(e)
     res.status(500).json({ message: 'Verification failed' })
+  }
+}
+
+export async function clientForgotPasswordRequest(req, res) {
+  try {
+    const { email } = req.body
+    if (!email) return res.status(400).json({ message: 'Email required' })
+
+    const normalizedEmail = email.toLowerCase().trim()
+    const user = await User.findOne({ email: normalizedEmail })
+
+    if (!user) {
+      return res.status(404).json({ message: 'No account found with this email.' })
+    }
+
+    const code = Math.floor(100000 + Math.random() * 900000).toString()
+    await Otp.deleteMany({ email: normalizedEmail })
+    await Otp.create({ email: normalizedEmail, otp: code })
+
+    const gmailUser = process.env.GMAIL_USER || 'info@satbyte.in'
+    
+    try {
+      await mailTransporter.sendMail({
+        from: `"SatByte Support" <${gmailUser}>`,
+        to: normalizedEmail,
+        subject: `Password Reset Code: ${code}`,
+        html: `<h2>Reset Your Password</h2><p>Your password reset code is: <strong>${code}</strong></p><p>This code expires in 5 minutes.</p>`,
+      })
+      res.json({ message: 'Reset code sent to your email.' })
+    } catch (mailError) {
+      console.error('[auth/client-forgot-password] Mail Delivery Failed. OTP:', code, '| Error:', mailError.message)
+      if (process.env.NODE_ENV !== 'production' || !process.env.GMAIL_USER) {
+        return res.json({ 
+          message: 'Reset code generated (Check server console/logs for code)',
+          dev_note: 'Mail delivery failed. See server logs for the OTP code to proceed.'
+        })
+      }
+      throw mailError
+    }
+  } catch (e) {
+    console.error('[auth/client-forgot-password] Failed:', e.message)
+    res.status(500).json({ message: 'Failed to send reset code' })
+  }
+}
+
+export async function clientResetPassword(req, res) {
+  try {
+    const { email, otp, password } = req.body
+    if (!email || !otp || !password || password.length < 8) {
+      return res.status(400).json({ message: 'Email, OTP, and password (8+ chars) are required' })
+    }
+
+    const normalizedEmail = email.toLowerCase().trim()
+    const validOtp = await Otp.findOne({ email: normalizedEmail, otp })
+
+    if (!validOtp) {
+      return res.status(401).json({ message: 'Invalid or expired reset code' })
+    }
+
+    const user = await User.findOne({ email: normalizedEmail })
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' })
+    }
+
+    const passwordHash = await bcrypt.hash(password, 12)
+    user.passwordHash = passwordHash
+    await user.save()
+
+    await Otp.deleteMany({ email: normalizedEmail })
+
+    res.json({ message: 'Password reset successfully. You can now login.' })
+  } catch (e) {
+    console.error('[auth/client-reset-password] Failed:', e.message)
+    res.status(500).json({ message: 'Failed to reset password' })
   }
 }
 

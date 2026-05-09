@@ -9,6 +9,8 @@ import {
   clientRegister,
   clientRegisterRequest,
   clientRegisterVerify,
+  clientForgotPasswordRequest,
+  clientResetPassword,
   getProfile,
   updateProfile,
   getClients 
@@ -26,6 +28,8 @@ router.post('/client-register-verify', clientRegisterVerify)
 router.post('/client-login', clientLoginRequest)
 router.post('/client-verify', clientLoginVerify)
 router.post('/client-password-login', clientPasswordLogin)
+router.post('/client-forgot-password', clientForgotPasswordRequest)
+router.post('/client-reset-password', clientResetPassword)
 router.post('/client-set-password', requireAuth, clientSetPassword)
 router.get('/profile', requireAuth, getProfile)
 router.put('/profile', requireAuth, updateProfile)

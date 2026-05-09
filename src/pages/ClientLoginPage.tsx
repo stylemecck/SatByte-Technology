@@ -28,7 +28,7 @@ export default function ClientLoginPage() {
     return <Navigate to="/portal" replace />
   }
 
-  const [authMode, setAuthMode] = useState<'login' | 'register'>('login')
+  const [authMode, setAuthMode] = useState<'login' | 'register' | 'forgot'>('login')
   const [loginMethod, setLoginMethod] = useState<'password' | 'otp'>('password')
   const [showPassword, setShowPassword] = useState(false)
   
@@ -39,6 +39,7 @@ export default function ClientLoginPage() {
   const [otp, setOtp] = useState('')
   const [step, setStep] = useState<1 | 2>(1)
   const [regStep, setRegStep] = useState<1 | 2>(1)
+  const [forgotStep, setForgotStep] = useState<1 | 2>(1)
   
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -122,13 +123,54 @@ export default function ClientLoginPage() {
     }
   }
 
-  const resetForms = (mode: 'login' | 'register') => {
+  const handleForgotPasswordRequest = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setLoading(true)
+    setError('')
+    try {
+      const res = await api.post('auth/client-forgot-password', { email })
+      setForgotStep(2)
+      setSuccess(res.data.message || 'Reset code sent to your email.')
+    } catch (err: any) {
+      setError(err.response?.data?.message || 'Failed to send reset code')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleResetPassword = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setLoading(true)
+    setError('')
+    try {
+      const res = await api.post('auth/client-reset-password', { email, otp, password })
+      setSuccess(res.data.message || 'Password reset successfully!')
+      setTimeout(() => {
+        setAuthMode('login')
+        setLoginMethod('password')
+        setForgotStep(1)
+        setError('')
+        setSuccess('')
+        setPassword('')
+        setOtp('')
+      }, 2000)
+    } catch (err: any) {
+      setError(err.response?.data?.message || 'Failed to reset password')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const resetForms = (mode: 'login' | 'register' | 'forgot') => {
     setAuthMode(mode)
     setError('')
     setSuccess('')
     setName('')
     setStep(1)
     setRegStep(1)
+    setForgotStep(1)
+    setOtp('')
+    setPassword('')
   }
 
   return (
@@ -185,33 +227,37 @@ export default function ClientLoginPage() {
         
         <div className="w-full max-w-[440px]">
           <div className="text-center mb-10">
-            <h2 className="text-3xl font-black mb-2">{authMode === 'login' ? 'Welcome Back' : 'Create Account'}</h2>
+            <h2 className="text-3xl font-black mb-2">
+              {authMode === 'login' ? 'Welcome Back' : authMode === 'register' ? 'Create Account' : 'Reset Password'}
+            </h2>
             <p className="text-muted-foreground">
-              {authMode === 'login' ? 'Enter your credentials to access your portal.' : 'Register to track your studio projects.'}
+              {authMode === 'login' ? 'Enter your credentials to access your portal.' : authMode === 'register' ? 'Register to track your studio projects.' : 'We will send a reset code to your email.'}
             </p>
           </div>
 
           <Card className="border-border bg-card shadow-2xl rounded-[2.5rem] overflow-hidden">
-            <div className="flex border-b border-border bg-muted/50 p-1">
-               <button 
-                 onClick={() => resetForms('login')}
-                 className={cn(
-                   "flex-1 py-3 text-sm font-bold rounded-2xl transition-all",
-                   authMode === 'login' ? "bg-background text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
-                 )}
-               >
-                 Log In
-               </button>
-               <button 
-                 onClick={() => resetForms('register')}
-                 className={cn(
-                   "flex-1 py-3 text-sm font-bold rounded-2xl transition-all",
-                   authMode === 'register' ? "bg-background text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
-                 )}
-               >
-                 Sign Up
-               </button>
-            </div>
+            {authMode !== 'forgot' && (
+              <div className="flex border-b border-border bg-muted/50 p-1">
+                 <button 
+                   onClick={() => resetForms('login')}
+                   className={cn(
+                     "flex-1 py-3 text-sm font-bold rounded-2xl transition-all",
+                     authMode === 'login' ? "bg-background text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
+                   )}
+                 >
+                   Log In
+                 </button>
+                 <button 
+                   onClick={() => resetForms('register')}
+                   className={cn(
+                     "flex-1 py-3 text-sm font-bold rounded-2xl transition-all",
+                     authMode === 'register' ? "bg-background text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
+                   )}
+                 >
+                   Sign Up
+                 </button>
+              </div>
+            )}
 
             <CardContent className="p-8">
               <AnimatePresence mode="wait">
@@ -276,7 +322,13 @@ export default function ClientLoginPage() {
                                 <input type="checkbox" className="rounded border-border bg-secondary" />
                                 <span>Remember me</span>
                              </label>
-                             <button type="button" className="text-xs font-bold text-primary hover:underline">Forgot password?</button>
+                             <button 
+                               type="button" 
+                               onClick={() => resetForms('forgot')}
+                               className="text-xs font-bold text-primary hover:underline"
+                             >
+                               Forgot password?
+                             </button>
                           </div>
 
                           <Button type="submit" className="w-full h-12 rounded-xl font-bold bg-primary text-primary-foreground shadow-lg shadow-primary/20" disabled={loading}>
@@ -373,6 +425,59 @@ export default function ClientLoginPage() {
                       <p className="text-[10px] text-center text-muted-foreground px-4">
                         By signing up, you agree to our terms and will receive access to your private project portal.
                       </p>
+                    </div>
+                  )}
+
+                  {authMode === 'forgot' && (
+                    <div className="space-y-5">
+                       {forgotStep === 1 ? (
+                         <form onSubmit={handleForgotPasswordRequest} className="space-y-5">
+                           <Input
+                             type="email"
+                             placeholder="Enter registered email"
+                             value={email}
+                             onChange={(e) => setEmail(e.target.value)}
+                             required
+                             className="h-12 rounded-xl bg-secondary/30"
+                           />
+                           <Button type="submit" className="w-full h-12 rounded-xl font-bold" disabled={loading}>
+                             {loading ? 'Sending Code...' : 'Send Reset Code'}
+                           </Button>
+                         </form>
+                       ) : (
+                         <form onSubmit={handleResetPassword} className="space-y-5">
+                           <div className="text-center mb-4">
+                              <p className="text-sm text-muted-foreground">Reset code sent to <strong>{email}</strong></p>
+                           </div>
+                           <Input
+                             type="text"
+                             placeholder="6-digit Code"
+                             maxLength={6}
+                             value={otp}
+                             onChange={(e) => setOtp(e.target.value)}
+                             required
+                             className="text-center text-2xl tracking-[0.5em] font-mono h-14 rounded-xl bg-secondary/30"
+                           />
+                           <Input
+                             type="password"
+                             placeholder="New Secure Password"
+                             value={password}
+                             onChange={(e) => setPassword(e.target.value)}
+                             required
+                             className="h-12 rounded-xl bg-secondary/30"
+                           />
+                           <Button type="submit" className="w-full h-12 rounded-xl font-bold" disabled={loading || otp.length < 6}>
+                             {loading ? 'Resetting...' : 'Update Password'}
+                           </Button>
+                         </form>
+                       )}
+                       <button 
+                         type="button" 
+                         onClick={() => resetForms('login')} 
+                         className="text-xs text-muted-foreground hover:text-primary underline w-full text-center"
+                       >
+                         Back to Login
+                       </button>
                     </div>
                   )}
                 </motion.div>
