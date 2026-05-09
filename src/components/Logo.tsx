@@ -256,6 +256,9 @@ export function Logo({
           >
             Technologies
           </span>
+          <span className="text-[6px] font-medium tracking-widest text-muted-foreground mt-0.5">
+            Software & SEO Agency
+          </span>
         </div>
       )}
     </div>

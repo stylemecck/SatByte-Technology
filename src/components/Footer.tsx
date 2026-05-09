@@ -44,6 +44,7 @@ export function Footer() {
     <footer className="border-t border-border/50 bg-background text-muted-foreground transition-colors duration-300">
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
         <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-4">
+          {/* Col 1 */}
           <div className="space-y-4">
             <Link to="/" className="inline-block">
               <Logo variant="full" theme="dark" className="scale-110 origin-left" />
@@ -54,11 +55,12 @@ export function Footer() {
             </p>
           </div>
 
+          {/* Col 2 */}
           <div>
             <h3 className="font-heading mb-4 text-sm font-bold uppercase tracking-[0.15em] text-foreground">
               Company
             </h3>
-            <ul className="space-y-2 text-sm">
+            <ul className="space-y-2 text-sm mb-8">
               {NAV_LINKS.filter(l => ['Home', 'About', 'Portfolio', 'Careers', 'Testimonials'].includes(l.label)).map(({ href, label }) => (
                 <li key={href}>
                   <Link
@@ -70,13 +72,35 @@ export function Footer() {
                 </li>
               ))}
             </ul>
+
+            <h3 className="font-heading mb-4 text-sm font-bold uppercase tracking-[0.15em] text-foreground">
+              Legal
+            </h3>
+            <ul className="space-y-2 text-sm">
+              <li>
+                <Link to="/privacy" className="text-muted-foreground transition-all hover:text-primary hover:translate-x-1 inline-block">
+                  Privacy Policy
+                </Link>
+              </li>
+              <li>
+                <Link to="/terms" className="text-muted-foreground transition-all hover:text-primary hover:translate-x-1 inline-block">
+                  Terms of Service
+                </Link>
+              </li>
+              <li>
+                <Link to="/sitemap" className="text-muted-foreground transition-all hover:text-primary hover:translate-x-1 inline-block">
+                  HTML Sitemap
+                </Link>
+              </li>
+            </ul>
           </div>
 
+          {/* Col 3 */}
           <div>
             <h3 className="font-heading mb-4 text-sm font-bold uppercase tracking-[0.15em] text-foreground">
               Services & Tools
             </h3>
-            <ul className="space-y-2 text-sm">
+            <ul className="space-y-2 text-sm mb-8">
               {NAV_LINKS.filter(l => ['Services', 'Pricing', 'Blog', 'Estimator'].includes(l.label)).map(({ href, label }) => (
                 <li key={href}>
                   <Link
@@ -88,9 +112,7 @@ export function Footer() {
                 </li>
               ))}
             </ul>
-          </div>
 
-          <div>
             <h3 className="font-heading mb-4 text-sm font-bold uppercase tracking-[0.15em] text-foreground">
               Support
             </h3>
@@ -108,9 +130,13 @@ export function Footer() {
             </ul>
             <ul className="space-y-2 text-sm text-muted-foreground border-t border-border pt-6">
               <li>
-                <a href={`tel:${SITE.phoneDigits}`} className="hover:text-primary transition-colors">
-                  {SITE.phone}
-                </a>
+                {SITE.phoneDigits ? (
+                  <a href={`tel:${SITE.phoneDigits}`} className="hover:text-primary transition-colors">
+                    {SITE.phone}
+                  </a>
+                ) : (
+                  <span className="text-muted-foreground">{SITE.phone}</span>
+                )}
               </li>
               <li>
                 <a href={`mailto:${SITE.email}`} className="hover:text-primary transition-colors">
@@ -120,6 +146,7 @@ export function Footer() {
             </ul>
           </div>
 
+          {/* Col 4 */}
           <div>
             <h3 className="font-heading mb-4 text-sm font-bold uppercase tracking-[0.15em] text-foreground">
               Follow Us

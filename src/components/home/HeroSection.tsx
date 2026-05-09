@@ -28,7 +28,7 @@ export function HeroSection() {
           className="mb-8 inline-flex items-center gap-2 rounded-full border border-border/50 bg-secondary/50 px-4 py-1.5 text-sm font-semibold text-foreground backdrop-blur-md shadow-sm"
         >
           <Sparkles className="h-4 w-4 text-primary" />
-          <span>Pioneering Digital Architectures</span>
+          <span>Premium Web & Software Solutions</span>
         </motion.div>
 
         {/* Minimal Headline */}

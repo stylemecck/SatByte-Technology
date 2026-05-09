@@ -7,7 +7,6 @@ import { SectionHeader } from '@/components/SectionHeader'
 import { LazyImage } from '@/components/LazyImage'
 import { useProjectsQuery } from '@/hooks/useCmsQueries'
 import { HOME_PORTFOLIO } from '@/lib/constants'
-import { cn } from '@/lib/utils'
 
 export function PortfolioPreview() {
   const { data } = useProjectsQuery()
