@@ -107,9 +107,15 @@ export function Navbar() {
             </Link>
           )}
 
-          <div className="hidden md:block w-px h-4 bg-border" />
+          <div className="hidden md:block w-px h-4 bg-border mx-2" />
 
-
+          {/* Sticky CTA (Desktop) */}
+          <Link 
+            to="/contact" 
+            className="hidden lg:flex items-center px-4 py-2 rounded-md bg-primary text-primary-foreground text-sm font-semibold hover:bg-primary/90 transition-transform active:scale-95 shadow-sm"
+          >
+            Start a Project
+          </Link>
 
           {/* Theme Toggle */}
           <button

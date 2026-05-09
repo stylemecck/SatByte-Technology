@@ -1,6 +1,5 @@
 import { Link } from 'react-router-dom'
 
-import { Separator } from '@/components/ui/separator'
 import { NAV_LINKS, SITE, SOCIAL_LINKS } from '@/lib/constants'
 import { Logo } from './Logo'
 
@@ -41,168 +40,74 @@ export function Footer() {
   const year = new Date().getFullYear()
 
   return (
-    <footer className="border-t border-border/50 bg-background text-muted-foreground transition-colors duration-300">
-      <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-        <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-4">
-          {/* Col 1 */}
-          <div className="space-y-4">
+    <footer className="border-t border-border bg-background pt-16 pb-8">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8 lg:gap-12 mb-16">
+          {/* Col 1 - Brand */}
+          <div className="col-span-2 lg:col-span-2 space-y-6">
             <Link to="/" className="inline-block">
-              <Logo variant="full" className="scale-110 origin-left" />
+              <Logo variant="full" className="scale-100 origin-left" />
             </Link>
-            <p className="text-sm leading-relaxed text-muted-foreground">
-              Modern websites, software, and digital solutions for businesses across India — based in{' '}
-              {SITE.location}.
+            <p className="text-sm leading-relaxed text-muted-foreground max-w-sm">
+              Engineering modern web platforms and enterprise scalable software architectures for ambitious startups and businesses.
             </p>
-          </div>
-
-          {/* Col 2 */}
-          <div>
-            <h3 className="font-heading mb-4 text-sm font-bold uppercase tracking-[0.15em] text-foreground">
-              Company
-            </h3>
-            <ul className="space-y-2 text-sm mb-8">
-              {NAV_LINKS.filter(l => ['Home', 'About', 'Portfolio', 'Careers', 'Testimonials'].includes(l.label)).map(({ href, label }) => (
-                <li key={href}>
-                  <Link
-                    to={href}
-                    className="text-muted-foreground transition-all hover:text-primary hover:translate-x-1 inline-block"
-                  >
-                    {label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-
-            <h3 className="font-heading mb-4 text-sm font-bold uppercase tracking-[0.15em] text-foreground">
-              Legal
-            </h3>
-            <ul className="space-y-2 text-sm">
-              <li>
-                <Link to="/privacy" className="text-muted-foreground transition-all hover:text-primary hover:translate-x-1 inline-block">
-                  Privacy Policy
-                </Link>
-              </li>
-              <li>
-                <Link to="/terms" className="text-muted-foreground transition-all hover:text-primary hover:translate-x-1 inline-block">
-                  Terms of Service
-                </Link>
-              </li>
-              <li>
-                <Link to="/sitemap" className="text-muted-foreground transition-all hover:text-primary hover:translate-x-1 inline-block">
-                  HTML Sitemap
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          {/* Col 3 */}
-          <div>
-            <h3 className="font-heading mb-4 text-sm font-bold uppercase tracking-[0.15em] text-foreground">
-              Services & Tools
-            </h3>
-            <ul className="space-y-2 text-sm mb-8">
-              {NAV_LINKS.filter(l => ['Services', 'Pricing', 'Blog', 'Estimator'].includes(l.label)).map(({ href, label }) => (
-                <li key={href}>
-                  <Link
-                    to={href}
-                    className="text-muted-foreground transition-all hover:text-primary hover:translate-x-1 inline-block"
-                  >
-                    {label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-
-            <h3 className="font-heading mb-4 text-sm font-bold uppercase tracking-[0.15em] text-foreground">
-              Support
-            </h3>
-            <ul className="space-y-2 text-sm text-muted-foreground mb-6">
-              {NAV_LINKS.filter(l => ['Contact', 'Client Login'].includes(l.label)).map(({ href, label }) => (
-                <li key={href}>
-                  <Link
-                    to={href}
-                    className="text-muted-foreground transition-all hover:text-primary hover:translate-x-1 inline-block"
-                  >
-                    {label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-            <ul className="space-y-2 text-sm text-muted-foreground border-t border-border pt-6">
-              <li>
-                {SITE.phoneDigits ? (
-                  <a href={`tel:${SITE.phoneDigits}`} className="hover:text-primary transition-colors">
-                    {SITE.phone}
-                  </a>
-                ) : (
-                  <span className="text-muted-foreground">{SITE.phone}</span>
-                )}
-              </li>
-              <li>
-                <a href={`mailto:${SITE.email}`} className="hover:text-primary transition-colors">
-                  {SITE.email}
-                </a>
-              </li>
-            </ul>
-          </div>
-
-          {/* Col 4 */}
-          <div>
-            <h3 className="font-heading mb-4 text-sm font-bold uppercase tracking-[0.15em] text-foreground">
-              Follow Us
-            </h3>
-            <div className="flex flex-wrap gap-3">
+            <div className="flex gap-4">
               {SOCIAL_LINKS.map(({ href, label, icon }) => (
                 <a
                   key={label}
                   href={href}
                   target="_blank"
                   rel="noreferrer noopener"
-                  className="flex h-10 w-10 items-center justify-center rounded-xl border border-border bg-card text-muted-foreground transition-all hover:border-primary hover:text-primary hover:-translate-y-1 shadow-sm"
+                  className="text-muted-foreground hover:text-foreground transition-colors"
                   aria-label={label}
                 >
                   <SocialGlyph icon={icon} />
                 </a>
               ))}
             </div>
-            
-            <div className="mt-8">
-              <h3 className="font-heading mb-4 text-sm font-bold uppercase tracking-[0.15em] text-foreground">
-                Subscribe to Newsletter
-              </h3>
-              <form 
-                className="flex flex-col sm:flex-row gap-2 mt-2"
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  alert("Thanks for subscribing! We'll be in touch.");
-                }}
-              >
-                <input 
-                  type="email" 
-                  placeholder="Enter your email" 
-                  required 
-                  className="w-full rounded-md border border-border/50 bg-secondary/50 px-3 py-2 text-sm text-foreground placeholder-muted-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary transition-all"
-                />
-                <button 
-                  type="submit" 
-                  className="rounded-md bg-foreground px-4 py-2 text-sm font-semibold text-background transition-all hover:bg-foreground/90 active:scale-95"
-                >
-                  Subscribe
-                </button>
-              </form>
-            </div>
+          </div>
+
+          {/* Col 2 */}
+          <div>
+            <h3 className="font-semibold text-sm text-foreground mb-4">Company</h3>
+            <ul className="space-y-3 text-sm">
+              {NAV_LINKS.filter(l => ['Home', 'About', 'Careers', 'Testimonials'].includes(l.label)).map(({ href, label }) => (
+                <li key={href}>
+                  <Link to={href} className="text-muted-foreground hover:text-foreground transition-colors">{label}</Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Col 3 */}
+          <div>
+            <h3 className="font-semibold text-sm text-foreground mb-4">Services</h3>
+            <ul className="space-y-3 text-sm">
+              {NAV_LINKS.filter(l => ['Services', 'Portfolio', 'Pricing', 'Blog'].includes(l.label)).map(({ href, label }) => (
+                <li key={href}>
+                  <Link to={href} className="text-muted-foreground hover:text-foreground transition-colors">{label}</Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Col 4 */}
+          <div>
+            <h3 className="font-semibold text-sm text-foreground mb-4">Legal</h3>
+            <ul className="space-y-3 text-sm">
+              <li><Link to="/privacy" className="text-muted-foreground hover:text-foreground transition-colors">Privacy Policy</Link></li>
+              <li><Link to="/terms" className="text-muted-foreground hover:text-foreground transition-colors">Terms of Service</Link></li>
+              <li><Link to="/sitemap" className="text-muted-foreground hover:text-foreground transition-colors">Sitemap</Link></li>
+              <li><Link to="/contact" className="text-muted-foreground hover:text-foreground transition-colors">Contact</Link></li>
+            </ul>
           </div>
         </div>
 
-        <Separator className="my-10 bg-border" />
-
-        <div className="flex flex-col items-center justify-between gap-4 text-center text-xs text-muted-foreground sm:flex-row sm:text-left">
-          <p>
-            © {year} {SITE.name}. All rights reserved.
-          </p>
-          <p>
-            Founder: <span className="text-foreground font-medium">{SITE.owner}</span>
-          </p>
+        <div className="pt-8 border-t border-border flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-muted-foreground">
+          <p>© {year} {SITE.name}. All rights reserved.</p>
+          <div className="flex gap-4 text-center md:text-right">
+            <span>Based in {SITE.location}</span>
+          </div>
         </div>
       </div>
     </footer>

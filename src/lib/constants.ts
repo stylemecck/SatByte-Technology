@@ -33,37 +33,36 @@ export const SOCIAL_LINKS = [
   { label: 'Instagram', href: 'https://instagram.com', icon: 'instagram' as const },
 ] as const
 
-/** Six services shown on the home preview. */
 export const HOME_SERVICES = [
   {
-    title: 'Website Development',
-    description: 'Fast, responsive sites that convert visitors into customers.',
-    icon: 'Globe',
+    title: 'Custom SaaS Platforms',
+    description: 'End-to-end product engineering for high-growth software companies.',
+    icon: 'Layers',
   },
   {
-    title: 'Web Application Development',
-    description: 'Custom dashboards, portals, and business tools on the web.',
+    title: 'Scalable Web Applications',
+    description: 'React & Node.js architectures built to handle enterprise traffic.',
     icon: 'LayoutDashboard',
   },
   {
-    title: 'E-commerce Development',
-    description: 'Secure online stores with smooth checkout experiences.',
+    title: 'High-Performance E-commerce',
+    description: 'Conversion-optimized digital storefronts and bespoke checkout flows.',
     icon: 'ShoppingCart',
   },
   {
-    title: 'SEO Services',
-    description: 'Technical SEO and content strategy to grow organic traffic.',
-    icon: 'Search',
+    title: 'Enterprise Cloud Architecture',
+    description: 'Secure, scalable AWS/Vercel deployments and API integrations.',
+    icon: 'Server',
   },
   {
-    title: 'Digital Marketing',
-    description: 'Campaigns that build brand presence and measurable ROI.',
-    icon: 'Megaphone',
+    title: 'UI/UX Systems Design',
+    description: 'Figma-to-code design systems that enforce brand consistency at scale.',
+    icon: 'Palette',
   },
   {
-    title: 'IT Consultancy',
-    description: 'Architecture, stack choices, and roadmap you can trust.',
-    icon: 'Briefcase',
+    title: 'Technical SEO & Performance',
+    description: 'Core Web Vitals optimization and programmatic SEO infrastructure.',
+    icon: 'TrendingUp',
   },
 ] as const
 
@@ -127,31 +126,38 @@ export const ALL_SERVICES = [
   },
 ] as const
 
-/** Home portfolio slider (4 samples). */
 export const HOME_PORTFOLIO = [
   {
-    title: 'School Website',
-    description: 'Informative portal for parents, students, and admissions.',
-    image:
-      'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=800&q=80',
+    title: 'Enterprise FinTech Dashboard',
+    description: 'A high-performance analytics platform handling millions of daily transactions with sub-second latency.',
+    image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80',
+    tech: ['Next.js', 'TypeScript', 'Tailwind', 'PostgreSQL'],
+    demoUrl: '#',
+    githubUrl: '#',
   },
   {
-    title: 'E-commerce Store',
-    description: 'Product discovery, cart, and checkout tuned for mobile buyers.',
-    image:
-      'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&q=80',
+    title: 'B2B Procurement Portal',
+    description: 'Streamlined vendor management and automated purchase order flows for a Fortune 500 logistics firm.',
+    image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80',
+    tech: ['React', 'Node.js', 'GraphQL', 'AWS'],
+    demoUrl: '#',
+    githubUrl: '#',
   },
   {
-    title: 'Business Portfolio',
-    description: 'Elegant showcase for services, case studies, and lead capture.',
-    image:
-      'https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&q=80',
+    title: 'AI Customer Success Platform',
+    description: 'Integrated LLM-driven chat support system reducing average ticket resolution time by 40%.',
+    image: 'https://images.unsplash.com/photo-1555949963-aa79dcee57d5?w=800&q=80',
+    tech: ['Vite', 'OpenAI API', 'Framer Motion'],
+    demoUrl: '#',
+    githubUrl: '#',
   },
   {
-    title: 'Billing Software',
-    description: 'Invoicing, GST-ready reports, and client management in one place.',
-    image:
-      'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80',
+    title: 'Global E-Commerce Storefront',
+    description: 'A headless commerce implementation focusing on mobile-first conversion and sub-100ms load times.',
+    image: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&q=80',
+    tech: ['Next.js', 'Stripe', 'Sanity CMS'],
+    demoUrl: '#',
+    githubUrl: '#',
   },
 ] as const
 
