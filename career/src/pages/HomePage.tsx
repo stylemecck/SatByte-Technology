@@ -1,228 +1,253 @@
 import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
-import { Briefcase, GraduationCap, Award, ArrowRight, ShieldCheck, Zap, Laptop, Star, Globe, ExternalLink } from 'lucide-react'
+import { 
+  Briefcase, 
+  GraduationCap, 
+  Award, 
+  ArrowRight, 
+  ShieldCheck, 
+  Zap, 
+  Cpu, 
+  Sparkles, 
+  Globe, 
+  CheckCircle2, 
+  LayoutDashboard,
+  Search,
+  Star,
+  Users
+} from 'lucide-react'
 import { SEO } from '../components/SEO'
 import { SITE } from '../lib/constants'
 
 export default function HomePage() {
   return (
-    <div className="bg-background selection:bg-brand-blue/30">
-      <SEO title="Home" description="Build your future with SatByte. Careers, Internships, and Professional Certifications." />
+    <div className="bg-background selection:bg-brand-blue/30 overflow-hidden">
+      <SEO title="Career Ecosystem" description="Build your future with SatByte. Modern AI-powered careers, internships, and professional masterclasses." />
 
-      {/* --- Cinematic Hero Section --- */}
-      <section className="relative min-h-[95vh] flex items-center overflow-hidden mesh-gradient pt-20">
-        <div className="absolute inset-0 opacity-30 dark:opacity-20 pointer-events-none">
-           <div className="absolute top-0 right-0 w-1/2 h-full bg-brand-blue/20 blur-[120px] rounded-full translate-x-1/3" />
-           <div className="absolute bottom-0 left-0 w-1/2 h-full bg-brand-emerald/20 blur-[120px] rounded-full -translate-x-1/3" />
+      {/* --- AI-Powered Hero Section --- */}
+      <section className="relative min-h-screen flex items-center pt-20 pb-32">
+        {/* Background Elements */}
+        <div className="absolute inset-0 z-0">
+          <div className="absolute top-[-10%] right-[-5%] w-[50%] h-[50%] bg-brand-blue/10 blur-[150px] rounded-full animate-pulse" />
+          <div className="absolute bottom-[10%] left-[-10%] w-[40%] h-[40%] bg-brand-violet/10 blur-[120px] rounded-full" />
+          <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:radial-gradient(white,transparent_85%)] opacity-20" />
         </div>
 
-        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 w-full">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+        <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 w-full">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <motion.div
               initial={{ opacity: 0, x: -30 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, ease: "easeOut" }}
             >
-              <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-secondary text-foreground border border-border font-extrabold text-[10px] uppercase tracking-[0.2em] mb-8 shadow-sm">
-                <ShieldCheck size={14} className="text-brand-blue" /> The Engineering Standard
-              </span>
-              <h1 className="font-heading text-5xl sm:text-7xl lg:text-[7.5rem] font-black text-foreground tracking-tighter leading-[0.85] mb-10">
-                {SITE.tagline.split(' — ')[0]} <br />
-                <span className="bg-gradient-to-r from-brand-blue to-foreground bg-clip-text text-transparent italic">
-                   {SITE.tagline.split(' — ')[1]}
-                </span>
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 mb-8 backdrop-blur-md">
+                <Sparkles size={14} className="text-brand-blue animate-pulse" />
+                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white">AI-Powered Career Hub</span>
+              </div>
+              
+              <h1 className="font-heading text-5xl md:text-7xl lg:text-8xl font-black text-white leading-[0.9] tracking-tighter mb-8">
+                Build Your Career <br />
+                <span className="text-brand-blue italic">With Modern</span> <br />
+                Opportunities.
               </h1>
-               <p className="text-lg text-muted-foreground max-w-xl leading-relaxed mb-12 font-medium">
-                Join a world-class ecosystem of developers and innovators. From career roles to high-impact structured masterclasses.
+              
+              <p className="text-lg md:text-xl text-muted-foreground max-w-lg leading-relaxed mb-10 font-medium">
+                Discover internships, jobs, certifications, and AI-driven career tools in one unified professional ecosystem.
               </p>
               
-              <div className="flex flex-wrap items-center gap-6">
+              <div className="flex flex-wrap items-center gap-5">
                 <Link
                   to="/careers"
-                  className="flex items-center justify-center gap-2 px-10 py-5 rounded-[2rem] bg-brand-blue text-white font-black text-lg shadow-2xl shadow-brand-blue/20 hover:scale-105 transition-all duration-500"
+                  className="h-16 px-10 rounded-2xl bg-brand-blue text-white font-black text-lg shadow-xl shadow-brand-blue/20 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center gap-3"
                 >
-                  Explore Roles <ArrowRight size={22} />
+                  Explore Opportunities <ArrowRight size={22} />
                 </Link>
                 <Link
                   to="/dashboard"
-                  className="flex items-center justify-center gap-3 px-8 py-5 rounded-[2rem] bg-secondary border border-border text-foreground font-extrabold text-lg hover:bg-muted transition-all duration-500 group"
+                  className="h-16 px-10 rounded-2xl bg-white/5 border border-white/10 text-white font-black text-lg hover:bg-white/10 transition-all flex items-center gap-3"
                 >
-                  Student Portal <ExternalLink size={20} className="group-hover:rotate-45 transition-transform" />
+                  Student Portal <LayoutDashboard size={22} />
                 </Link>
               </div>
 
-              {/* Quick Stats Overlay */}
-              <div className="mt-16 flex items-center gap-12 border-t border-border pt-10">
-                <QuickStat label="Active Roles" value="50+" />
-                <QuickStat label="Global Interns" value="200+" />
-                <QuickStat label="Certified" value="1.2k" />
+              {/* Ecosystem Metrics */}
+              <div className="mt-16 grid grid-cols-3 gap-8 border-t border-white/5 pt-10">
+                <Metric label="Active Roles" value="50+" />
+                <Metric label="Live Hubs" value="12" />
+                <Metric label="Hiring" value="24/7" />
               </div>
             </motion.div>
 
+            {/* Dashboard Preview Visual */}
             <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
+              initial={{ opacity: 0, scale: 0.9, rotate: 2 }}
+              animate={{ opacity: 1, scale: 1, rotate: 0 }}
               transition={{ duration: 1, delay: 0.2 }}
               className="relative hidden lg:block"
             >
-              <div className="absolute -inset-10 bg-brand-blue/10 blur-[100px] rounded-full animate-pulse" />
-              <div className="relative rounded-[4rem] overflow-hidden border border-border shadow-2xl aspect-square lg:aspect-auto lg:h-[750px]">
+              <div className="premium-card p-4 bg-[#0A0F14]/80 backdrop-blur-3xl relative overflow-hidden group">
+                <div className="absolute inset-0 bg-gradient-to-br from-brand-blue/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                 <img 
-                  src="/career_hero_illustration_1775908602153.png" 
-                  alt="Future of Tech" 
-                  className="w-full h-full object-cover scale-110"
+                  src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80" 
+                  alt="Platform Dashboard" 
+                  className="rounded-2xl shadow-2xl border border-white/5"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent opacity-60" />
+                
+                {/* Floating AI Insights Widget */}
+                <motion.div 
+                  animate={{ y: [0, -10, 0] }}
+                  transition={{ duration: 5, repeat: Infinity }}
+                  className="absolute -bottom-6 -left-6 p-6 rounded-3xl bg-[#111827] border border-white/10 shadow-2xl flex items-center gap-5 max-w-xs"
+                >
+                  <div className="h-12 w-12 rounded-2xl bg-brand-blue/20 flex items-center justify-center text-brand-blue">
+                    <Cpu size={24} />
+                  </div>
+                  <div>
+                    <h4 className="text-white font-bold text-xs uppercase tracking-widest mb-1">AI Recommendation</h4>
+                    <p className="text-muted-foreground text-[10px]">Full-Stack Intern role matched with your React profile.</p>
+                  </div>
+                </motion.div>
               </div>
-              
-              {/* Floating Achievement Card */}
-              <motion.div 
-                 animate={{ y: [0, -15, 0] }}
-                 transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                 className="absolute -bottom-8 -left-8 p-6 rounded-[2.5rem] bg-card/80 backdrop-blur-2xl border border-border shadow-2xl flex items-center gap-6 max-w-xs"
-              >
-                 <div className="h-14 w-14 rounded-2xl bg-gradient-to-br from-brand-blue to-brand-emerald flex items-center justify-center text-white shadow-xl">
-                    <Star size={24} className="fill-white" />
-                 </div>
-                 <div>
-                    <h4 className="text-foreground font-black text-xs uppercase tracking-widest">Top Excellence</h4>
-                    <p className="text-muted-foreground text-[11px] font-medium">Ranked #1 Engineering Internship Program 2024</p>
-                 </div>
-              </motion.div>
             </motion.div>
           </div>
         </div>
       </section>
 
-      {/* --- The Pathways (Core Features) --- */}
-      <section className="py-32 relative bg-background">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-20">
-             <div className="max-w-2xl">
-                <span className="text-brand-blue font-black uppercase tracking-[0.3em] text-[10px]">Your Journey</span>
-                <h2 className="mt-4 font-heading text-4xl sm:text-6xl font-black text-foreground tracking-tighter leading-none">
-                  Choose your next <br /> <span className="bg-gradient-to-r from-brand-blue to-brand-emerald bg-clip-text text-transparent italic">Career Orbit.</span>
-                </h2>
-             </div>
-             <p className="text-muted-foreground font-medium max-w-md">Our ecosystem is built for high-performers. Whether you're a student or a senior lead, we have a pathway for your orbit.</p>
+      {/* --- Live Opportunity Feed --- */}
+      <section className="py-32 bg-[#020609] border-y border-white/5">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="flex flex-col md:flex-row items-end justify-between gap-8 mb-20">
+            <div>
+              <div className="flex items-center gap-2 text-brand-blue font-black uppercase tracking-[0.3em] text-[10px] mb-4">
+                <div className="h-2 w-2 rounded-full bg-brand-blue animate-pulse" /> Live Now
+              </div>
+              <h2 className="font-heading text-4xl md:text-6xl font-black text-white tracking-tighter leading-none">
+                Direct Path to the <br /> <span className="text-gradient">Next Generation.</span>
+              </h2>
+            </div>
+            <Link to="/careers" className="text-muted-foreground hover:text-white font-bold flex items-center gap-2 transition-colors">
+              View all listings <ArrowRight size={18} />
+            </Link>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-            <FeatureCard 
-              icon={Briefcase}
-              title="Full-Time Roles"
-              description="Join our engineering, design, and product units to build the infrastructure of tomorrow."
-              link="/careers"
-              color="var(--brand-blue)"
-              sub="50+ Roles Open"
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <OpportunityCard 
+              type="Internship"
+              title="Full-Stack Developer"
+              location="Remote / Mumbai"
+              salary="₹15k - ₹25k / mo"
+              tags={['React', 'Node.js', 'MongoDB']}
+              status="New"
             />
-            <FeatureCard 
-              icon={GraduationCap}
-              title="Global Internships"
-              description="Structured programs for high-potential talent to work on production systems with senior mentorship."
-              link="/internships"
-              color="var(--brand-emerald)"
-              sub="Cohort 2024 Open"
+            <OpportunityCard 
+              type="Full-Time"
+              title="Product Designer"
+              location="Remote"
+              salary="₹12L - ₹18L PA"
+              tags={['Figma', 'UX Research', 'UI']}
+              status="Hot"
             />
-            <FeatureCard 
-              icon={Award}
-              title="Masterclasses"
-              description="Earn industry-recognized certifications in MERN, Cloud Ops, and AI Architecture."
-              link="/certifications"
-              color="var(--brand-amber)"
-              sub="15+ Specializations"
+            <OpportunityCard 
+              type="Internship"
+              title="Marketing Associate"
+              location="Pune"
+              salary="₹10k - ₹15k / mo"
+              tags={['Growth', 'SEO', 'Ads']}
+              status="Active"
             />
           </div>
         </div>
       </section>
 
-      {/* --- Why SatByte (Modernized UX) --- */}
-      <section className="py-32 bg-secondary/30 overflow-hidden relative border-y border-border">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+      {/* --- Why the Ecosystem? --- */}
+      <section className="py-32 bg-background relative overflow-hidden">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
             <div className="relative">
-               <div className="absolute -inset-10 bg-brand-blue/5 rounded-[4rem] blur-[80px] rotate-6" />
-               <div className="relative">
-                  <div className="grid grid-cols-2 gap-6 pt-12">
-                     <div className="space-y-6">
-                        <img src="https://images.unsplash.com/photo-1517048676732-d65bc937f952?w=400&q=80" className="rounded-[2.5rem] shadow-2xl h-80 object-cover w-full border border-border" alt="Team" />
-                        <div className="p-8 rounded-[2.5rem] bg-card border border-border shadow-xl flex flex-col items-center text-center">
-                           <div className="h-12 w-12 rounded-2xl bg-brand-blue flex items-center justify-center text-white mb-4 shadow-lg shadow-brand-blue/20">
-                              <Globe size={24} />
-                           </div>
-                           <h4 className="font-black text-xs uppercase tracking-widest text-foreground">Global Team</h4>
-                           <p className="text-[10px] text-muted-foreground mt-1 font-bold">12+ Countries</p>
-                        </div>
-                     </div>
-                     <div className="space-y-6 -mt-12">
-                        <div className="p-8 rounded-[2.5rem] bg-foreground text-background shadow-2xl flex flex-col items-center text-center">
-                           <div className="h-12 w-12 rounded-2xl bg-background/10 flex items-center justify-center text-brand-emerald mb-4">
-                              <Zap size={24} className="fill-brand-emerald" />
-                           </div>
-                           <h4 className="font-black text-xs uppercase tracking-widest">Rapid Growth</h4>
-                           <p className="text-[10px] opacity-60 mt-1 font-bold">300% Yearly Scale</p>
-                        </div>
-                        <img src="https://images.unsplash.com/photo-1522071823991-b19c77663cf8?w=400&q=80" className="rounded-[2.5rem] shadow-2xl h-80 object-cover w-full border border-border" alt="Work" />
-                     </div>
+              <div className="grid grid-cols-2 gap-6">
+                <div className="space-y-6">
+                  <div className="premium-card p-8 bg-brand-blue/5 border-brand-blue/10">
+                    <Zap size={32} className="text-brand-blue mb-4" />
+                    <h4 className="text-white font-black text-xl mb-2">Fast-Track</h4>
+                    <p className="text-muted-foreground text-sm leading-relaxed">Skip the line with direct ecosystem placement referrals.</p>
                   </div>
-               </div>
+                  <div className="premium-card p-8 bg-brand-emerald/5 border-brand-emerald/10">
+                    <Award size={32} className="text-brand-emerald mb-4" />
+                    <h4 className="text-white font-black text-xl mb-2">Verified</h4>
+                    <p className="text-muted-foreground text-sm leading-relaxed">Get cryptographically signed experience certificates.</p>
+                  </div>
+                </div>
+                <div className="space-y-6 mt-12">
+                  <div className="premium-card p-8 bg-brand-violet/5 border-brand-violet/10">
+                    <Users size={32} className="text-brand-violet mb-4" />
+                    <h4 className="text-white font-black text-xl mb-2">Community</h4>
+                    <p className="text-muted-foreground text-sm leading-relaxed">Network with top engineers and designers globally.</p>
+                  </div>
+                  <div className="premium-card p-8 bg-brand-amber/5 border-brand-amber/10">
+                    <Globe size={32} className="text-brand-amber mb-4" />
+                    <h4 className="text-white font-black text-xl mb-2">Global</h4>
+                    <p className="text-muted-foreground text-sm leading-relaxed">Work on products serving international audiences.</p>
+                  </div>
+                </div>
+              </div>
             </div>
 
             <div>
-              <span className="text-muted-foreground font-black uppercase tracking-[0.4em] text-[10px] mb-6 block">Our Engineering Culture</span>
-              <h2 className="font-heading text-4xl sm:text-6xl font-black text-foreground tracking-tight leading-[0.9] mb-12">
-                We don't build apps. <br /> <span className="text-brand-blue">We build the future.</span>
+              <span className="text-brand-blue font-black uppercase tracking-[0.3em] text-[10px] mb-6 block">Career Evolution</span>
+              <h2 className="font-heading text-4xl md:text-6xl font-black text-white leading-[0.9] tracking-tighter mb-10">
+                It's Not a Job Board. <br /> <span className="text-gradient italic">It's an Ecosystem.</span>
               </h2>
+              <p className="text-lg text-muted-foreground font-medium leading-relaxed mb-12">
+                We've built a professional orbit designed to accelerate student and developer careers through real-world high-scale production experience.
+              </p>
               
-              <div className="space-y-10">
-                <BenefitCard icon={Zap} title="Hyper-Growth environment" desc="Skip the corporate ladder. We operate with high-trust and high-ownership cycles that accelerate your career by years." />
-                <BenefitCard icon={Laptop} title="High-Scale Systems" desc="Work on distributed systems serving millions of requests. Learn how to architect for infinity." />
-                <BenefitCard icon={ShieldCheck} title="Proof of Achievement" desc="Every career milestone here is verified. Build a verifiable portfolio of excellence recognized globally." />
-              </div>
-
-              <div className="mt-16 pt-12 border-t border-border flex items-center gap-10">
-                 <div className="flex -space-x-4">
-                    {[1,2,3,4].map(i => (
-                       <div key={i} className="h-12 w-12 rounded-full border-2 border-background bg-secondary overflow-hidden shadow-sm">
-                          <img src={`https://i.pravatar.cc/100?img=${i+10}`} alt="avatar" />
-                       </div>
-                    ))}
-                 </div>
-                 <div>
-                    <p className="text-sm font-bold text-foreground">Joined by 1,200+ engineers</p>
-                    <p className="text-xs text-muted-foreground font-medium">Be part of the SatByte revolution.</p>
-                 </div>
-              </div>
+              <ul className="space-y-6">
+                {[
+                  { title: "Direct Mentorship", desc: "Work directly with core engineering leads." },
+                  { title: "AI Skill Gap Analysis", desc: "Our platform identifies what you need to learn next." },
+                  { title: "Verifiable Excellence", desc: "Built-in professional portfolio of your project impact." }
+                ].map((item, i) => (
+                  <li key={i} className="flex gap-4">
+                    <div className="h-6 w-6 rounded-full bg-brand-blue/20 flex items-center justify-center text-brand-blue shrink-0 mt-1">
+                      <CheckCircle2 size={14} />
+                    </div>
+                    <div>
+                      <h4 className="text-white font-bold">{item.title}</h4>
+                      <p className="text-muted-foreground text-sm">{item.desc}</p>
+                    </div>
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
         </div>
       </section>
 
-      {/* --- Unified CTA Experience --- */}
-      <section className="py-40 px-4 sm:px-6 lg:px-8 bg-background">
-        <div className="max-w-6xl mx-auto rounded-[5rem] bg-foreground p-12 sm:p-32 text-center relative shadow-2xl overflow-hidden group">
-          <div className="absolute inset-0 bg-gradient-to-tr from-brand-blue/20 via-transparent to-brand-emerald/10 pointer-events-none" />
+      {/* --- Launchpad CTA --- */}
+      <section className="py-40 px-6">
+        <div className="max-w-6xl mx-auto premium-card bg-foreground p-12 md:p-32 text-center relative overflow-hidden group">
+          <div className="absolute inset-0 bg-gradient-to-tr from-brand-blue/20 via-transparent to-brand-emerald/10 opacity-50" />
           
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             className="relative z-10"
           >
-             <h2 className="font-heading text-5xl sm:text-7xl font-black text-background leading-none mb-10 tracking-tighter">
-               Become a part of <br /> the <span className="text-brand-blue underline decoration-background/20 underline-offset-8 italic">next evolution.</span>
-             </h2>
-             <p className="text-xl sm:text-2xl text-background/60 font-medium mb-16 max-w-2xl mx-auto leading-relaxed">
-               Whether you want a career change or specialized training, we have a place for your ambition.
-             </p>
-             <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
-               <Link
-                 to="/careers"
-                 className="w-full sm:w-auto px-12 py-6 rounded-[2.5rem] bg-background text-foreground font-black text-xl shadow-xl hover:scale-105 transition-all duration-500 flex items-center justify-center gap-3"
-               >
-                 Launch Application <ArrowRight size={24} />
-               </Link>
-             </div>
+            <h2 className="font-heading text-4xl md:text-7xl font-black text-background leading-none mb-8 tracking-tighter">
+              Ready to synchronize <br /> with your <span className="text-brand-blue italic">next orbit?</span>
+            </h2>
+            <p className="text-lg md:text-2xl text-background/60 font-medium mb-12 max-w-2xl mx-auto">
+              Whether you are looking for your first internship or a senior engineering role, your journey starts here.
+            </p>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-5">
+              <Link
+                to="/register"
+                className="w-full sm:w-auto h-20 px-12 rounded-full bg-background text-foreground font-black text-xl shadow-2xl flex items-center justify-center gap-3 hover:scale-[1.03] transition-all"
+              >
+                Join the Ecosystem <ArrowRight size={24} />
+              </Link>
+            </div>
           </motion.div>
         </div>
       </section>
@@ -230,50 +255,41 @@ export default function HomePage() {
   )
 }
 
-function QuickStat({ label, value }: { label: string, value: string }) {
+function Metric({ label, value }: { label: string, value: string }) {
   return (
-    <div className="flex flex-col">
-       <h4 className="text-4xl font-black text-foreground mb-1 tracking-tighter">{value}</h4>
-       <p className="text-[10px] font-extrabold uppercase tracking-[0.3em] text-muted-foreground">{label}</p>
+    <div>
+      <h4 className="text-3xl font-black text-white tracking-tighter mb-1">{value}</h4>
+      <p className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">{label}</p>
     </div>
   )
 }
 
-function FeatureCard({ icon: Icon, title, description, link, color, sub }: any) {
+function OpportunityCard({ type, title, location, salary, tags, status }: any) {
   return (
-    <motion.div
-      whileHover={{ y: -8 }}
-      className="group p-10 rounded-[2.5rem] bg-card border border-border shadow-2xl flex flex-col h-full relative overflow-hidden transition-all duration-500 hover:border-brand-blue/30"
-    >
-       <div className="absolute top-0 right-0 w-32 h-32 opacity-[0.03] blur-3xl rounded-full transform translate-x-12 -translate-y-12 transition-all group-hover:opacity-10" style={{ backgroundColor: color }} />
-       
-       <div className="h-16 w-16 rounded-[1.8rem] flex items-center justify-center text-white mb-10 group-hover:scale-110 transition-transform duration-500 shadow-xl" style={{ backgroundColor: color }}>
-         <Icon size={32} />
-       </div>
-       
-       <div className="flex-1">
-          <span className="text-[10px] font-black text-muted-foreground uppercase tracking-widest mb-4 block group-hover:text-foreground transition-colors">{sub}</span>
-          <h3 className="font-heading text-3xl font-black text-foreground tracking-tighter mb-4">{title}</h3>
-          <p className="text-muted-foreground leading-relaxed font-medium mb-10">{description}</p>
-       </div>
-       
-       <Link to={link} className="mt-auto inline-flex items-center gap-3 font-black text-[11px] uppercase tracking-widest text-brand-blue group-hover:gap-5 transition-all">
-         Explore Pathway <ArrowRight size={18} />
-       </Link>
-    </motion.div>
-  )
-}
-
-function BenefitCard({ icon: Icon, title, desc }: any) {
-  return (
-    <div className="flex gap-8 group">
-      <div className="h-14 w-14 rounded-2xl bg-card border border-border shadow-lg flex items-center justify-center text-brand-blue shrink-0 group-hover:bg-brand-blue group-hover:text-white transition-all duration-500">
-        <Icon size={28} />
+    <div className="premium-card p-8 bg-[#0A0F14] hover:bg-[#0F1720] border-white/5 group relative overflow-hidden">
+      <div className="flex justify-between items-start mb-6">
+        <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest ${type === 'Internship' ? 'bg-brand-emerald/10 text-brand-emerald' : 'bg-brand-blue/10 text-brand-blue'}`}>
+          {type}
+        </span>
+        {status && (
+          <span className="text-[10px] font-black text-white/40 uppercase tracking-widest">{status}</span>
+        )}
       </div>
-      <div>
-        <h4 className="font-heading font-black text-xl text-foreground tracking-tight mb-2">{title}</h4>
-        <p className="text-muted-foreground text-sm font-medium leading-relaxed">{desc}</p>
+      
+      <h3 className="text-2xl font-black text-white tracking-tight mb-2 group-hover:text-brand-blue transition-colors">{title}</h3>
+      <p className="text-muted-foreground text-sm font-medium mb-6">{location} • {salary}</p>
+      
+      <div className="flex flex-wrap gap-2 mb-8">
+        {tags.map((tag: string) => (
+          <span key={tag} className="px-3 py-1 rounded-lg bg-white/5 text-[10px] font-bold text-white/60">
+            {tag}
+          </span>
+        ))}
       </div>
+      
+      <Link to="/careers" className="w-full h-12 rounded-xl bg-white/5 border border-white/5 flex items-center justify-center text-xs font-black uppercase tracking-widest text-white hover:bg-white/10 transition-all">
+        Quick View
+      </Link>
     </div>
   )
 }

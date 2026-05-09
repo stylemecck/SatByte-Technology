@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion'
-import { Moon, Sun, X, Rocket, LogOut, LayoutDashboard } from 'lucide-react'
+import { Moon, Sun, Rocket, LogOut, LayoutDashboard, User } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
 
@@ -36,106 +36,104 @@ export function Navbar() {
   }
 
   return (
-    <div className="fixed top-0 inset-x-0 z-50 flex justify-center pt-4 px-4 pointer-events-none transition-all duration-300">
+    <div className="fixed top-0 inset-x-0 z-[100] flex justify-center pt-6 px-6 pointer-events-none">
       <header className={cn(
-        "pointer-events-auto flex items-center justify-between w-full max-w-5xl h-14 rounded-full border px-4 sm:px-6 transition-all duration-500",
+        "pointer-events-auto flex items-center justify-between w-full max-w-7xl h-16 rounded-[2rem] border px-6 transition-all duration-500",
         scrolled 
-          ? "bg-background/70 backdrop-blur-xl border-border shadow-sm dark:shadow-black/50" 
-          : "bg-background/40 backdrop-blur-md border-transparent shadow-none"
+          ? "glass border-white/5 shadow-2xl" 
+          : "bg-transparent border-transparent"
       )}>
         
         {/* Brand */}
         <Link
           to="/"
-          className="flex items-center gap-2.5 transition-opacity hover:opacity-80 outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-md"
+          className="flex items-center gap-3 transition-transform hover:scale-[1.02] outline-none"
         >
-          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-foreground text-background">
-            <Rocket className="h-4 w-4" />
+          <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-white text-black shadow-lg">
+            <Rocket className="h-5 w-5" />
           </div>
-          <div className="flex flex-col sm:flex-row sm:items-baseline sm:gap-2">
-            <span className="font-heading text-[15px] font-bold tracking-tight text-foreground">
+          <div className="flex flex-col">
+            <span className="font-heading text-lg font-black tracking-tighter text-white leading-none uppercase">
               SatByte
             </span>
-            <span className="hidden text-[10px] font-bold uppercase tracking-widest text-brand-blue sm:block">
-              Careers
+            <span className="text-[9px] font-black uppercase tracking-[0.2em] text-brand-blue">
+              Career Orbit
             </span>
           </div>
         </Link>
 
         {/* Desktop Navigation */}
-        <nav className="hidden lg:flex items-center h-full">
+        <nav className="hidden lg:flex items-center h-full gap-2">
           {NAV_LINKS.map(({ href, label }) => (
             <NavLink
               key={href}
               to={href}
               className={({ isActive }) =>
                 cn(
-                  'relative h-full flex items-center px-4 text-[13px] font-bold transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-md uppercase tracking-wider',
+                  'relative px-5 py-2 rounded-xl text-[11px] font-black uppercase tracking-widest transition-all',
                   isActive 
-                    ? 'text-foreground' 
-                    : 'text-muted-foreground hover:text-foreground'
+                    ? 'text-white bg-white/5' 
+                    : 'text-white/40 hover:text-white hover:bg-white/5'
                 )
               }
             >
-              {({ isActive }) => (
-                <>
-                  <span className="relative z-10">{label}</span>
-                  {isActive && (
-                    <motion.div 
-                      layoutId="nav-active-career" 
-                      className="absolute bottom-[-1px] left-0 right-0 h-[2px] bg-foreground mx-4 rounded-t-full"
-                    />
-                  )}
-                </>
-              )}
+              {label}
             </NavLink>
           ))}
         </nav>
 
         {/* Actions */}
-        <div className="flex items-center gap-2">
-          {isLoggedIn ? (
-            <div className="hidden lg:flex items-center gap-2">
-              <Link 
-                to="/dashboard" 
-                className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-secondary text-secondary-foreground text-xs font-bold hover:bg-muted transition-colors"
-              >
-                <LayoutDashboard className="h-3.5 w-3.5" /> Dashboard
-              </Link>
-              <button 
-                onClick={handleLogout}
-                className="h-9 w-9 flex items-center justify-center rounded-full text-muted-foreground hover:text-red-500 hover:bg-red-500/10 transition-colors"
-              >
-                <LogOut className="h-4 w-4" />
-              </button>
-            </div>
-          ) : (
-            <div className="hidden lg:flex items-center gap-4 mr-2">
-              <Link to="/login" className="text-xs font-bold text-muted-foreground hover:text-foreground transition-colors uppercase tracking-widest">Sign In</Link>
-              <Link to="/register" className="px-5 py-2 rounded-full bg-foreground text-background text-xs font-black uppercase tracking-[0.1em] hover:opacity-90 transition-opacity">Apply Now</Link>
-            </div>
-          )}
+        <div className="flex items-center gap-4">
+          <div className="hidden lg:flex items-center gap-4">
+             {isLoggedIn ? (
+               <>
+                 <Link 
+                   to="/dashboard" 
+                   className="flex items-center gap-2 px-5 py-2 rounded-xl bg-brand-blue text-white text-[10px] font-black uppercase tracking-widest shadow-xl shadow-brand-blue/20 hover:scale-[1.05] transition-all"
+                 >
+                   <LayoutDashboard className="h-4 w-4" /> Hub
+                 </Link>
+                 <Link 
+                   to="/profile" 
+                   className="h-10 w-10 rounded-xl bg-white/5 flex items-center justify-center text-white/40 hover:text-white hover:bg-white/10 transition-all border border-white/5"
+                 >
+                   <User className="h-5 w-5" />
+                 </Link>
+                 <button 
+                   onClick={handleLogout}
+                   className="h-10 w-10 flex items-center justify-center rounded-xl text-white/20 hover:text-red-500 hover:bg-red-500/10 transition-all"
+                 >
+                   <LogOut className="h-4 w-4" />
+                 </button>
+               </>
+             ) : (
+               <>
+                 <Link to="/login" className="text-[10px] font-black text-white/40 hover:text-white transition-all uppercase tracking-widest px-4">Sign In</Link>
+                 <Link to="/register" className="h-11 px-6 rounded-2xl bg-white text-black text-[10px] font-black uppercase tracking-widest hover:bg-brand-blue hover:text-white transition-all shadow-xl shadow-white/5">Activate Identity</Link>
+               </>
+             )}
+          </div>
 
-          <div className="hidden lg:block w-px h-4 bg-border mx-1" />
+          <div className="hidden lg:block w-px h-6 bg-white/5 mx-2" />
 
           {/* Theme Toggle */}
           <button
             onClick={toggleTheme}
-            className="flex items-center justify-center h-9 w-9 rounded-full text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            className="flex items-center justify-center h-10 w-10 rounded-xl text-white/40 hover:text-white hover:bg-white/5 transition-all outline-none"
             aria-label="Toggle theme"
           >
-            {theme === 'dark' ? <Sun className="h-[18px] w-[18px]" /> : <Moon className="h-[18px] w-[18px]" />}
+            {theme === 'dark' ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
           </button>
 
           {/* Mobile Menu Trigger */}
           <button 
             onClick={() => setIsOpen(!isOpen)}
-            className="lg:hidden flex flex-col justify-center items-center h-9 w-9 gap-[4px] rounded-full text-foreground hover:bg-secondary transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring relative z-[70]"
+            className="lg:hidden flex flex-col justify-center items-center h-10 w-10 gap-1.5 rounded-xl text-white hover:bg-white/5 transition-all outline-none relative z-[70]"
             aria-label="Toggle menu"
           >
-            <motion.span animate={{ rotate: isOpen ? 45 : 0, y: isOpen ? 6 : 0 }} className="w-4 h-[2px] bg-current rounded-full block origin-center" />
-            <motion.span animate={{ opacity: isOpen ? 0 : 1 }} className="w-4 h-[2px] bg-current rounded-full block" />
-            <motion.span animate={{ rotate: isOpen ? -45 : 0, y: isOpen ? -6 : 0 }} className="w-4 h-[2px] bg-current rounded-full block origin-center" />
+            <motion.span animate={{ rotate: isOpen ? 45 : 0, y: isOpen ? 8 : 0 }} className="w-5 h-[2px] bg-current rounded-full block" />
+            <motion.span animate={{ opacity: isOpen ? 0 : 1 }} className="w-5 h-[2px] bg-current rounded-full block" />
+            <motion.span animate={{ rotate: isOpen ? -45 : 0, y: isOpen ? -8 : 0 }} className="w-5 h-[2px] bg-current rounded-full block" />
           </button>
 
           <AnimatePresence>
@@ -147,7 +145,7 @@ export function Navbar() {
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                   onClick={() => setIsOpen(false)}
-                  className="fixed inset-0 z-[60] bg-background/80 backdrop-blur-sm lg:hidden"
+                  className="fixed inset-0 z-[60] bg-black/90 backdrop-blur-xl lg:hidden"
                 />
                 
                 {/* Content */}
@@ -155,42 +153,33 @@ export function Navbar() {
                   initial={{ opacity: 0, scale: 0.95, y: -20 }}
                   animate={{ opacity: 1, scale: 1, y: 0 }}
                   exit={{ opacity: 0, scale: 0.95, y: -20 }}
-                  className="fixed top-4 inset-x-4 z-[65] flex flex-col rounded-3xl border border-border bg-background p-6 shadow-2xl outline-none origin-top lg:hidden"
+                  className="fixed top-24 inset-x-6 z-[65] flex flex-col rounded-[2.5rem] border border-white/5 bg-[#0A0F14] p-8 shadow-2xl origin-top lg:hidden"
                 >
-                  <div className="flex items-center justify-between mb-8">
-                     <div className="flex items-center gap-2 text-foreground font-bold font-heading">
-                      <Rocket className="h-4 w-4" /> SatByte Careers
-                   </div>
-                     <button 
-                        onClick={() => setIsOpen(false)}
-                        className="flex h-8 w-8 items-center justify-center rounded-full bg-secondary text-foreground"
-                     >
-                        <X className="h-4 w-4" />
-                     </button>
-                  </div>
-
-                  <nav className="flex flex-col gap-2">
+                  <nav className="flex flex-col gap-4">
                     {NAV_LINKS.map(({ href, label }) => (
                       <NavLink
                         key={href}
                         to={href}
                         className={({ isActive }) =>
                           cn(
-                            'flex items-center px-4 py-3 text-lg font-bold rounded-xl transition-colors',
-                            isActive ? 'bg-secondary text-foreground' : 'text-muted-foreground hover:bg-secondary/50'
+                            'flex items-center px-6 py-4 text-sm font-black uppercase tracking-widest rounded-2xl transition-all',
+                            isActive ? 'bg-brand-blue text-white' : 'text-white/40 hover:bg-white/5 hover:text-white'
                           )
                         }
                       >
                         {label}
                       </NavLink>
                     ))}
-                    <div className="h-px bg-border my-2" />
+                    <div className="h-px bg-white/5 my-4" />
                     {isLoggedIn ? (
-                      <Link to="/dashboard" className="flex items-center justify-center w-full px-4 py-4 rounded-xl bg-foreground text-background font-black text-sm uppercase tracking-widest">User Dashboard</Link>
+                      <div className="grid grid-cols-2 gap-4">
+                        <Link to="/dashboard" className="flex items-center justify-center px-6 py-5 rounded-2xl bg-white text-black font-black text-[10px] uppercase tracking-widest">Dashboard</Link>
+                        <Link to="/profile" className="flex items-center justify-center px-6 py-5 rounded-2xl bg-white/5 text-white font-black text-[10px] uppercase tracking-widest border border-white/10">Profile</Link>
+                      </div>
                     ) : (
-                      <div className="flex flex-col gap-3">
-                        <Link to="/login" className="flex items-center justify-center w-full py-4 rounded-xl bg-secondary text-foreground font-bold">Sign In</Link>
-                        <Link to="/register" className="flex items-center justify-center w-full py-4 rounded-xl bg-foreground text-background font-black text-sm uppercase tracking-widest">Apply Now</Link>
+                      <div className="flex flex-col gap-4">
+                        <Link to="/login" className="flex items-center justify-center w-full py-5 rounded-2xl bg-white/5 text-white font-black text-[10px] uppercase tracking-widest">Sign In</Link>
+                        <Link to="/register" className="flex items-center justify-center w-full py-5 rounded-2xl bg-white text-black font-black text-[10px] uppercase tracking-widest">Create Profile</Link>
                       </div>
                     )}
                   </nav>
@@ -203,4 +192,3 @@ export function Navbar() {
     </div>
   )
 }
-

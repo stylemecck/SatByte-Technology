@@ -1,7 +1,18 @@
 import { useState } from 'react'
 import { Link, useNavigate, Navigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { User, Mail, Lock, ArrowRight, ShieldCheck, Loader2, Sparkles, ChevronLeft, Rocket } from 'lucide-react'
+import { 
+  User, 
+  Mail, 
+  Lock, 
+  ArrowRight, 
+  ShieldCheck, 
+  Loader2, 
+  Sparkles, 
+  ChevronLeft, 
+  Rocket,
+  X
+} from 'lucide-react'
 import { api, getStoredToken, saveToken } from '../lib/apiClient'
 import { SEO } from '../components/SEO'
 import { useAuth } from '../contexts/AuthContext'
@@ -39,99 +50,169 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center p-6 relative overflow-hidden selection:bg-brand-blue/30">
-      <SEO title="Register" />
+    <div className="min-h-screen bg-[#020609] flex flex-col lg:flex-row overflow-hidden selection:bg-brand-blue/30">
+      <SEO title="Create Orbit Profile" />
+      
+      {/* --- Left Column: Onboarding Visual --- */}
+      <div className="hidden lg:flex lg:w-[45%] bg-[#0A0F14] relative flex-col justify-between p-16 overflow-hidden border-r border-white/5">
+         <div className="absolute inset-0">
+            <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-brand-emerald/10 via-transparent to-brand-blue/5 opacity-50" />
+            <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center opacity-10" />
+         </div>
 
-      {/* Cinematic Background */}
-      <div className="absolute inset-0 mesh-gradient opacity-30 pointer-events-none" />
-      <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-brand-emerald/10 blur-[120px] rounded-full -translate-x-1/2 -translate-y-1/2 pointer-events-none" />
-      <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-brand-blue/20 blur-[120px] rounded-full translate-x-1/2 translate-y-1/2 pointer-events-none" />
+         <div className="relative z-10">
+            <Link to="/" className="inline-flex items-center gap-3 group">
+               <div className="h-12 w-12 rounded-2xl bg-white text-black flex items-center justify-center shadow-2xl group-hover:scale-110 transition-all duration-500">
+                  <Rocket size={24} />
+               </div>
+               <span className="text-white font-black text-xl tracking-tighter uppercase">SatByte Career</span>
+            </Link>
+         </div>
 
-      <motion.div
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        className="max-w-md w-full relative z-10"
-      >
-        <div className="text-center mb-12">
-          <Link to="/" className="inline-flex flex-col items-center group">
-             <div className="h-16 w-16 rounded-[1.8rem] bg-foreground text-background flex items-center justify-center shadow-2xl group-hover:scale-110 transition-transform duration-500 mb-6">
-                <Rocket className="h-8 w-8" />
-             </div>
-             <h2 className="text-4xl font-black text-foreground tracking-tighter mb-2 leading-none uppercase">Create Orbit</h2>
-             <p className="text-muted-foreground font-bold text-xs uppercase tracking-[0.3em]">Initialize your profile.</p>
-          </Link>
-        </div>
-
-        <div className="glass p-12 rounded-[3.5rem] border border-border shadow-2xl relative">
-          {error && (
-            <motion.div 
-               initial={{ opacity: 0, x: -10 }}
-               animate={{ opacity: 1, x: 0 }}
-               className="mb-8 p-5 rounded-2xl bg-red-500/10 border border-red-500/20 text-red-500 text-[10px] font-black uppercase tracking-widest flex items-center gap-3"
+         <div className="relative z-10">
+            <motion.div
+               initial={{ opacity: 0, y: 20 }}
+               animate={{ opacity: 1, y: 0 }}
+               transition={{ duration: 0.8 }}
             >
-              <ShieldCheck size={16} /> {error}
+               <h2 className="font-heading text-6xl font-black text-white tracking-tighter leading-none mb-8">
+                  Begin Your <br /> <span className="text-brand-emerald italic">Journey.</span>
+               </h2>
+               <div className="space-y-8">
+                  <StepItem 
+                    number="01" 
+                    title="Initialize Profile" 
+                    desc="Create your professional identity in our hub." 
+                  />
+                  <StepItem 
+                    number="02" 
+                    title="Skill Synchronization" 
+                    desc="Our AI identifies the best orbits for your career." 
+                  />
+                  <StepItem 
+                    number="03" 
+                    title="Launch Career" 
+                    desc="Apply to elite roles and masterclasses directly." 
+                  />
+               </div>
             </motion.div>
-          )}
+         </div>
 
-          <form className="space-y-8" onSubmit={handleSubmit}>
-            <div className="space-y-4">
-              <label className="block text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground ml-2">Full Legal Identity</label>
-              <div className="relative group">
-                <User className="absolute left-6 top-1/2 -translate-y-1/2 text-muted-foreground group-focus-within:text-brand-blue transition-colors" size={20} />
-                <input
-                  required type="text" placeholder="Satya Nadella"
-                  className="w-full pl-16 pr-8 py-5 rounded-2xl bg-secondary border border-border text-foreground placeholder-muted-foreground/30 focus:border-brand-blue/50 outline-none transition-all font-bold text-[15px]"
-                  value={name} onChange={(e) => setName(e.target.value)}
-                />
-              </div>
+         <div className="relative z-10 p-8 rounded-3xl bg-white/5 border border-white/5 backdrop-blur-md">
+            <div className="flex items-center gap-4">
+               <div className="h-10 w-10 rounded-full bg-brand-emerald/20 flex items-center justify-center text-brand-emerald">
+                  <ShieldCheck size={20} />
+               </div>
+               <p className="text-[10px] font-black text-white uppercase tracking-[0.2em] leading-relaxed">
+                  Join a community of <span className="text-brand-emerald">top engineers</span> building the future.
+               </p>
             </div>
+         </div>
+      </div>
 
-            <div className="space-y-4">
-              <label className="block text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground ml-2">Secure Mail Relay</label>
-              <div className="relative group">
-                <Mail className="absolute left-6 top-1/2 -translate-y-1/2 text-muted-foreground group-focus-within:text-brand-blue transition-colors" size={20} />
-                <input
-                  required type="email" placeholder="identity@satbyte.in"
-                  className="w-full pl-16 pr-8 py-5 rounded-2xl bg-secondary border border-border text-foreground placeholder-muted-foreground/30 focus:border-brand-blue/50 outline-none transition-all font-bold text-[15px]"
-                  value={email} onChange={(e) => setEmail(e.target.value)}
-                />
-              </div>
-            </div>
+      {/* --- Right Column: Register Form --- */}
+      <div className="flex-1 flex flex-col justify-center items-center p-8 lg:p-24 relative">
+         <div className="absolute inset-0 lg:hidden">
+            <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-brand-emerald/10 blur-[120px] rounded-full -translate-x-1/2 translate-y-1/2" />
+         </div>
 
-            <div className="space-y-4">
-              <label className="block text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground ml-2">Security Hash (Password)</label>
-              <div className="relative group">
-                <Lock className="absolute left-6 top-1/2 -translate-y-1/2 text-muted-foreground group-focus-within:text-brand-blue transition-colors" size={20} />
-                <input
-                  required type="password" placeholder="••••••••"
-                  className="w-full pl-16 pr-8 py-5 rounded-2xl bg-secondary border border-border text-foreground placeholder-muted-foreground/30 focus:border-brand-blue/50 outline-none transition-all font-bold text-[15px]"
-                  value={password} onChange={(e) => setPassword(e.target.value)}
-                />
-              </div>
-            </div>
+         <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            className="w-full max-w-md"
+         >
+            <header className="mb-12">
+               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-emerald/10 border border-brand-emerald/20 mb-6">
+                  <Sparkles size={12} className="text-brand-emerald" />
+                  <span className="text-[9px] font-black uppercase tracking-widest text-white">Ecosystem Entry</span>
+               </div>
+               <h1 className="font-heading text-5xl font-black text-white tracking-tighter mb-4 leading-none">Create Profile</h1>
+               <p className="text-muted-foreground font-medium text-lg">Initialize your secure member identity.</p>
+            </header>
 
-            <button
-              type="submit" disabled={isLoading}
-              className="h-20 flex items-center justify-center gap-4 w-full rounded-full bg-foreground text-background font-black text-xs uppercase tracking-widest shadow-2xl hover:opacity-90 active:scale-[0.98] transition-all disabled:opacity-50 group/btn"
-            >
-              {isLoading ? <Loader2 className="animate-spin" size={24} /> : <><Sparkles size={24} className="group-hover/btn:rotate-12 transition-transform" /> Activate Account</>}
-            </button>
-          </form>
+            {error && (
+              <motion.div 
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                className="mb-8 p-4 rounded-2xl bg-red-500/10 border border-red-500/20 text-red-500 text-[10px] font-black uppercase tracking-widest flex items-center gap-3 overflow-hidden"
+              >
+                <X size={16} /> {error}
+              </motion.div>
+            )}
 
-          <div className="mt-12 pt-10 border-t border-border text-center">
-            <p className="text-sm font-bold text-muted-foreground">
-              Already have an identity?{' '}
-              <Link to="/login" className="font-black text-brand-blue hover:underline decoration-2 underline-offset-4 inline-flex items-center gap-2 uppercase tracking-widest text-[11px] ml-2">
-                Sign In <ArrowRight size={14} />
-              </Link>
-            </p>
-          </div>
-        </div>
-        
-        <Link to="/" className="mt-12 flex items-center justify-center gap-3 text-[10px] font-black text-muted-foreground hover:text-foreground uppercase tracking-[0.4em] transition-colors">
-           <ChevronLeft size={16} /> Return to Home
-        </Link>
-      </motion.div>
+            <form className="space-y-6" onSubmit={handleSubmit}>
+               <div className="space-y-3">
+                  <label className="block text-[10px] font-black uppercase tracking-[0.2em] text-white/40 ml-2">Legal Identity</label>
+                  <div className="relative group">
+                     <User className="absolute left-6 top-1/2 -translate-y-1/2 text-muted-foreground group-focus-within:text-brand-emerald transition-colors" size={20} />
+                     <input
+                        required type="text" placeholder="Full Name"
+                        className="w-full h-16 pl-16 pr-8 rounded-2xl bg-white/[0.02] border border-white/10 text-white placeholder-white/20 focus:border-brand-emerald/50 outline-none transition-all font-bold text-sm"
+                        value={name} onChange={(e) => setName(e.target.value)}
+                     />
+                  </div>
+               </div>
+
+               <div className="space-y-3">
+                  <label className="block text-[10px] font-black uppercase tracking-[0.2em] text-white/40 ml-2">Secure Email</label>
+                  <div className="relative group">
+                     <Mail className="absolute left-6 top-1/2 -translate-y-1/2 text-muted-foreground group-focus-within:text-brand-emerald transition-colors" size={20} />
+                     <input
+                        required type="email" placeholder="name@orbit.com"
+                        className="w-full h-16 pl-16 pr-8 rounded-2xl bg-white/[0.02] border border-white/10 text-white placeholder-white/20 focus:border-brand-emerald/50 outline-none transition-all font-bold text-sm"
+                        value={email} onChange={(e) => setEmail(e.target.value)}
+                     />
+                  </div>
+               </div>
+
+               <div className="space-y-3">
+                  <label className="block text-[10px] font-black uppercase tracking-[0.2em] text-white/40 ml-2">Security Hash</label>
+                  <div className="relative group">
+                     <Lock className="absolute left-6 top-1/2 -translate-y-1/2 text-muted-foreground group-focus-within:text-brand-emerald transition-colors" size={20} />
+                     <input
+                        required type="password" placeholder="••••••••"
+                        className="w-full h-16 pl-16 pr-8 rounded-2xl bg-white/[0.02] border border-white/10 text-white placeholder-white/20 focus:border-brand-emerald/50 outline-none transition-all font-bold text-sm"
+                        value={password} onChange={(e) => setPassword(e.target.value)}
+                     />
+                  </div>
+               </div>
+
+               <button
+                  type="submit" disabled={isLoading}
+                  className="h-20 w-full mt-4 rounded-full bg-white text-black font-black text-xs uppercase tracking-widest shadow-2xl hover:bg-brand-emerald hover:text-white transition-all disabled:opacity-50 flex items-center justify-center gap-4 group/btn shadow-brand-emerald/10"
+               >
+                  {isLoading ? <Loader2 className="animate-spin" size={24} /> : <><Sparkles size={22} className="group-hover/btn:rotate-12 transition-transform" /> Activate Identity</>}
+               </button>
+            </form>
+
+            <footer className="mt-12 text-center">
+               <p className="text-sm font-bold text-muted-foreground">
+                  Already synchronized?{' '}
+                  <Link to="/login" className="font-black text-brand-blue hover:underline underline-offset-4 uppercase tracking-widest text-[11px] ml-2 flex items-center justify-center gap-2 mt-4">
+                    Member Access <ArrowRight size={14} />
+                  </Link>
+               </p>
+               
+               <Link to="/" className="mt-12 inline-flex items-center gap-3 text-[10px] font-black text-white/20 hover:text-white uppercase tracking-[0.4em] transition-colors">
+                  <ChevronLeft size={16} /> Hub Terminal
+               </Link>
+            </footer>
+         </motion.div>
+      </div>
+    </div>
+  )
+}
+
+function StepItem({ number, title, desc }: any) {
+  return (
+    <div className="flex gap-5">
+       <div className="h-10 w-10 rounded-xl bg-white/5 border border-white/5 flex items-center justify-center text-brand-emerald text-[10px] font-black shrink-0">
+          {number}
+       </div>
+       <div>
+          <h4 className="text-white font-bold text-sm mb-1">{title}</h4>
+          <p className="text-[11px] text-muted-foreground leading-relaxed">{desc}</p>
+       </div>
     </div>
   )
 }

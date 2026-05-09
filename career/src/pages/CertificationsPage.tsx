@@ -1,6 +1,22 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Award, Clock, CheckCircle2, IndianRupee, BookOpen, Star, Sparkles, ArrowRight, Loader2, ShieldCheck, Zap, Eye, Trophy, FileText } from 'lucide-react'
+import { 
+  Award, 
+  Clock, 
+  CheckCircle2, 
+  IndianRupee, 
+  BookOpen, 
+  Star, 
+  Sparkles, 
+  ArrowRight, 
+  Loader2, 
+  ShieldCheck, 
+  Zap, 
+  Eye, 
+  Trophy, 
+  FileText,
+  Target
+} from 'lucide-react'
 import { useQuery, useMutation } from '@tanstack/react-query'
 import { api } from '../lib/apiClient'
 import { SEO } from '../components/SEO'
@@ -8,6 +24,7 @@ import type { Certification } from '../types'
 import { useAuth } from '../contexts/AuthContext'
 import { useNavigate } from 'react-router-dom'
 import { CertificatePreview } from '../components/CertificatePreview'
+import { cn } from '../utils/cn'
 
 export default function CertificationsPage() {
   const [previewOpen, setPreviewOpen] = useState(false)
@@ -27,144 +44,144 @@ export default function CertificationsPage() {
   }
 
   return (
-    <div className="bg-background selection:bg-brand-blue/30">
-      <SEO title="Certifications" description="Upskill with industry-recognized certifications from SatByte." />
+    <div className="bg-[#020609] min-h-screen selection:bg-brand-blue/30 overflow-hidden">
+      <SEO title="Professional Certifications" description="Upskill with industry-recognized certifications from SatByte." />
 
-      {/* Hero Section */}
-      <section className="relative overflow-hidden pt-32 pb-24 mesh-gradient">
-        <div className="absolute inset-0 opacity-30 dark:opacity-20 pointer-events-none">
-           <div className="absolute top-0 -left-1/4 w-1/2 h-full bg-brand-blue/20 blur-[120px] rounded-full" />
-           <div className="absolute bottom-0 -right-1/4 w-1/2 h-full bg-brand-emerald/10 blur-[120px] rounded-full" />
+      {/* --- Cinematic Header --- */}
+      <section className="relative pt-32 pb-24 border-b border-white/5">
+        <div className="absolute inset-0">
+           <div className="absolute top-0 right-0 w-[50%] h-full bg-brand-violet/5 blur-[120px] rounded-full" />
+           <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center opacity-10" />
         </div>
 
-        <div className="relative max-w-7xl mx-auto px-6 sm:px-8 lg:px-10 text-center">
+        <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-10 text-center">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
           >
-            <span className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-secondary text-foreground border border-border font-extrabold text-[10px] uppercase tracking-[0.2em] mb-8 shadow-sm">
-               <Sparkles size={14} className="text-brand-blue" /> Platinum Learning Paths
-            </span>
-            <h1 className="font-heading text-5xl sm:text-7xl font-black text-foreground leading-[0.85] mb-8 tracking-tighter">
-               Elevate your <br />
-               <span className="bg-gradient-to-r from-brand-blue to-foreground bg-clip-text text-transparent italic">professional trajectory</span>
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-violet/10 border border-brand-violet/20 mb-8">
+               <Sparkles size={12} className="text-brand-violet" />
+               <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white">Platinum Learning Paths</span>
+            </div>
+            <h1 className="font-heading text-5xl md:text-7xl lg:text-8xl font-black text-white leading-[0.85] mb-8 tracking-tighter">
+               Master the <br />
+               <span className="text-brand-violet italic">Core Architecture.</span>
             </h1>
             <p className="max-w-2xl mx-auto text-lg text-muted-foreground leading-relaxed mb-12 font-medium">
-               Master cutting-edge technologies with our high-fidelity curriculum, structured masterclasses, and globally recognized credentials.
+               High-fidelity curriculum architected by veteran engineers. Earn verifiable professional credentials that define your trajectory.
             </p>
             
-            <div className="flex flex-wrap justify-center gap-4">
+            <div className="flex flex-wrap justify-center gap-5">
                <button 
                   onClick={() => openPreview('certificate')}
-                  className="flex items-center gap-3 px-8 py-4 rounded-full bg-foreground text-background font-black text-[13px] uppercase tracking-widest hover:opacity-90 transition-all shadow-xl"
+                  className="h-16 px-10 rounded-2xl bg-white text-black font-black text-xs uppercase tracking-widest shadow-xl shadow-white/5 hover:bg-brand-violet hover:text-white transition-all flex items-center gap-3"
                >
-                  <Eye size={20} /> View Demo Credential
+                  <Eye size={18} /> View Sample Credential
                </button>
                <button 
                   onClick={() => openPreview('lor')}
-                  className="flex items-center gap-3 px-8 py-4 rounded-full bg-secondary text-foreground border border-border font-black text-[13px] uppercase tracking-widest hover:bg-muted transition-all"
+                  className="h-16 px-10 rounded-2xl bg-white/5 border border-white/10 text-white font-black text-xs uppercase tracking-widest hover:bg-white/10 transition-all flex items-center gap-3"
                >
-                  <FileText size={20} className="text-brand-blue" /> Sample LOR
+                  <FileText size={18} /> Review LOR Format
                </button>
             </div>
           </motion.div>
         </div>
       </section>
 
-      {/* Trust Ticker */}
-      <div className="relative -mt-10 py-8 bg-card border border-border overflow-hidden z-10 mx-6 rounded-[2.5rem] shadow-2xl max-w-5xl lg:mx-auto lg:max-w-6xl">
-         <div className="flex items-center justify-around opacity-60">
-            <div className="flex items-center gap-3 font-heading font-black text-foreground text-[11px] uppercase tracking-[0.2em]">
-               <Award size={18} className="text-brand-blue" /> ISO 9001:2015
-            </div>
-            <div className="flex items-center gap-3 font-heading font-black text-foreground text-[11px] uppercase tracking-[0.2em]">
-               <ShieldCheck size={18} className="text-brand-emerald" /> STQC VERIFIED
-            </div>
-            <div className="hidden sm:flex items-center gap-3 font-heading font-black text-foreground text-[11px] uppercase tracking-[0.2em]">
-               <Trophy size={18} className="text-brand-amber" /> TOP-RATED 2024
-            </div>
+      {/* --- Standards Ticker --- */}
+      <div className="max-w-6xl mx-auto px-6 -mt-10 relative z-20">
+         <div className="premium-card bg-[#0A0F14]/80 backdrop-blur-2xl p-8 flex flex-wrap items-center justify-around gap-8 border-white/5">
+            <StandardBadge icon={Award} label="ISO 9001:2015" />
+            <div className="h-4 w-px bg-white/5 hidden md:block" />
+            <StandardBadge icon={ShieldCheck} label="STQC Verified" />
+            <div className="h-4 w-px bg-white/5 hidden md:block" />
+            <StandardBadge icon={Target} label="Industry 4.0 Standard" />
          </div>
       </div>
 
-      {/* Program Grid */}
-      <section className="py-32 bg-background">
-        <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10 mb-20">
-           <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-20">
+      {/* --- Programs Area --- */}
+      <section className="py-32">
+        <div className="max-w-7xl mx-auto px-6 lg:px-10 mb-20">
+           <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-10">
               <div className="max-w-2xl">
-                 <span className="text-brand-blue font-black uppercase tracking-[0.3em] text-[10px]">Certification Paths</span>
-                 <h2 className="mt-4 font-heading text-4xl sm:text-6xl font-black text-foreground tracking-tighter leading-none">
-                   Master your next <br /> <span className="bg-gradient-to-r from-brand-blue to-foreground bg-clip-text text-transparent italic">Specialization.</span>
+                 <span className="text-brand-violet font-black uppercase tracking-[0.3em] text-[10px] mb-4 block">Available Specializations</span>
+                 <h2 className="font-heading text-4xl md:text-6xl font-black text-white tracking-tighter leading-none">
+                   Synchronize with <br /> <span className="text-gradient">Professional Standards.</span>
                  </h2>
               </div>
-              <p className="text-muted-foreground font-medium max-w-sm">Every program is architected by industry leads to ensure you're learning production-ready standards.</p>
+              <p className="text-muted-foreground text-lg font-medium max-w-sm leading-relaxed">
+                 Every masterclass is structured to simulate a high-scale production engineering environment.
+              </p>
            </div>
         </div>
 
-        <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10">
+        <div className="max-w-7xl mx-auto px-6 lg:px-10">
            {isLoading ? (
              <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-                {[1, 2].map(i => <div key={i} className="h-[600px] rounded-[4rem] bg-muted animate-pulse border border-border" />)}
+                {[1, 2].map(i => <div key={i} className="h-[600px] rounded-4xl bg-[#0A0F14] animate-pulse border border-white/5" />)}
              </div>
            ) : certifications?.length ? (
-             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 xl:gap-20">
-                {certifications.map(cert => (
-                   <CertificationCard key={cert._id} cert={cert} />
+             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 xl:gap-16">
+                {certifications.map((cert, i) => (
+                   <CertificationItem key={cert._id} cert={cert} index={i} />
                 ))}
              </div>
            ) : (
-             <div className="text-center py-32 bg-muted rounded-[4rem] border-2 border-dashed border-border max-w-2xl mx-auto">
-                <div className="h-20 w-20 rounded-3xl bg-secondary flex items-center justify-center text-muted-foreground mx-auto mb-8 shadow-sm">
-                   <Award size={40} />
-                </div>
-                <h3 className="text-2xl font-black text-foreground tracking-tighter">Curating Excellence</h3>
-                <p className="text-muted-foreground mt-4 px-8 max-w-md mx-auto font-medium">We are currently architecting new premium certification paths. Join the waitlist to be synchronized on new releases.</p>
+             <div className="py-40 text-center premium-card border-dashed">
+                <Trophy size={48} className="mx-auto text-muted-foreground/20 mb-6" />
+                <h3 className="text-2xl font-black text-white mb-2">Architecting New Paths</h3>
+                <p className="text-muted-foreground text-sm max-w-sm mx-auto">We are currently refining the next generation of certification modules. Join the hub to get notified.</p>
              </div>
            )}
         </div>
       </section>
 
-      {/* Feature Section */}
-      <section className="py-32 bg-secondary/30 text-foreground overflow-hidden relative border-t border-border">
-         <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10 relative">
+      {/* --- The SatByte Standard --- */}
+      <section className="py-32 bg-[#0A0F14] border-y border-white/5 overflow-hidden">
+         <div className="max-w-7xl mx-auto px-6 lg:px-8">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
                <div>
-                  <span className="text-brand-blue font-black text-[10px] uppercase tracking-[0.4em] mb-4 block">The SatByte Standard</span>
-                  <h2 className="text-4xl sm:text-6xl font-heading font-black tracking-tighter leading-[0.9] mb-12 text-foreground">
-                     More than just a <br /> <span className="text-brand-blue">piece of paper.</span>
+                  <span className="text-brand-blue font-black text-[10px] uppercase tracking-[0.4em] mb-4 block">Verification Protocol</span>
+                  <h2 className="text-4xl md:text-6xl font-heading font-black tracking-tighter leading-none mb-12 text-white">
+                     More than a <br /> <span className="text-brand-blue italic">piece of paper.</span>
                   </h2>
-                  <div className="space-y-10">
-                     {[
-                        { icon: <ShieldCheck />, color: "var(--brand-blue)", title: 'Globally Verifiable', desc: 'Each certificate carries a unique cryptographic ID for instant verification.' },
-                        { icon: <Zap />, color: "var(--brand-emerald)", title: 'MERN & FullStack Pro', desc: 'Includes a digital portfolio link showcasing all the production-grade projects you built.' },
-                        { icon: <Star />, color: "var(--brand-amber)", title: 'Career Acceleration', desc: 'Get access to our internal job board and referral network for 6 months post-completion.' }
-                     ].map((item, idx) => (
-                        <div key={idx} className="flex gap-8 group">
-                           <div className="h-14 w-14 rounded-2xl bg-card border border-border flex items-center justify-center transition-all shadow-sm" style={{ color: item.color }}>
-                              {item.icon}
-                           </div>
-                           <div>
-                              <h4 className="text-xl font-black text-foreground tracking-tight mb-2 group-hover:text-brand-blue transition-colors">{item.title}</h4>
-                              <p className="text-muted-foreground text-[14px] font-medium leading-relaxed">{item.desc}</p>
-                           </div>
-                        </div>
-                     ))}
+                  <div className="space-y-12">
+                     <StandardFeature 
+                       icon={ShieldCheck} 
+                       title="Cryptographically Hashed" 
+                       desc="Every certificate carries a unique ID verified on our global recruitment ledger." 
+                       color="text-brand-blue"
+                     />
+                     <StandardFeature 
+                       icon={Zap} 
+                       title="Impact-Driven Curriculum" 
+                       desc="Focus on production-grade standards used by elite software squads." 
+                       color="text-brand-emerald"
+                     />
+                     <StandardFeature 
+                       icon={Star} 
+                       title="Ecosystem Access" 
+                       desc="Get prioritized for internal internships and full-time engineering orbits." 
+                       color="text-brand-amber"
+                     />
                   </div>
                </div>
-               <div className="relative pt-12">
+               <div className="relative">
+                  <div className="absolute inset-0 bg-brand-blue/10 blur-[100px] rounded-full" />
                   <motion.div 
-                     initial={{ rotate: 10, y: 100 }}
+                     initial={{ rotate: 5, y: 50 }}
                      whileInView={{ rotate: -5, y: 0 }}
-                     className="relative z-10 rounded-[3rem] overflow-hidden shadow-2xl border border-border bg-card"
+                     className="relative z-10 premium-card bg-[#111827] overflow-hidden shadow-[0_50px_100px_rgba(0,0,0,0.5)] border-white/10"
                   >
-                     <img src="/0d309038-484e-4251-b777-2debc82a90ae/demo_certificate_mockup_1775907983466.png" alt="Certificate" className="w-full h-auto opacity-90" />
-                  </motion.div>
-                  <motion.div 
-                     initial={{ rotate: -10, y: 50 }}
-                     whileInView={{ rotate: 5, y: -50 }}
-                     className="absolute -top-12 -left-12 z-0 w-2/3 rounded-[3rem] overflow-hidden shadow-2xl border border-border opacity-40 blur-[2px] bg-card"
-                  >
-                     <img src="/0d309038-484e-4251-b777-2debc82a90ae/lor_mockup_illustration_1775908009926.png" alt="LOR" className="w-full h-auto opacity-70" />
+                     <img src="https://images.unsplash.com/photo-1546410531-bb4caa6b424d?w=800&q=80" alt="Certificate" className="w-full h-auto opacity-80" />
+                     <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent" />
+                     <div className="absolute bottom-8 left-8">
+                        <div className="h-10 w-10 rounded-xl bg-brand-blue flex items-center justify-center text-white mb-4">
+                           <Award size={24} />
+                        </div>
+                        <h4 className="text-white font-black text-xl tracking-tighter">Verified Credential</h4>
+                     </div>
                   </motion.div>
                </div>
             </div>
@@ -180,7 +197,30 @@ export default function CertificationsPage() {
   )
 }
 
-function CertificationCard({ cert }: { cert: Certification }) {
+function StandardBadge({ icon: Icon, label }: any) {
+  return (
+    <div className="flex items-center gap-3">
+       <Icon size={20} className="text-brand-blue" />
+       <span className="text-[10px] font-black text-white uppercase tracking-widest">{label}</span>
+    </div>
+  )
+}
+
+function StandardFeature({ icon: Icon, title, desc, color }: any) {
+  return (
+    <div className="flex gap-6 group">
+       <div className={cn("h-12 w-12 rounded-2xl bg-white/5 border border-white/5 flex items-center justify-center shrink-0 group-hover:scale-110 transition-all", color)}>
+          <Icon size={24} />
+       </div>
+       <div>
+          <h4 className="text-xl font-black text-white tracking-tight mb-2 group-hover:text-brand-blue transition-colors">{title}</h4>
+          <p className="text-sm text-muted-foreground leading-relaxed font-medium">{desc}</p>
+       </div>
+    </div>
+  )
+}
+
+function CertificationItem({ cert, index }: { cert: Certification, index: number }) {
   const { user } = useAuth()
   const navigate = useNavigate()
   const [isProcessing, setIsProcessing] = useState(false)
@@ -204,7 +244,7 @@ function CertificationCard({ cert }: { cert: Certification }) {
     try {
       await enrollMutation.mutateAsync()
     } catch (e) {
-      alert('Could not start enrollment. Please try again.')
+      alert('Could not initiate enrollment.')
     } finally {
       setIsProcessing(false)
     }
@@ -212,87 +252,76 @@ function CertificationCard({ cert }: { cert: Certification }) {
 
   return (
     <motion.div 
-      initial={{ opacity: 0, y: 40 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      className="group bg-card border border-border rounded-[3.5rem] overflow-hidden shadow-2xl hover:border-brand-blue/30 transition-all duration-500"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: index * 0.1 }}
+      className="premium-card p-10 md:p-14 bg-[#0A0F14] group flex flex-col relative overflow-hidden"
     >
-       <div className="p-10 sm:p-14 flex flex-col h-full relative">
-          <div className="absolute top-0 right-0 w-32 h-32 bg-brand-blue/5 blur-[60px] rounded-full group-hover:bg-brand-blue/10 transition-colors" />
+       <div className="absolute top-0 right-0 w-64 h-64 bg-brand-violet/5 blur-[100px] rounded-full opacity-0 group-hover:opacity-100 transition-opacity" />
 
-          <div className="flex justify-between items-start mb-14">
-             <div className="h-20 w-20 rounded-3xl bg-foreground text-background flex items-center justify-center shadow-2xl group-hover:scale-110 transition-transform duration-500">
-                <BookOpen size={36} />
-             </div>
-             <div className="text-right">
-                <span className="block text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em] mb-2">Standard Access</span>
-                <div className="flex items-center justify-end gap-1 font-heading font-black text-4xl text-foreground tracking-tighter">
-                   <IndianRupee size={24} className="text-brand-blue" /> {cert.price.toLocaleString()}
-                </div>
+       <div className="flex justify-between items-start mb-12 relative z-10">
+          <div className="h-16 w-16 rounded-2xl bg-white text-black flex items-center justify-center shadow-xl group-hover:scale-110 transition-all duration-500">
+             <BookOpen size={28} />
+          </div>
+          <div className="text-right">
+             <span className="text-[9px] font-black text-white/40 uppercase tracking-widest mb-1 block">Deployment Access</span>
+             <div className="flex items-center justify-end gap-1 font-heading font-black text-4xl text-white tracking-tighter leading-none">
+                <IndianRupee size={22} className="text-brand-violet" /> {cert.price.toLocaleString()}
              </div>
           </div>
+       </div>
 
-          <h3 className="font-heading text-4xl sm:text-5xl font-black text-foreground mb-6 tracking-tighter leading-none group-hover:text-brand-blue transition-colors">
-            {cert.title}
-          </h3>
-          <p className="text-muted-foreground text-lg font-medium leading-relaxed mb-12 flex-1 max-w-lg">
-            {cert.description}
-          </p>
+       <h3 className="text-4xl md:text-5xl font-black text-white tracking-tighter leading-none mb-6 group-hover:text-brand-violet transition-colors">
+         {cert.title}
+       </h3>
+       <p className="text-lg text-muted-foreground font-medium leading-relaxed mb-12 flex-1 line-clamp-3">
+         {cert.description}
+       </p>
 
-          <div className="grid grid-cols-2 gap-8 mb-14 border-y border-border py-10">
-             <div className="space-y-3">
-                <span className="text-[10px] font-black text-muted-foreground uppercase tracking-widest block">Duration</span>
-                <div className="flex items-center gap-2.5 font-black text-foreground uppercase tracking-tight text-sm">
-                   <Clock size={16} className="text-brand-blue" /> {cert.duration}
-                </div>
-             </div>
-             <div className="space-y-3 text-right">
-                <span className="text-[10px] font-black text-muted-foreground uppercase tracking-widest block">Trust Rating</span>
-                <div className="flex items-center justify-end gap-2 font-black text-foreground text-sm uppercase tracking-tight">
-                   <Star size={16} className="text-brand-amber fill-brand-amber" /> 4.9/5 Precision
-                </div>
+       <div className="grid grid-cols-2 gap-8 mb-12 py-10 border-y border-white/5 relative z-10">
+          <div>
+             <span className="text-[9px] font-black text-white/20 uppercase tracking-widest block mb-2">Cohort Duration</span>
+             <div className="flex items-center gap-2 font-black text-white uppercase text-xs tracking-widest">
+                <Clock size={16} className="text-brand-blue" /> {cert.duration}
              </div>
           </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-12 mb-16">
-             <div>
-                <h4 className="text-[10px] font-black text-foreground uppercase tracking-widest mb-6 px-4 py-2 bg-secondary rounded-xl border border-border inline-block">Key Takeaways</h4>
-                <ul className="space-y-5">
-                   {cert.features.map((f, i) => (
-                      <li key={i} className="flex gap-4 text-[15px] text-muted-foreground font-medium leading-tight">
-                         <CheckCircle2 size={18} className="text-brand-blue mt-0.5 shrink-0" />
-                         {f}
-                      </li>
-                   ))}
-                </ul>
-             </div>
-             <div>
-                <h4 className="text-[10px] font-black text-foreground uppercase tracking-widest mb-6 px-4 py-2 bg-secondary rounded-xl border border-border inline-block">Syllabus Grid</h4>
-                <ul className="space-y-5">
-                   {cert.syllabus.slice(0, 4).map((s, i) => (
-                      <li key={i} className="flex items-start gap-4 text-[15px] text-muted-foreground font-medium leading-tight group/item">
-                         <div className="h-2 w-2 rounded-full bg-brand-blue/30 mt-2 shrink-0 group-hover/item:bg-brand-blue transition-colors" />
-                         {s}
-                      </li>
-                   ))}
-                </ul>
+          <div className="text-right">
+             <span className="text-[9px] font-black text-white/20 uppercase tracking-widest block mb-2">Ecosystem Rating</span>
+             <div className="flex items-center justify-end gap-2 font-black text-white text-xs uppercase tracking-widest">
+                <Star size={16} className="text-brand-amber fill-brand-amber" /> 4.9 Precision
              </div>
           </div>
+       </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mt-auto">
-             <button
-                onClick={handleEnroll}
-                disabled={isProcessing}
-                className="h-20 flex items-center justify-center gap-4 rounded-full bg-foreground text-background font-black text-lg uppercase tracking-widest shadow-2xl hover:opacity-90 active:scale-[0.98] transition-all disabled:opacity-50"
-             >
-                {isProcessing ? <Loader2 className="animate-spin" size={24} /> : <>Enroll Mission <ArrowRight size={22} /></>}
-             </button>
-             <button
-                className="h-20 flex items-center justify-center rounded-full bg-secondary border border-border text-foreground font-black text-lg uppercase tracking-widest hover:bg-muted transition-all"
-             >
-                Specification
-             </button>
+       <div className="space-y-8 mb-12 relative z-10">
+          <div>
+             <h4 className="text-[10px] font-black text-white uppercase tracking-[0.3em] mb-6 flex items-center gap-2">
+                <Zap size={16} className="text-brand-violet" /> Module Highlights
+             </h4>
+             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {cert.features.slice(0, 4).map((f, i) => (
+                   <div key={i} className="flex gap-3 text-xs text-muted-foreground font-bold leading-tight">
+                      <CheckCircle2 size={16} className="text-brand-emerald shrink-0" />
+                      {f}
+                   </div>
+                ))}
+             </div>
           </div>
+       </div>
+
+       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 relative z-10">
+          <button
+             onClick={handleEnroll}
+             disabled={isProcessing}
+             className="h-16 flex items-center justify-center gap-3 rounded-2xl bg-brand-violet text-white font-black text-xs uppercase tracking-widest shadow-xl shadow-brand-violet/20 hover:scale-[1.03] active:scale-[0.98] transition-all disabled:opacity-50"
+          >
+             {isProcessing ? <Loader2 className="animate-spin" size={20} /> : <>Enroll Mission <ArrowRight size={20} /></>}
+          </button>
+          <button
+             className="h-16 rounded-2xl bg-white/5 border border-white/5 text-white font-black text-xs uppercase tracking-widest hover:bg-white/10 transition-all"
+          >
+             Syllabus Sync
+          </button>
        </div>
     </motion.div>
   )

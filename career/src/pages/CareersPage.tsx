@@ -1,6 +1,17 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Search, MapPin, Briefcase, Zap, Clock, ShieldCheck, ArrowRight } from 'lucide-react'
+import { 
+  Search, 
+  MapPin, 
+  Briefcase, 
+  Zap, 
+  Clock, 
+  ArrowRight, 
+  Filter, 
+  ChevronRight,
+  DollarSign,
+  Sparkles
+} from 'lucide-react'
 import { useQuery } from '@tanstack/react-query'
 import { Link } from 'react-router-dom'
 import { api } from '../lib/apiClient'
@@ -11,6 +22,7 @@ import { cn } from '../utils/cn'
 export default function CareersPage() {
   const [searchTerm, setSearchTerm] = useState('')
   const [categoryFilter, setCategoryFilter] = useState('All')
+  const [isFilterOpen, setIsFilterOpen] = useState(false)
 
   const { data: jobs, isLoading } = useQuery<Job[]>({
     queryKey: ['jobs'],
@@ -30,171 +42,173 @@ export default function CareersPage() {
   const categories = ['All', 'Engineering', 'Design', 'Marketing', 'Sales', 'Other']
 
   return (
-    <div className="bg-background selection:bg-brand-blue/30">
-      <SEO title="Careers" description="Explore job opportunities at SatByte Technologies." />
+    <div className="bg-[#020609] min-h-screen selection:bg-brand-blue/30">
+      <SEO title="Opportunities" description="Explore job opportunities at SatByte Technologies." />
 
-      {/* Premium Cinematic Header */}
-      <section className="relative pt-32 pb-24 mesh-gradient overflow-hidden">
-        <div className="absolute inset-0 opacity-30 dark:opacity-20 pointer-events-none">
-           <div className="absolute top-0 right-0 w-1/2 h-full bg-brand-blue/20 blur-[120px] rounded-full translate-x-1/2" />
-        </div>
-        
-        <div className="relative z-10 max-w-7xl mx-auto px-6 sm:px-8 lg:px-10">
-          <div className="max-w-3xl">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-            >
-              <span className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-secondary text-foreground border border-border font-extrabold text-[10px] uppercase tracking-[0.2em] mb-8 shadow-sm">
-                <ShieldCheck size={14} className="text-brand-blue" /> Excellence Guaranteed
-              </span>
-              <h1 className="font-heading text-5xl sm:text-7xl font-black text-foreground tracking-tighter leading-none mb-8">
-                Build the <br /> <span className="bg-gradient-to-r from-brand-blue to-foreground bg-clip-text text-transparent italic">future infrastructure.</span>
-              </h1>
-              <p className="text-xl text-muted-foreground font-medium leading-relaxed max-w-2xl">
-                Join our elite squads to architect legacy-defining software. 
-                Ownership is binary here — you own it, or you don't.
-              </p>
-            </motion.div>
+      <div className="max-w-[1600px] mx-auto px-6 lg:px-10 pt-32 pb-20">
+        {/* Header Section */}
+        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-10 mb-16">
+          <div className="max-w-2xl">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-blue/10 border border-brand-blue/20 mb-6">
+              <Sparkles size={12} className="text-brand-blue" />
+              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white">Live Opportunities</span>
+            </div>
+            <h1 className="font-heading text-5xl md:text-7xl font-black text-white tracking-tighter leading-none mb-6">
+              Find Your <span className="text-brand-blue italic">Orbit.</span>
+            </h1>
+            <p className="text-lg text-muted-foreground font-medium max-w-xl">
+              Discover specialized roles across engineering, design, and product units. Join our elite global squads.
+            </p>
           </div>
-
-          {/* Premium Search & Filter Bar */}
-          <div className="mt-16 relative z-30">
-             <div className="p-3 rounded-[3.5rem] bg-card border border-border shadow-2xl flex flex-col lg:flex-row gap-4">
-                <div className="relative flex-1 group">
-                   <Search className="absolute left-8 top-1/2 -translate-y-1/2 text-muted-foreground group-focus-within:text-brand-blue transition-colors" size={20} />
-                   <input 
-                     type="text" 
-                     placeholder="Search specialized roles..." 
-                     className="w-full pl-20 pr-8 py-5 rounded-[2.5rem] bg-secondary border border-border text-foreground placeholder:text-muted-foreground/60 focus:border-brand-blue/50 outline-none transition-all font-bold text-[15px]"
-                     value={searchTerm}
-                     onChange={(e) => setSearchTerm(e.target.value)}
-                   />
-                </div>
-                <div className="flex gap-2.5 p-1 overflow-x-auto custom-scrollbar shrink-0 no-scrollbar">
-                  {categories.map(cat => (
-                    <button
-                      key={cat}
-                      onClick={() => setCategoryFilter(cat)}
-                      className={cn(
-                        'px-8 py-4 rounded-[2rem] font-black text-[10px] uppercase tracking-widest transition-all whitespace-nowrap',
-                        categoryFilter === cat 
-                          ? 'bg-foreground text-background shadow-xl' 
-                          : 'bg-secondary text-muted-foreground hover:bg-muted hover:text-foreground border border-border'
-                      )}
-                    >
-                      {cat}
-                    </button>
-                  ))}
-                </div>
+          
+          <div className="flex items-center gap-4">
+             <div className="bg-[#0A0F14] border border-white/5 rounded-2xl p-1 flex">
+                <button 
+                  onClick={() => setIsFilterOpen(!isFilterOpen)}
+                  className={cn(
+                    "flex items-center gap-2 px-6 py-3 rounded-xl text-xs font-black uppercase tracking-widest transition-all",
+                    isFilterOpen ? "bg-white/10 text-white" : "text-muted-foreground hover:text-white"
+                  )}
+                >
+                  <Filter size={16} /> Filters
+                </button>
              </div>
           </div>
         </div>
-      </section>
 
-      {/* Jobs Hub Section */}
-      <section className="py-24 relative z-20">
-        <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10">
-          {isLoading ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-               {[1, 2, 3, 4, 5, 6].map(i => (
-                 <div key={i} className="h-80 rounded-[3.5rem] bg-muted animate-pulse border border-border" />
-               ))}
-            </div>
-          ) : filteredJobs?.length ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-              <AnimatePresence mode="popLayout">
-                {filteredJobs.map(job => (
-                  <JobCard key={job._id} job={job} />
-                ))}
-              </AnimatePresence>
-            </div>
-          ) : (
-             <motion.div 
-               initial={{ opacity: 0, scale: 0.95 }}
-               animate={{ opacity: 1, scale: 1 }}
-               className="text-center py-32 bg-muted rounded-[4rem] border-2 border-dashed border-border max-w-2xl mx-auto"
-             >
-                <div className="h-24 w-24 rounded-[2.5rem] bg-secondary flex items-center justify-center text-muted-foreground mx-auto mb-8 shadow-sm">
-                  <Briefcase size={48} />
+        <div className="flex flex-col lg:flex-row gap-12">
+           {/* Sidebar Filters */}
+           <AnimatePresence>
+             {isFilterOpen && (
+               <motion.aside 
+                 initial={{ opacity: 0, x: -20 }}
+                 animate={{ opacity: 1, x: 0 }}
+                 exit={{ opacity: 0, x: -20 }}
+                 className="lg:w-80 shrink-0 space-y-10"
+               >
+                  <div className="space-y-6">
+                    <h3 className="text-white font-black text-xs uppercase tracking-widest">Search</h3>
+                    <div className="relative group">
+                      <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground group-focus-within:text-brand-blue transition-colors" size={18} />
+                      <input 
+                        type="text" 
+                        placeholder="Search roles..."
+                        className="w-full h-14 pl-12 pr-4 bg-[#0A0F14] border border-white/5 rounded-2xl text-sm font-bold text-white focus:border-brand-blue/50 outline-none transition-all"
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-6">
+                    <h3 className="text-white font-black text-xs uppercase tracking-widest">Categories</h3>
+                    <div className="flex flex-wrap gap-2">
+                      {categories.map(cat => (
+                        <button
+                          key={cat}
+                          onClick={() => setCategoryFilter(cat)}
+                          className={cn(
+                            "px-5 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all",
+                            categoryFilter === cat ? "bg-brand-blue text-white" : "bg-[#0A0F14] text-muted-foreground hover:text-white border border-white/5"
+                          )}
+                        >
+                          {cat}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="p-8 rounded-3xl bg-brand-blue/5 border border-brand-blue/10">
+                     <h4 className="text-white font-black text-sm mb-2">AI Matcher</h4>
+                     <p className="text-[11px] text-muted-foreground leading-relaxed mb-6">Log in to see roles personalized for your verified skill set.</p>
+                     <Link to="/login" className="text-[10px] font-black uppercase tracking-widest text-brand-blue hover:underline">Get Synchronized</Link>
+                  </div>
+               </motion.aside>
+             )}
+           </AnimatePresence>
+
+           {/* Main Feed */}
+           <div className="flex-1">
+              {isLoading ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                   {[1, 2, 3, 4].map(i => (
+                     <div key={i} className="h-64 rounded-4xl bg-[#0A0F14] animate-pulse border border-white/5" />
+                   ))}
                 </div>
-                <h3 className="font-heading text-3xl font-black text-foreground tracking-tighter">No match detected.</h3>
-                <p className="mt-4 text-muted-foreground font-medium max-w-sm mx-auto leading-relaxed">
-                  The role you seek may be classified or unlisted. Try using broader terms.
-                </p>
-                <button 
-                  onClick={() => { setSearchTerm(''); setCategoryFilter('All'); }}
-                  className="mt-10 px-10 py-4 rounded-full bg-foreground text-background font-black text-xs uppercase tracking-widest shadow-xl hover:opacity-90 transition-all"
-                >
-                  Reset Parameters
-                </button>
-             </motion.div>
-          )}
+              ) : filteredJobs?.length ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                   <AnimatePresence mode="popLayout">
+                     {filteredJobs.map((job, i) => (
+                       <JobItem key={job._id} job={job} index={i} />
+                     ))}
+                   </AnimatePresence>
+                </div>
+              ) : (
+                <div className="py-40 text-center premium-card border-dashed">
+                   <Briefcase size={48} className="mx-auto text-muted-foreground/30 mb-6" />
+                   <h3 className="text-2xl font-black text-white mb-2">No roles found</h3>
+                   <p className="text-muted-foreground text-sm">Try adjusting your filters or search terms.</p>
+                </div>
+              )}
+           </div>
         </div>
-      </section>
+      </div>
     </div>
   )
 }
 
-function JobCard({ job }: { job: Job }) {
+function JobItem({ job, index }: { job: Job, index: number }) {
   return (
     <motion.div
-      layout
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, scale: 0.95 }}
-      whileHover={{ y: -10 }}
-      className="group p-12 rounded-[3.5rem] bg-card border border-border shadow-2xl hover:border-brand-blue/30 transition-all duration-500 flex flex-col relative overflow-hidden"
+      transition={{ delay: index * 0.05 }}
+      className="premium-card p-10 bg-[#0A0F14] hover:bg-[#0F1720] group"
     >
-      <div className="absolute top-0 right-0 w-32 h-32 bg-brand-blue/5 blur-[50px] rounded-full group-hover:bg-brand-blue/10 transition-colors" />
-
-      <div className="flex w-full justify-between items-start mb-12 relative">
-        <div className="px-5 py-2 rounded-xl bg-foreground text-background text-[10px] font-black uppercase tracking-[0.2em] shadow-lg">
-          {job.type} Track
+      <div className="flex justify-between items-start mb-10">
+        <div className="flex gap-3">
+           <span className="px-3 py-1 rounded-lg bg-white/5 text-[9px] font-black uppercase tracking-widest text-white/40">
+             {job.category}
+           </span>
+           <span className="px-3 py-1 rounded-lg bg-brand-blue/10 text-[9px] font-black uppercase tracking-widest text-brand-blue">
+             {job.type}
+           </span>
         </div>
-        <div className="flex items-center gap-2 text-[10px] font-black text-muted-foreground uppercase tracking-widest bg-secondary px-3 py-1.5 rounded-lg border border-border">
-           <Clock size={14} /> {new Date(job.createdAt).toLocaleDateString()}
+        <div className="flex items-center gap-1.5 text-[9px] font-black text-muted-foreground uppercase tracking-widest">
+           <Clock size={12} /> {new Date(job.createdAt).toLocaleDateString()}
         </div>
       </div>
 
-      <div className="flex-1">
-         <h3 className="font-heading text-3xl font-black text-foreground leading-none tracking-tighter group-hover:text-brand-blue transition-colors mb-6">
-           {job.title}
-         </h3>
-         
-         <div className="flex flex-wrap gap-4 mb-10">
-           <Badge icon={<MapPin size={14} />} label={job.location} color="var(--brand-blue)" />
-           <Badge icon={<Zap size={14} />} label={job.experience} color="var(--brand-emerald)" />
+      <h3 className="text-3xl font-black text-white tracking-tight mb-4 group-hover:text-brand-blue transition-colors leading-none">
+        {job.title}
+      </h3>
+      
+      <div className="flex flex-wrap gap-6 mb-10">
+         <div className="flex items-center gap-2 text-xs font-bold text-muted-foreground">
+            <MapPin size={14} className="text-brand-blue" /> {job.location}
          </div>
-
-         <p className="text-muted-foreground font-medium text-[15px] leading-relaxed line-clamp-3 mb-12 opacity-80 group-hover:opacity-100 transition-opacity">
-           {job.description}
-         </p>
+         <div className="flex items-center gap-2 text-xs font-bold text-muted-foreground">
+            <Zap size={14} className="text-brand-emerald" /> {job.experience}
+         </div>
+         {job.salary && (
+           <div className="flex items-center gap-2 text-xs font-bold text-muted-foreground">
+              <DollarSign size={14} className="text-brand-amber" /> {job.salary}
+           </div>
+         )}
       </div>
 
-      <div className="pt-10 border-t border-border w-full flex items-center justify-between mt-auto">
-         <div className="flex items-center gap-2.5">
-            <div className="h-7 w-7 rounded-lg bg-secondary flex items-center justify-center text-[11px] font-black text-brand-blue uppercase border border-border">
-               {job.category[0]}
-            </div>
-            <span className="text-[10px] font-black text-foreground uppercase tracking-[0.2em]">{job.category}</span>
+      <div className="flex items-center justify-between pt-10 border-t border-white/5">
+         <div className="flex items-center gap-1 px-3 py-1 rounded-full bg-brand-emerald/10 border border-brand-emerald/20">
+            <div className="h-1.5 w-1.5 rounded-full bg-brand-emerald animate-pulse" />
+            <span className="text-[9px] font-black text-brand-emerald uppercase tracking-widest">Matching Now</span>
          </div>
          <Link 
            to={`/careers/${job._id}`}
-           className="h-14 w-14 rounded-2xl bg-foreground text-background flex items-center justify-center hover:bg-brand-blue hover:text-white transition-all shadow-xl group/btn"
+           className="h-14 px-8 rounded-2xl bg-white/5 border border-white/5 text-white font-black text-xs uppercase tracking-widest flex items-center gap-3 hover:bg-brand-blue hover:border-brand-blue hover:shadow-xl hover:shadow-brand-blue/20 transition-all"
          >
-           <ArrowRight size={22} className="group-hover/btn:translate-x-1 transition-transform" />
+           View Details <ChevronRight size={18} />
          </Link>
       </div>
     </motion.div>
   )
-}
-
-function Badge({ icon, label, color }: { icon: React.ReactNode, label: string, color: string }) {
-   return (
-      <div className="flex items-center gap-2.5 bg-secondary border border-border px-5 py-2.5 rounded-xl text-[11px] font-black uppercase tracking-widest text-foreground">
-         <span style={{ color }}>{icon}</span>
-         {label}
-      </div>
-   )
 }

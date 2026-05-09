@@ -12,6 +12,7 @@ import CertificationsPage from './pages/CertificationsPage'
 import LoginPage from './pages/LoginPage'
 import RegisterPage from './pages/RegisterPage'
 import DashboardPage from './pages/DashboardPage'
+import ProfilePage from './pages/ProfilePage'
 
 function ProtectedRoute({ children, adminOnly = false }: { children: React.ReactNode; adminOnly?: boolean }) {
   const { user, isLoading } = useAuth()
@@ -45,6 +46,14 @@ function App() {
           element={
             <ProtectedRoute>
               <DashboardPage />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="profile" 
+          element={
+            <ProtectedRoute>
+              <ProfilePage />
             </ProtectedRoute>
           } 
         />
