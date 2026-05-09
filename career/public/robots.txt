@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+
+# Disallow user dashboard and profile
+Disallow: /dashboard/
+Disallow: /profile/
+Disallow: /login
+Disallow: /register
+
+# Host and Sitemap
+Sitemap: https://career.satbyte.in/sitemap.xml

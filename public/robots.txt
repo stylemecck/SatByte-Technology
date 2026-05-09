@@ -1,4 +1,11 @@
 User-agent: *
 Allow: /
 
+# Disallow administrative and private areas
+Disallow: /admin/
+Disallow: /portal/
+Disallow: /pricing/success
+Disallow: /pricing/canceled
+
+# Host and Sitemap
 Sitemap: https://satbyte.in/sitemap.xml
