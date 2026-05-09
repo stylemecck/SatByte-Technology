@@ -33,10 +33,12 @@ export default function ClientLoginPage() {
   const [showPassword, setShowPassword] = useState(false)
   
   // Form states
+  const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [otp, setOtp] = useState('')
   const [step, setStep] = useState<1 | 2>(1)
+  const [regStep, setRegStep] = useState<1 | 2>(1)
   
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -58,13 +60,28 @@ export default function ClientLoginPage() {
     }
   }
 
-  const handleRegister = async (e: React.FormEvent) => {
+  const handleRegisterRequest = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setLoading(true)
+    setError('')
+    try {
+      const res = await api.post('auth/client-register-request', { email, name })
+      setRegStep(2)
+      setSuccess(res.data.message || 'Verification code sent to your email.')
+    } catch (err: any) {
+      setError(err.response?.data?.message || 'Failed to send code')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleRegisterVerify = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
     setError('')
     setSuccess('')
     try {
-      const res = await api.post('auth/client-register', { email, password })
+      const res = await api.post('auth/client-register-verify', { email, name, otp, password })
       saveToken(res.data.token)
       setSuccess('Account created successfully! Redirecting...')
       setTimeout(() => navigate('/portal'), 1500)
@@ -80,8 +97,9 @@ export default function ClientLoginPage() {
     setLoading(true)
     setError('')
     try {
-      await api.post('auth/client-login', { email })
+      const res = await api.post('auth/client-login', { email })
       setStep(2)
+      setSuccess(res.data.message || 'Verification code sent to your email.')
     } catch (err: any) {
       setError(err.response?.data?.message || 'Failed to send OTP')
     } finally {
@@ -108,7 +126,9 @@ export default function ClientLoginPage() {
     setAuthMode(mode)
     setError('')
     setSuccess('')
+    setName('')
     setStep(1)
+    setRegStep(1)
   }
 
   return (
@@ -299,30 +319,61 @@ export default function ClientLoginPage() {
                   )}
 
                   {authMode === 'register' && (
-                    <form onSubmit={handleRegister} className="space-y-5">
-                      <Input
-                        type="email"
-                        placeholder="name@company.com"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        required
-                        className="h-12 rounded-xl bg-secondary/30"
-                      />
-                      <Input
-                        type="password"
-                        placeholder="Create Secure Password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required
-                        className="h-12 rounded-xl bg-secondary/30"
-                      />
-                      <Button type="submit" className="w-full h-12 rounded-xl font-bold" disabled={loading}>
-                        {loading ? 'Creating Account...' : 'Continue Securely'}
-                      </Button>
+                    <div className="space-y-5">
+                      {regStep === 1 ? (
+                        <form onSubmit={handleRegisterRequest} className="space-y-5">
+                          <Input
+                            type="text"
+                            placeholder="Full Name"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                            required
+                            className="h-12 rounded-xl bg-secondary/30"
+                          />
+                          <Input
+                            type="email"
+                            placeholder="name@company.com"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            required
+                            className="h-12 rounded-xl bg-secondary/30"
+                          />
+                          <Button type="submit" className="w-full h-12 rounded-xl font-bold" disabled={loading}>
+                            {loading ? 'Sending Code...' : 'Verify Email'}
+                          </Button>
+                        </form>
+                      ) : (
+                        <form onSubmit={handleRegisterVerify} className="space-y-5">
+                          <div className="text-center mb-4">
+                             <p className="text-sm text-muted-foreground">Code sent to <strong>{email}</strong></p>
+                          </div>
+                          <Input
+                            type="text"
+                            placeholder="6-digit Code"
+                            maxLength={6}
+                            value={otp}
+                            onChange={(e) => setOtp(e.target.value)}
+                            required
+                            className="text-center text-2xl tracking-[0.5em] font-mono h-14 rounded-xl bg-secondary/30"
+                          />
+                          <Input
+                            type="password"
+                            placeholder="Create Secure Password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            required
+                            className="h-12 rounded-xl bg-secondary/30"
+                          />
+                          <Button type="submit" className="w-full h-12 rounded-xl font-bold" disabled={loading || otp.length < 6}>
+                            {loading ? 'Creating Account...' : 'Complete Registration'}
+                          </Button>
+                          <button type="button" onClick={() => setRegStep(1)} className="text-xs text-muted-foreground hover:text-primary underline w-full text-center">Back to Details</button>
+                        </form>
+                      )}
                       <p className="text-[10px] text-center text-muted-foreground px-4">
                         By signing up, you agree to our terms and will receive access to your private project portal.
                       </p>
-                    </form>
+                    </div>
                   )}
                 </motion.div>
               </AnimatePresence>

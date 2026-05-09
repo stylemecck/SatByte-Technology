@@ -7,6 +7,8 @@ import {
   clientSetPassword, 
   clientPasswordLogin, 
   clientRegister,
+  clientRegisterRequest,
+  clientRegisterVerify,
   getProfile,
   updateProfile,
   getClients 
@@ -19,6 +21,8 @@ const router = Router()
 router.post('/login', login)
 router.post('/register', register)
 router.post('/client-register', clientRegister)
+router.post('/client-register-request', clientRegisterRequest)
+router.post('/client-register-verify', clientRegisterVerify)
 router.post('/client-login', clientLoginRequest)
 router.post('/client-verify', clientLoginVerify)
 router.post('/client-password-login', clientPasswordLogin)

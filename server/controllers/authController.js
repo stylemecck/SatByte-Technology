@@ -103,6 +103,99 @@ export async function clientRegister(req, res) {
   }
 }
 
+/** 
+ * Step 1: Request Registration OTP. 
+ * Doesn't check for orders, just verifies email availability and sends code.
+ */
+export async function clientRegisterRequest(req, res) {
+  try {
+    const { email, name } = req.body
+    if (!email || !name) {
+      return res.status(400).json({ message: 'Name and email are required' })
+    }
+
+    const normalizedEmail = email.toLowerCase().trim()
+    const exists = await User.findOne({ email: normalizedEmail })
+    
+    if (exists) {
+      return res.status(409).json({ message: 'This email is already registered. Please login instead.' })
+    }
+
+    const code = Math.floor(100000 + Math.random() * 900000).toString()
+    await Otp.deleteMany({ email: normalizedEmail })
+    await Otp.create({ email: normalizedEmail, otp: code })
+
+    const gmailUser = process.env.GMAIL_USER || 'info@satbyte.in'
+
+    try {
+      await mailTransporter.sendMail({
+        from: `"SatByte Registration" <${gmailUser}>`,
+        to: normalizedEmail,
+        subject: `Your Registration Code: ${code}`,
+        html: `<h2>Welcome to SatByte</h2><p>Hello ${name},</p><p>Your verification code to complete registration is: <strong>${code}</strong></p><p>This code expires in 5 minutes.</p>`,
+      })
+      res.json({ message: 'Verification code sent to your email.' })
+    } catch (mailError) {
+      console.error('[client-register-request] Mail Delivery Failed. OTP:', code, '| Error:', mailError.message)
+      // Fallback for local development if mail fails
+      if (process.env.NODE_ENV !== 'production' || !process.env.GMAIL_USER) {
+        return res.json({ 
+          message: 'Verification code generated (Check server console/logs for code)', 
+          dev_note: 'Mail delivery failed. See server logs for the OTP code to proceed.' 
+        })
+      }
+      throw mailError // Re-throw to be caught by outer catch for production 500
+    }
+  } catch (e) {
+    console.error('[client-register-request] Failed:', e.message)
+    res.status(500).json({ message: 'Failed to send verification code' })
+  }
+}
+
+/** 
+ * Step 2: Verify Registration OTP and Create Account.
+ */
+export async function clientRegisterVerify(req, res) {
+  try {
+    const { email, name, otp, password } = req.body
+    if (!email || !name || !otp || !password || password.length < 8) {
+      return res.status(400).json({ message: 'All fields (name, email, otp, password 8+) are required' })
+    }
+
+    const normalizedEmail = email.toLowerCase().trim()
+    const validOtp = await Otp.findOne({ email: normalizedEmail, otp })
+
+    if (!validOtp) {
+      return res.status(401).json({ message: 'Invalid or expired verification code' })
+    }
+
+    // Double check existence just in case of race condition
+    const exists = await User.findOne({ email: normalizedEmail })
+    if (exists) {
+      return res.status(409).json({ message: 'Email already registered' })
+    }
+
+    await Otp.deleteMany({ email: normalizedEmail })
+
+    const passwordHash = await bcrypt.hash(password, 12)
+    const user = await User.create({
+      email: normalizedEmail,
+      name: name.trim(),
+      passwordHash,
+      role: 'client',
+    })
+
+    const token = signToken(user)
+    res.status(201).json({
+      token,
+      user: { id: user._id, email: user.email, role: user.role, name: user.name },
+    })
+  } catch (e) {
+    console.error('[client-register-verify] Failed:', e.message)
+    res.status(500).json({ message: 'Account creation failed' })
+  }
+}
+
 export async function clientLoginRequest(req, res) {
   try {
     const { email } = req.body
@@ -119,21 +212,26 @@ export async function clientLoginRequest(req, res) {
     await Otp.deleteMany({ email: normalizedEmail })
     await Otp.create({ email: normalizedEmail, otp: code })
 
-    const gmailUser = process.env.GMAIL_USER
-
-    if (!gmailUser) {
-      console.warn('GMAIL_USER not configured. Outputting OTP to console:', code)
-      return res.json({ message: 'OTP sent (check server logs)' })
+    const gmailUser = process.env.GMAIL_USER || 'info@satbyte.in'
+    
+    try {
+      await mailTransporter.sendMail({
+        from: `"SatByte Portal" <${gmailUser}>`,
+        to: normalizedEmail,
+        subject: `Your Login Code: ${code}`,
+        html: `<h2>SatByte Client Portal</h2><p>Your one-time login code is: <strong>${code}</strong></p><p>This code expires in 5 minutes.</p>`,
+      })
+      res.json({ message: 'OTP sent to your email.' })
+    } catch (mailError) {
+      console.error('[auth/client-login] Mail Delivery Failed. OTP:', code, '| Error:', mailError.message)
+      if (process.env.NODE_ENV !== 'production' || !process.env.GMAIL_USER) {
+        return res.json({ 
+          message: 'OTP generated (Check server console/logs for code)',
+          dev_note: 'Mail delivery failed. See server logs for the OTP code to proceed.'
+        })
+      }
+      throw mailError
     }
-
-    await mailTransporter.sendMail({
-      from: `"SatByte Portal" <${gmailUser}>`,
-      to: normalizedEmail,
-      subject: `Your Login Code: ${code}`,
-      html: `<h2>SatByte Client Portal</h2><p>Your one-time login code is: <strong>${code}</strong></p><p>This code expires in 5 minutes.</p>`,
-    })
-
-    res.json({ message: 'OTP sent to your email.' })
   } catch (e) {
     console.error('[auth/client-login] Failed to send OTP:', e.message, '| code:', e.code, '| response:', e.response)
     res.status(500).json({ message: 'Failed to send OTP' })
