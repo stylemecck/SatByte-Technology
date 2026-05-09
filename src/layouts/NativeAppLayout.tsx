@@ -8,13 +8,12 @@ import { PageSkeleton } from '@/components/PageSkeleton'
 import { BottomNav } from '../components/BottomNav'
 import { SITE } from '@/lib/constants'
 import { Logo } from '@/components/Logo'
-import { useTheme } from '@/contexts/ThemeContext'
 
 export function NativeAppLayout() {
   const location = useLocation()
   const outlet = useOutlet()
   const navigate = useNavigate()
-  const { theme } = useTheme()
+  // Theme is handled globally now
 
   // Determine page title based on route
   const getPageTitle = (path: string) => {
@@ -46,7 +45,7 @@ export function NativeAppLayout() {
             </button>
           ) : (
             <div className="h-8 w-8 flex items-center justify-center">
-              <Logo variant="icon" theme={theme} className="scale-75" />
+              <Logo variant="icon" className="scale-75" />
             </div>
           )}
         </div>

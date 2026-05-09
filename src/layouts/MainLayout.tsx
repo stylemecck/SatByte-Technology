@@ -16,7 +16,7 @@ export function MainLayout() {
   return (
     <div className="flex min-h-screen flex-col">
       <Navbar />
-      <main className="flex-1 pt-20">
+      <main className="flex-1 pt-20 max-w-screen-2xl mx-auto px-4 w-full">
         <Suspense fallback={<PageSkeleton />}>
           <AnimatePresence mode="wait">
             <motion.div

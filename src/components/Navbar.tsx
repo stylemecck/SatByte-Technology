@@ -1,12 +1,13 @@
 import * as Dialog from '@radix-ui/react-dialog'
 import { motion } from 'framer-motion'
-import { X, LayoutDashboard } from 'lucide-react'
+import { X, LayoutDashboard, Moon, Sun } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
 
 
 import { cn } from '@/lib/utils'
 import { getStoredToken } from '@/lib/apiClient'
+import { useTheme } from '@/contexts/ThemeContext'
 import { Logo } from './Logo'
 
 const PRIMARY_LINKS = [
@@ -20,17 +21,18 @@ const PRIMARY_LINKS = [
 ]
 
 export function Navbar() {
-  const [open, setOpen] = useState(false)
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const location = useLocation()
+  const { theme, toggleTheme } = useTheme()
 
   useEffect(() => {
     setIsLoggedIn(!!getStoredToken())
   }, [location.pathname])
 
   useEffect(() => {
-    setOpen(false)
+    setIsMenuOpen(false)
   }, [location.pathname])
 
   useEffect(() => {
@@ -53,7 +55,7 @@ export function Navbar() {
           to="/"
           className="flex items-center transition-opacity hover:opacity-80 outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-md"
         >
-          <Logo theme="auto" speed="fast" pauseOnHover trailBlocks={5}  />
+          <Logo speed="fast" pauseOnHover trailBlocks={5}  />
         </Link>
 
         {/* Desktop Navigation */}
@@ -109,23 +111,32 @@ export function Navbar() {
 
 
 
+          {/* Theme Toggle */}
+          <button
+            onClick={toggleTheme}
+            className="flex h-9 w-9 items-center justify-center rounded-md text-foreground hover:bg-secondary/50 transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            aria-label="Toggle theme"
+          >
+            {theme === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+          </button>
+
           {/* Mobile Menu Trigger */}
-          <Dialog.Root open={open} onOpenChange={setOpen}>
+          <Dialog.Root open={isMenuOpen} onOpenChange={setIsMenuOpen}>
             <Dialog.Trigger asChild>
               <button 
                 className="md:hidden flex flex-col justify-center items-center h-9 w-9 gap-[4px] rounded-md text-foreground hover:bg-secondary/50 transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring"
                 aria-label="Open menu"
               >
                 <motion.span 
-                  animate={{ rotate: open ? 45 : 0, y: open ? 6 : 0 }} 
+                  animate={{ rotate: isMenuOpen ? 45 : 0, y: isMenuOpen ? 6 : 0 }} 
                   className="w-4 h-[2px] bg-current rounded-full block origin-center transition-all"
                 />
                 <motion.span 
-                  animate={{ opacity: open ? 0 : 1 }} 
+                  animate={{ opacity: isMenuOpen ? 0 : 1 }} 
                   className="w-4 h-[2px] bg-current rounded-full block transition-opacity"
                 />
                 <motion.span 
-                  animate={{ rotate: open ? -45 : 0, y: open ? -6 : 0 }} 
+                  animate={{ rotate: isMenuOpen ? -45 : 0, y: isMenuOpen ? -6 : 0 }} 
                   className="w-4 h-[2px] bg-current rounded-full block origin-center transition-all"
                 />
               </button>
@@ -138,7 +149,7 @@ export function Navbar() {
                 
                 <div className="flex items-center justify-between mb-8">
                    <Link to="/" className="flex items-center">
-                      <Logo theme="auto" speed="fast" pauseOnHover trailBlocks={5}  />
+                      <Logo speed="fast" pauseOnHover trailBlocks={5}  />
                    </Link>
                    <Dialog.Close asChild>
                      <button className="flex h-8 w-8 items-center justify-center rounded-md bg-secondary text-foreground hover:bg-secondary/80 transition-colors active:scale-95">

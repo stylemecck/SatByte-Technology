@@ -47,7 +47,7 @@ export function Footer() {
           {/* Col 1 */}
           <div className="space-y-4">
             <Link to="/" className="inline-block">
-              <Logo variant="full" theme="dark" className="scale-110 origin-left" />
+              <Logo variant="full" className="scale-110 origin-left" />
             </Link>
             <p className="text-sm leading-relaxed text-muted-foreground">
               Modern websites, software, and digital solutions for businesses across India — based in{' '}

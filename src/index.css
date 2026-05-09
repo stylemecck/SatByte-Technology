@@ -90,8 +90,8 @@
   
   .dark {
     /* Premium Dark Theme - Cosmic Orange */
-    --background: #000000;
-    --foreground: #FAFAFA;
+    --background: #0a0a0a;
+    --foreground: #ededed;
     
     --card: #0A0A0A;
     --card-foreground: #FAFAFA;

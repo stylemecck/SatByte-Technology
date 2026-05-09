@@ -98,12 +98,11 @@
 
 import { motion, useReducedMotion } from 'framer-motion';
 import { cn } from '@/lib/utils';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 interface LogoProps {
   className?: string;
   variant?: 'full' | 'icon';
-  theme?: 'light' | 'dark' | 'auto';
   speed?: 'slow' | 'normal' | 'fast';
   pauseOnHover?: boolean;
   trailBlocks?: number; // 2–6
@@ -112,24 +111,12 @@ interface LogoProps {
 export function Logo({ 
   className, 
   variant = 'full', 
-  theme = 'auto', 
   speed = 'normal',
   pauseOnHover = true,
   trailBlocks = 4 
 }: LogoProps) {
   const prefersReducedMotion = useReducedMotion();
-  const [resolvedTheme, setResolvedTheme] = useState<'light' | 'dark'>('light');
   const [isHovered, setIsHovered] = useState(false);
-
-  // Resolve 'auto' theme on client
-  useEffect(() => {
-    if (theme === 'auto') {
-      const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      setResolvedTheme(isDark ? 'dark' : 'light');
-    } else {
-      setResolvedTheme(theme);
-    }
-  }, [theme]);
 
   const speedMap = {
     slow: 16,
@@ -138,9 +125,7 @@ export function Logo({
   };
   const duration = prefersReducedMotion ? 0 : speedMap[speed];
 
-  // Colors – using CSS variables for easy override
-  const textColor = resolvedTheme === 'dark' ? 'white' : '#0c1b32';
-  const cyan = '#ff8800ff';
+  // Tailwind variables will handle the colors automatically
 
   // Build pixel trail blocks (positioned relative to the moving satellite)
   const trailPositions = Array.from({ length: trailBlocks }).map((_, i) => {
@@ -155,8 +140,7 @@ export function Logo({
 
   return (
     <div 
-      className={cn("flex items-center gap-3 select-none", className)} 
-      style={{ color: textColor }}
+      className={cn("flex items-center gap-3 select-none text-foreground", className)} 
       onMouseEnter={() => pauseOnHover && setIsHovered(true)}
       onMouseLeave={() => pauseOnHover && setIsHovered(false)}
     >
@@ -178,7 +162,7 @@ export function Logo({
             cy="50"
             rx="45"
             ry="30"
-            stroke={textColor}
+            stroke="currentColor"
             strokeWidth="2.5"
             transform="rotate(-15 50 50)"
             className="opacity-80"
@@ -193,7 +177,7 @@ export function Logo({
                 y={pos.y - pos.size/2}
                 width={Math.max(1, pos.size)}
                 height={Math.max(1, pos.size)}
-                fill={idx % 2 === 0 ? cyan : textColor}
+                className={idx % 2 === 0 ? "fill-primary" : "fill-foreground"}
                 opacity={pos.opacity}
               />
             ))}
@@ -207,7 +191,7 @@ export function Logo({
             style={{ transformOrigin: "50px 50px" }}
           >
             {/* Satellite body */}
-            <circle cx="95" cy="50" r="5" fill={cyan}>
+            <circle cx="95" cy="50" r="5" className="fill-primary">
               {/* Optional pulse animation – only if motion is allowed */}
               {!prefersReducedMotion && (
                 <animate
@@ -220,7 +204,7 @@ export function Logo({
             </circle>
             
             {/* Glow */}
-            <circle cx="95" cy="50" r="8" fill={cyan} opacity="0.3">
+            <circle cx="95" cy="50" r="8" className="fill-primary" opacity="0.3">
               {!prefersReducedMotion && (
                 <animate
                   attributeName="r"
@@ -238,21 +222,18 @@ export function Logo({
         <div className="flex flex-col leading-none">
           <div className="flex items-baseline gap-0">
             <span 
-              className="text-2xl font-black italic tracking-tighter"
-              style={{ color: textColor }}
+              className="text-2xl font-black italic tracking-tighter text-foreground"
             >
               Sat
             </span>
             <span 
-              className="text-2xl font-black italic tracking-tighter"
-              style={{ color: cyan }}
+              className="text-2xl font-black italic tracking-tighter text-primary"
             >
               Byte
             </span>
           </div>
           <span 
-            className="text-[8px] font-bold tracking-[0.3em] uppercase opacity-70"
-            style={{ color: textColor }}
+            className="text-[8px] font-bold tracking-[0.3em] uppercase opacity-70 text-foreground"
           >
             Technologies
           </span>
