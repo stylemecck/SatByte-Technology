@@ -2,6 +2,7 @@ import { lazy } from 'react'
 import { Route, Routes } from 'react-router-dom'
 
 import { RequireAdmin } from '@/components/admin/RequireAdmin'
+import { RequireClient } from '@/components/auth/RequireClient'
 import { ScrollToTopOnNav } from '@/components/ScrollToTopOnNav'
 import { MainLayout } from '@/layouts/MainLayout'
 import { NativeAppLayout } from '@/layouts/NativeAppLayout'
@@ -75,7 +76,14 @@ export default function App() {
         <Route path="quote" element={<QuotePage />} />
         <Route path="menu" element={<MobileMenuPage />} />
         <Route path="client-login" element={<ClientLoginPage />} />
-        <Route path="portal" element={<ClientDashboardPage />} />
+        <Route
+          path="portal"
+          element={
+            <RequireClient>
+              <ClientDashboardPage />
+            </RequireClient>
+          }
+        />
         <Route path="privacy" element={<PrivacyPolicyPage />} />
         <Route path="terms" element={<TermsPage />} />
         <Route path="sitemap" element={<SitemapPage />} />

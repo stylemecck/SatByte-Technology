@@ -80,3 +80,14 @@ export function hydrateAuthFromStorage() {
   const t = getStoredToken()
   if (t) setAuthToken(t)
 }
+
+export function getRoleFromToken(): string | null {
+  const token = getStoredToken()
+  if (!token) return null
+  try {
+    const payload = JSON.parse(atob(token.split('.')[1]))
+    return payload.role || 'client' // default to client if role is missing
+  } catch {
+    return null
+  }
+}

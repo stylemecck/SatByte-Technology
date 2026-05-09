@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Navigate, useNavigate, Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Eye, EyeOff, ShieldCheck, Lock, Globe, Layers, LayoutDashboard, FileText, Users, MessageSquare, HelpCircle } from 'lucide-react'
-import { api, getStoredToken, saveToken } from '@/lib/apiClient'
+import { api, saveToken, getRoleFromToken } from '@/lib/apiClient'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -24,8 +24,11 @@ const SECURITY_BADGES = [
 ]
 
 export default function ClientLoginPage() {
-  if (getStoredToken()) {
+  const role = getRoleFromToken()
+  if (role === 'client') {
     return <Navigate to="/portal" replace />
+  } else if (role === 'admin') {
+    return <Navigate to="/admin" replace />
   }
 
   const [authMode, setAuthMode] = useState<'login' | 'register' | 'forgot'>('login')

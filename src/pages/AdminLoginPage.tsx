@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { api, getStoredToken, saveToken } from '@/lib/apiClient'
+import { api, saveToken, getRoleFromToken } from '@/lib/apiClient'
 import { SITE } from '@/lib/constants'
 
 type FormValues = { email: string; password: string }
@@ -24,8 +24,11 @@ export default function AdminLoginPage() {
     setError,
   } = useForm<FormValues>({ defaultValues: { email: '', password: '' } })
 
-  if (getStoredToken()) {
+  const role = getRoleFromToken()
+  if (role === 'admin') {
     return <Navigate to="/admin" replace />
+  } else if (role === 'client') {
+    return <Navigate to="/portal" replace />
   }
 
   const onSubmit = async (values: FormValues) => {
